@@ -75,12 +75,9 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     @sub_service_request = SubServiceRequest.find params[:id]
 
     attrs = params[@protocol.type.downcase.to_sym]
-   
-    ###TODO temporarily disabling validation in Admin Portal
-    @protocol.attributes = attrs
-
-    if @protocol.save(:validate => false) #update_attributes attrs
-      redirect_to "/portal/admin/sub_service_requests/#{@sub_service_request.id}"
+    
+    if @protocol.update_attributes attrs
+      redirect_to portal_admin_sub_service_request_path(@sub_service_request)
     else
       @user_toasts = @user.received_toast_messages.select {|x| x.sending_class == 'SubServiceRequest'}
       @service_request = @sub_service_request.service_request
@@ -92,6 +89,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
       @related_service_requests = @protocol.all_child_sub_service_requests
       @approvals = [@service_request.approvals, @sub_service_request.approvals].flatten
       @selected_arm = @service_request.arms.first
+
       render :action => 'show'
     end
   end   
@@ -308,7 +306,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     # send e-mail to all folks with view and above
     @protocol.project_roles.each do |project_role|
       next if project_role.project_rights == 'none'
-      Notifier.notify_user(project_role, @service_request, xls, false, current_user).deliver unless project_role.identity.email.blank?
+      Notifier.notify_user(project_role, @service_request, xls, false, current_user).deliver_now unless project_role.identity.email.blank?
     end
 
     # Check to see if we need to send notifications for epic.
