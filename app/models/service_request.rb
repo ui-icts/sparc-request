@@ -106,27 +106,7 @@ class ServiceRequest < ActiveRecord::Base
   alias_attribute :service_request_id, :id
 
   #after_save :fix_missing_visits
-  
-  def service_requester_name
-    self.try(:service_requester).try(:display_name)
-  end
-  
-  def protocol_short_title
-    self.try(:protocol).try(:short_title)
-  end  
 
-  def pi_name
-    self.try(:protocol).try(:primary_principal_investigator).try(:display_name) 
-  end
-  
-  def get_or_create_line_item_additional_details
-    results =[]
-      for sub_service_request in self.sub_service_requests
-        results.concat(sub_service_request.get_or_create_line_item_additional_details)
-      end
-    results  
-  end
-   
   def protocol_page
     if self.protocol_id.blank?
       errors.add(:protocol_id, "You must identify the service request with a study/project before continuing.")
@@ -160,7 +140,7 @@ class ServiceRequest < ActiveRecord::Base
       end
     end
 
-    unless (direction == 'back' and status == 'first_draft')
+    unless direction == 'back' && ((status == 'first_draft') || (status == 'draft' && !submitted_at.present?))
       #validate start date and end date
       if protocol
         if protocol.start_date.nil?
@@ -203,7 +183,7 @@ class ServiceRequest < ActiveRecord::Base
   end
 
   def service_calendar_page(direction)
-    return if direction == 'back' and status == 'first_draft'
+    return if direction == 'back' && ((status == 'first_draft') || (status == 'draft' && !submitted_at.present?))
     return unless has_per_patient_per_visit_services?
 
     if USE_EPIC
@@ -506,12 +486,14 @@ class ServiceRequest < ActiveRecord::Base
 
   # Change the status of the service request and all the sub service
   # requests to the given status.
-  def update_status(new_status)
-    self.update_attributes(status: new_status)
+  def update_status(new_status, use_validation=true)
+    self.assign_attributes(status: new_status)
 
     self.sub_service_requests.each do |ssr|
-      ssr.update_attributes(status: new_status)
+      ssr.assign_attributes(status: new_status)
     end
+
+    self.save(validate: use_validation)
   end
 
   # Make sure that all the sub service requests have an ssr id

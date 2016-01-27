@@ -47,49 +47,6 @@ class Portal::ProtocolsController < Portal::BaseController
     end
   end
 
-  def new
-    @protocol = Study.new
-    @protocol.requester_id = current_user.id
-    @protocol.populate_for_edit
-    @errors = nil
-    @portal = true
-    @current_step = 'protocol'
-    session[:protocol_type] = 'study'
-  end
-
-  def create
-    @current_step = params[:current_step]
-    @protocol = Study.new(params[:study])
-    @protocol.validate_nct = true
-    @portal = params[:portal]
-    session[:protocol_type] = 'study'
-    @portal = params[:portal]
-
-    # @protocol.assign_attributes(params[:study] || params[:project])
-    if @current_step == 'go_back'
-      @current_step = 'protocol'
-      @protocol.populate_for_edit
-    elsif @current_step == 'protocol' and @protocol.group_valid? :protocol
-      @current_step = 'user_details'
-      @protocol.populate_for_edit
-    elsif @current_step == 'user_details' and @protocol.valid?
-      @protocol.save
-      @current_step = 'return_to_portal'
-      if USE_EPIC
-        if @protocol.selected_for_epic
-          @protocol.ensure_epic_user
-          Notifier.notify_for_epic_user_approval(@protocol).deliver unless QUEUE_EPIC
-        end
-      end
-    elsif @current_step == 'cancel_protocol'
-      @current_step = 'return_to_portal'
-    else
-      # TODO: Is this neccessary?
-      @errors = @current_step == 'protocol' ? @protocol.grouped_errors[:protocol].try(:messages) : @protocol.grouped_errors[:user_details].try(:messages)
-      @protocol.populate_for_edit
-    end
-  end
-
   def update_from_fulfillment
     if @protocol.update_attributes(params[:protocol])
       render :nothing => true
@@ -101,17 +58,25 @@ class Portal::ProtocolsController < Portal::BaseController
   end
 
   def edit
+
     @edit_protocol = true
     @protocol.populate_for_edit if @protocol.type == "Study"
     @protocol.valid?
     respond_to do |format|
       format.html
-    end
+    end   
   end
 
   def update
-    attrs = params[@protocol.type.downcase.to_sym]
-    if @protocol.update_attributes attrs
+    attrs = if @protocol.type.downcase.to_sym == :study && params[:study]
+      params[:study]
+    elsif @protocol.type.downcase.to_sym == :project && params[:project]
+      params[:project]
+    else
+      Hash.new
+    end
+    
+    if @protocol.update_attributes(attrs.merge(study_type_question_group_id: StudyTypeQuestionGroup.active.pluck(:id).first))
       flash[:notice] = "Study updated"
       redirect_to portal_root_path(:default_protocol => @protocol)
     else
@@ -135,7 +100,9 @@ class Portal::ProtocolsController < Portal::BaseController
   # to update the protocol type
   def update_protocol_type
     # Using update_attribute here is intentional, type is a protected attribute
-    if @protocol.update_attribute(:type, params[:protocol][:type])
+    @protocol_type = params[:protocol][:type]
+    if @protocol.update_attribute(:type, @protocol_type)
+      @protocol.update_attribute(:study_type_question_group_id, StudyTypeQuestionGroup.active.pluck(:id).first)
       if params[:sub_service_request_id]
         @sub_service_request = SubServiceRequest.find(params[:sub_service_request_id])
         redirect_to portal_admin_sub_service_request_path(@sub_service_request)

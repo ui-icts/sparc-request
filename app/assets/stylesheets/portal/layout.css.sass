@@ -63,7 +63,6 @@ h2.title
 .required
   color: red
 
-
 .error
   border: 1px solid red
 
@@ -177,6 +176,29 @@ h2.title
   float: left
   h3.blue-provider.ui-accordion-header
     border: 0px !important
+  .row-portal-header
+    .portal_create_new_study
+      margin-right: 30px
+    .portal_create_new_study,
+    .portal_create_new_project
+      float: right
+      position: relative
+      .new-study-text
+        margin-left: 17px
+      .new-project-text
+        margin-left: 16px
+      .new-project-text,
+      .new-study-text
+        color: white
+        height: 100%
+        width: 100%
+        position: absolute
+        vertical-align: middle
+        margin-top: 2px
+        line-height: 32px
+        text-align: center
+        font-size: 1.1em
+
 .protocol-accordion-title
   width: 630px
 .protocol-short-title
@@ -595,6 +617,12 @@ div.permissions_dialog
     select
       width: 205px
 
+.decrement_days 
+  padding-right: 10px
+
+.increment_days 
+  padding-left: 12px
+
 .icon
   background-repeat: no-repeat
   border: medium none
@@ -978,16 +1006,6 @@ div.permissions_dialog
 
 .return a img, .continue a img
   vertical-align: middle
-
-
-.continue
-  color: $white
-  font-size: 14px
-  font-weight: bold
-  float: left
-  width: 452px
-  padding-right: 10px
-  cursor: pointer
 
 
 // ReviewView
