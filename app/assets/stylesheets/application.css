@@ -2,10 +2,10 @@
  * This is a manifest file that'll automatically include all the stylesheets available in this directory
  * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
  * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_tree ./proper
  *= require_self
- *= require ./bootstrap.min.css
- *= require ./bootstrap-theme.min.css
 */
+
 /* extend bootstrap */
 /* turn off search box background image in IE 9 */
 
@@ -1659,6 +1659,7 @@ tr.grand-totals {
   font-weight: bold;
 }
 
+* {
 .calendar tr.service td.name, .calendar tr.totals td.name {
   text-align: left;
 }
