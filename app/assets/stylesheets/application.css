@@ -54,6 +54,7 @@ width: 100%;
 }
 
 
+
 html, body {
   height: 100%;
 }
@@ -94,6 +95,14 @@ img {
 
 a {
   text-decoration: none;
+}
+
+label.decrement_days {
+  padding-right: 16px;
+}
+
+label.increment_days {
+  padding-left: 18px;
 }
 
 ul {
@@ -872,6 +881,7 @@ span#infotip img {
   text-decoration: none;
   font-size: 18px;
   color: #fff;
+  line-height: 36px;
 }
 
 .continue div{
@@ -895,6 +905,21 @@ span#infotip img {
   padding-top: 2px !important;
   padding-bottom: 2px !important;
 }
+
+.continue div .continue-spinner {
+  padding-left: 0px !important;
+  padding-right: 5px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.continue div .return-spinner {
+  padding-left: 5px !important;
+  padding-right: 0px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
 
 .continue div.exit a{
   margin: 0 0 0 0px; /* change last to 60px to revert */
@@ -1096,6 +1121,7 @@ span#infotip img {
   border-color: red;
   border-width: 2px;
 }
+
 /* ServiceRequestSetupView */
 .service-request-setup-view .service-details {
   background: #0775B0 !important;
@@ -1491,6 +1517,12 @@ legend {
   height: 35px;
 }
 
+.edit-project-view .authorized-users td.none,
+.edit-project-view .authorized-users td.view,
+.edit-project-view .authorized-users td.request,
+.edit-project-view .authorized-users td.approve {
+  text-align: center !important;
+}
 .edit-project-view .search-results {
   height: 185px;
   overflow: auto;
