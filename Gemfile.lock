@@ -102,6 +102,7 @@ GEM
     bullet (4.14.7)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.9.0)
+    byebug (9.0.3)
     capistrano (2.15.6)
       highline
       net-scp (>= 1.0.0)
@@ -453,6 +454,7 @@ DEPENDENCIES
   axlsx_rails
   bluecloth
   bullet
+  byebug
   capistrano
   capistrano-ext
   capybara-webkit
@@ -522,3 +524,6 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   webmock
   will_paginate
+
+BUNDLED WITH
+   1.11.2

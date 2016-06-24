@@ -80,6 +80,7 @@ group :development do
   gem 'highline'
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'byebug'
 end
 
 group :test do
