@@ -1,23 +1,3 @@
-// Copyright © 2011 MUSC Foundation for Research Development
-// All rights reserved.
-
-// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-// 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-// 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
-// disclaimer in the documentation and/or other materials provided with the distribution.
-
-// 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
-// derived from this software without specific prior written permission.
-
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
-// BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
-// SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-// TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 // Mixins
 // ------------------------------------------------>
 
@@ -30,11 +10,20 @@ $light_gray: #E8E8E8
 
 // The rest
 // ------------------------------------------------>
+.header_logo_2
+  height: 100px /* added */
+// added	
+#welcome_msg 
+  width: 950px
+  text-align: right
+  padding: 6px
+  background: white url(/assets/welcome_msg_background_gradient.png) left top repeat-x
+
 html, body
   height: 100%
 
 body
-  background: white url(/assets/portal/background_gradient.png) left top repeat-x
+  background: #F0F0F0 /* changed */
   color: #222222
   font-family: Verdana, Arial, Helvetica, sans-serif
   font-size: 75%
@@ -96,12 +85,16 @@ h2.title
 
 
 #container
-  width: 945px
+  width: 962px /* changed from 945 */
   height: 100%
   margin: 0 auto
 
 
 #container #header
+  padding-left: 5px /* added */
+  background: #383838 /* added */
+  
+#header
   height: 102px
 
 #container #org_logo, #container #department_title, #container #institution_logo
@@ -115,7 +108,7 @@ h2.title
 
 #container #department_title
   width: 510px
-  margin: 22px 15px 0 -30px
+  margin: 0px 0px 0 0px
   text-align: center
   a
     font-weight: bold
@@ -144,9 +137,9 @@ h2.title
   width: 941px
 #title
   color: #00346A
-  margin-top: 50px
+  margin-top: 40px
   background: white url(/assets/portal/puzzle_pieces.png) no-repeat
-  height: 92px
+  height: 82px
   h1
     padding: 10px 25px 0
     a
@@ -177,6 +170,28 @@ h2.title
   float: left
   h3.blue-provider.ui-accordion-header
     border: 0px !important
+  .row-portal-header
+    .portal_create_new_study
+      margin-right: 30px
+    .portal_create_new_study,
+    .portal_create_new_project
+      float: right
+      position: relative
+      .new-study-text
+        margin-left: 17px
+      .new-project-text
+        margin-left: 16px
+      .new-project-text,
+      .new-study-text
+        color: white
+        height: 100%
+        width: 100%
+        position: absolute
+        vertical-align: middle
+        margin-top: 2px
+        line-height: 32px
+        text-align: center
+        font-size: 1.1em
 .protocol-accordion-title
   width: 630px
 .protocol-short-title
@@ -430,7 +445,7 @@ div.permissions_dialog
         font-weight: bold
         background: url(/assets/portal/notification_green_small.png) no-repeat
         width: 125px
-      li.new_notification.roles
+      li.new_notification.roles, li.new_notification.requester
         width: 325px
 .service-request-button
   color: $white
@@ -495,11 +510,13 @@ div.permissions_dialog
     th
       text-align: left
     td
-      padding: 20px 0
+      padding: 10px 0 /* changed from 20px */
     td.sender div
-      width: 130px
+      width: 90px /* changed from 130px */
+    td.srid div
+      width: 50px /* added */
     td.subject div
-      width: 170px
+      width: 160px /* changed from 170px */
     .image_placeholder
       padding: 0px
       div
@@ -547,7 +564,7 @@ div.permissions_dialog
   margin-top: 3px
 .user-buttons
   margin: 8px auto auto 10px
-.view-full-calendar-button, .consolidated_request
+.view-full-calendar-button
   width: 230px
   height: 26px
   padding: 9px 9px 9px 15px
@@ -556,11 +573,6 @@ div.permissions_dialog
   color: white !important
   display: block
   background: url(/assets/portal/yellowbutton_calendar.png) no-repeat
-
-.consolidated_request
-  background: url(/assets/portal/yellowbutton_report.png) no-repeat
-  padding-left: 20px
-
 .add-services-button
   width: 230px
   height: 26px
@@ -594,6 +606,12 @@ div.permissions_dialog
       width: 200px
     select
       width: 205px
+
+.decrement_days 
+  padding-right: 10px
+
+.increment_days 
+  padding-left: 12px
 
 .icon
   background-repeat: no-repeat
@@ -829,6 +847,7 @@ div.permissions_dialog
 .qtip-content ul li
   margin-bottom: 10px
 
+
 // CatalogView
 .catalog-view .left
   width: 199px
@@ -852,7 +871,6 @@ div.permissions_dialog
 .blue-provider.ui-state-hover 
   .protocol-accordion-title
     color: #BBBBBB !important
-
 
 .orange-provider
   background: #ff9933 !important
@@ -978,16 +996,6 @@ div.permissions_dialog
 
 .return a img, .continue a img
   vertical-align: middle
-
-
-.continue
-  color: $white
-  font-size: 14px
-  font-weight: bold
-  float: left
-  width: 452px
-  padding-right: 10px
-  cursor: pointer
 
 
 // ReviewView
@@ -1446,7 +1454,7 @@ div.permissions_dialog
     background-color: #FFFFD5 !important
     color: red !important
 
-#processing_request
+#processing_request 
   background: #fff
   border: 1px solid #000
   left: 42%
@@ -1456,4 +1464,3 @@ div.permissions_dialog
   text-align: center
   width: 200px
   z-index: 5
-
