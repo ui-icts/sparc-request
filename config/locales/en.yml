@@ -12,7 +12,7 @@
 # DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-uiowa:
+en:
   about_text: "SPARC Request (Services, Pricing, & Application for Research Centers) is a web-based research management system that provides a central portal (one-stop shop) to researchers and their study teams to browse for research services and resources, as well as submit service and pricing requests with a focus on billing compliance and proposal/budget development. The free software is open to MUSC affiliates and CTSA institutions to adopt and capitalize on efficiencies."
   about_title: "About SPARC Request"
   activerecord:
