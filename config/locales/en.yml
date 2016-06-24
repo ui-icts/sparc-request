@@ -1798,22 +1798,22 @@ en:
 
   # Rails Root Page Messages
   rails_root:
-    message1: "I-CART is an online one-stop-shopping experience that efficiently manages all of your ICTS-related research requests and services. Anyone requesting to use ICTS services must use I-CART. If you need help planning your project, please select the appropriate consulting service to meet with a service manager."
-    welcome: "Welcome to the UIowa SPARC Request Services Catalog"
+    message1_html: "I-CART is an online one-stop-shopping experience that efficiently manages all of your ICTS-related research requests and services. Anyone requesting to use ICTS services must use I-CART. If you need help planning your project, please select the appropriate consulting service to meet with a service manager."
+    welcome_html: "Welcome to the UIowa SPARC Request Services Catalog"
     # message2: "Click \"Add Services\" at the bottom of any service description to add it to your \"My Services\"."
     # message3: "To delete a service from \"My Services\", use the red X beside any service."
-    message4: "I-CART is powered by Medical University of South Carolina’s Services, Pricing, & Applications for Research Centers (SPARC) request management system."
-    message5: "Welcome to SPARC Request Version 4.0. We're happy to announce that Step 2 now includes the concept of clinical trial arms. You'll find other numerous enhancements and upgrades in Version 4.0. For more information and training documents, please visit our new website at"
+    message4_html: "I-CART is powered by Medical University of South Carolina’s Services, Pricing, & Applications for Research Centers (SPARC) request management system."
+    message5_html: "Welcome to SPARC Request Version 4.0. We're happy to announce that Step 2 now includes the concept of clinical trial arms. You'll find other numerous enhancements and upgrades in Version 4.0. For more information and training documents, please visit our new website at"
     # <a>http://academicdepartments.musc.edu/sparc_request/</a>.
-    message6: "Please contact the PLACEHOLDER at xxx-xxxx with any questions or to set up a demonstration!"
-    message7: "Check out our SPARC Request Blog ("
-    message8: "). This feature allows you to follow our latest news and is a great way to ask questions of and leave feedback for the SPARC Request Team as well as communicate with both us and other SPARC Request Users."
+    message6_html: "Please contact the PLACEHOLDER at xxx-xxxx with any questions or to set up a demonstration!"
+    message7_html: "Check out our SPARC Request Blog ("
+    message8_html: "). This feature allows you to follow our latest news and is a great way to ask questions of and leave feedback for the SPARC Request Team as well as communicate with both us and other SPARC Request Users."
     # message7: "Due to user feedback regarding the inclusion of Indirect Costs in the Grand Total of Study Costs, Indirect Costs (as a line item) have currently been removed from SPARC Request and will be reintroduced in the budget template tools in the Study Tracker Release. Please contact the SUCCESS Center at 792-8300 with any questions."
-    message9: 'Search for services above or browse the catalog to your left. <strong>You may only select services applicable to ONE research study/project at a time</strong>. Please watch the following <a href="http://academicdepartments.musc.edu/sctr/sparc_request/training.html" target="_blank">training videos</a> to learn more.'
+    message9_html: 'Search for services above or browse the catalog to your left. <strong>You may only select services applicable to ONE research study/project at a time</strong>. Please watch the following <a href="http://academicdepartments.musc.edu/sctr/sparc_request/training.html" target="_blank">training videos</a> to learn more.'
     message9link: ''
-    message10: ""
+    message10_html: ""
     message10link: ''
-    message11: ""
+    message11_html: ""
 
   # Related Service Requests (portal/admin/)
   related:
