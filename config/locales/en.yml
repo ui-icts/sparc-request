@@ -1,24 +1,18 @@
 # Copyright © 2011 MUSC Foundation for Research Development
 # All rights reserved.
-
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
 # 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
 # 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
 # disclaimer in the documentation and/or other materials provided with the distribution.
-
 # 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
 # derived from this software without specific prior written permission.
-
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
 # BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
 # SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
 # DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-en:
+uiowa:
   about_text: "SPARC Request (Services, Pricing, & Application for Research Centers) is a web-based research management system that provides a central portal (one-stop shop) to researchers and their study teams to browse for research services and resources, as well as submit service and pricing requests with a focus on billing compliance and proposal/budget development. The free software is open to MUSC affiliates and CTSA institutions to adopt and capitalize on efficiencies."
   about_title: "About SPARC Request"
   activerecord:
@@ -27,18 +21,20 @@ en:
         nct_number: "The NCT #"
       protocol:
         human_subjects_info: "The NCT #"
-  admin_portal_title: "SPARC Request Administration"
+  admin_portal_title: "I-CART Request Administration"
   application_title: "SPARC Request"
   bug_enhancement_link: "Report a bug or request an enhancement"
-  catalog_manager_title: "SPARC Request Catalog Manager"
-  error_contact: "(843) 792-8300 or success@musc.edu"
+  catalog_manager_title: "I-CART Request Catalog Manager"
+  error_contact: "iCartHelp@healthcare.uiowa.edu"
   feedback: "Feedback"
-  issue_contact: "Please contact the SUCCESS Center at (843) 792-8300 or success@musc.edu for assistance with this process or with any questions you may have."
-  portal_title: "SPARC Request Portal"
+  issue_contact: "Please contact us at iCartHelp@healthcare.uiowa.edu for assistance with this process or with any questions you may have."
+  portal_title: "I-CART Request Portal"
+  create_an_account: 'Non-UIOWA User? Create an Account'
 
   # Admin Dashboard
   admin_dashboard:
     billing_business: "Billing/Business Manager"
+
     delete_confirm: "Are you sure?"
     delete_link: "Delete"
     delete: "Delete This Request"
@@ -46,6 +42,7 @@ en:
     epic_interface: "Epic Interface"
     export_link: "Export"
     export: "Export to Excel"
+
     id: "SRID"
     notifications_title: "Dashboard <span>|</span> Notifications"
     pi: "Principal Investigator"
@@ -64,40 +61,45 @@ en:
       protocol_info: "Project/Study Information"
       related_srs: "Related Service Requests"
       services: "Services"
+
       subject_tracker: "Subject Tracker"
       template: "Template"
       users: "Authorized Users"
     title: "Dashboard <span>|</span> Welcome"
 
   admin_identities:
+
+
     button_cancel: "Cancel"
-    button_add_user: "Add User"
+    button_add_user: "Add User to I-CART"
     button_edit_user: "Edit User"
     button_search: "Search"
     button_update_user: "Update User"
-    catalog_manager: "Catalog Manager"
+    catalog_manager: "Catalog Manager" 
     edit_user_modal_title: "Update "
     edit_user_email: "Email"
     edit_user_first_name: "First name"
-    edit_user_last_name: "Last name"
+    edit_user_last_name: "Last name" 
+
     edit_user_required: "Required"
     edit_user_valid_email_required: "Valid email required"
-    footer: "* Close this window or tab when you're done adding new users."
-    grid_uid: "LDAP UID"
+    footer: "* Close this window or tab when you're done adding new users to I-CART."
+    grid_uid: "HawkID"
     home: "Users"
     page_title: "Advanced User Search"
     portal: "Dashboard"
     portal_admin: "Portal Admin"
     request_services: "Request Services"
     return_to_basic_user_search: "Please go back to the 'STEP 1: Add Users' window to add them to your study/project."
-    search_help_block: "Filter the results by searching within the column headers in the grid below. Edit User buttons are displayed for people already in the system and only usable by administrators."
-    search_placeholder: "Find users by first name, last name, email, or user ID"
+    search_help_block: "Full name searches do not work. Filter the results by searching within the column headers in the grid below. Edit User buttons are displayed for people already in I-CART and only usable by I-CART administrators."
+    search_placeholder: "Search one of the following: first name, last name, email, or HawkID"
 
   # Admin Root Page
   admin_root:
     assigned: "Person Assigned"
     date: "Date Submitted"
     orgs: "Provider/Program/Core"
+ 
     requester: "Requester"
     search_placeholder: "Search all service requests..."
     service: "Service"
@@ -105,17 +107,17 @@ en:
 
   # Bottom navigation
   bottom_navigation:
-    cancel: "Cancel"
-    continue: "Continue"
+    cancel: " ⟵ Cancel"
+    continue: "Continue ⟶ "
     get_cost_estimate: "Get Cost Estimate"
-    go_back: "Go Back"
-    save_and_continue: "Save & Continue"
+    go_back: " ⟵ Go Back"
+    save_and_continue: "Save & Continue ⟶ "
     save_and_exit: "Save as Draft"
     save_as_draft: "Save As Draft"
-    submit_to_start: "Submit to Start Services"
+    submit_to_start: "Submit to Start Services ⟶ "
 
   message:
-    red_message: "Pricing is consistent across locations unless otherwise stated."
+    red_message: ""
 
   # Calendar Page
   calendar_page:
@@ -130,7 +132,7 @@ en:
       qty_type: "Qty Type"
       service_rate: "Service Rate"
       services: "Services"
-      subjects: "N"
+      subjects: "# Subjects"
       total_per_patient: "Total Per Patient"
       total_per_study: "Total Per Study"
       total_study: "Study Cost Totals"
@@ -174,6 +176,7 @@ en:
     institution: "Create New Institution"
     pricing_map1: "No Pricing Map Changes"
     pricing_map2: "Save and Apply to Pricing Maps"
+
     processing: "Processing request"
     program: "Create New Program"
     provider: "Create New Provider"
@@ -201,10 +204,10 @@ en:
     core: "Core"
     cpt_code: "CPT Code"
     css_class: "Color"
-    ctrc_label: "Nexus"
+    ctrc_label: "Clinical Research Support"	
     default_statuses: "Default Statuses:"
     description: "Description"
-    disabled: "Do not display in SPARC"
+    disabled: "Do not display in I-CART"
     epic_info: "Epic Interface"
     errors: "Effective Date, Display Dates, Percent of Fee, and Rates are required on all pricing setups."
     gen_info: "General Information"
@@ -252,6 +255,7 @@ en:
     is_one_time_fee: "Is One Time Fee"
     member_rate: "Member Rate"
     one_time_fee: "One Time Fee"
+
     otf_quantity_minimum: "Quantity Minimum"
     otf_unit_type: "Unit Type (weeks, days, samples, etc.)"
     other_rate: "Other Rate"
@@ -264,7 +268,6 @@ en:
     unit_maximum: "Unit Maximum"
     unit_minimum: "Quantity Minimum"
 
-  # Catalog Manager Shared Stuff
   cm_shared:
     headers:
       actions: "Actions"
@@ -330,7 +333,7 @@ en:
       survey_name: "Name (and Version)"
       survey_warning: "* The associated survey(s) will be sent out to the service requester(s) through email at the time of service completion."
       unfunded: "Unfunded Student Research*"
-    title: "SPARC Request Services Catalog"
+    title: "I-CART Request Services Catalog"
 
   # Documents Page
   documents:
@@ -355,6 +358,7 @@ en:
       uploaded: "Uploaded"
       uploads: "Document Uploads"
       versions: "Version"
+    panel_title: "Documents" #added as part of addi'l details
     select_prompt: "Select a Type"
     update_button: "Update"
     upload_button: "Upload"
@@ -391,7 +395,7 @@ en:
     funding_rfa: "Funding Opportunity #/RFA:"
     funding_source_other: "Please Specify"
     funding_start_date: "Funding Start Date:"
-    hr_number: "HR #:"
+    hr_number: "HawkIRB #:"
     human_subjects: "Human Subjects:"
     iacuc_approval_date: "IACUC Approval Date:"
     iacuc_expiration_date: "IACUC Expiration Date:"
@@ -408,7 +412,7 @@ en:
     irb_expiration_date: "IRB Expiration Date:"
     irb_of_record: "IRB of Record:"
     name_of_iacuc: "Name of IACUC:"
-    nct_number: "NCT #:"
+    nct_number: "NCT # (clinicaltrials.gov number):"
     needed_info: "Information needed to obtain correct pricing"
     optional_text: "Optional Information"
     optional_text2: "(used for reporting purposes and saved for your future use)"
@@ -421,7 +425,7 @@ en:
     potential_blank: "Select a Potential Funding Source"
     potential_funding_source_other: "Please Specify"
     potential_funding_start_date: "Potential Funding Start Date:"
-    pro_number: "Pro #:"
+    pro_number: "WIRB #:"
     push_to_epic: "Publish Study in Epic: *"
     save: "Save"
     sponsor_name: "Sponsor Name:*"
@@ -431,7 +435,7 @@ en:
     submission_type: "Submission Type:"
     title: "Protocol Title:*"
     type: "Study Type (Check all that apply)"
-    udak_project_number: "Financial Account (UDAK#):"
+    udak_project_number: "Financial Account (MFK#):"
     vertebrate_animals: "Vertebrate Animals:"
 
   # Fulfillment tab
@@ -529,14 +533,14 @@ en:
     protocol: "Queued Protocol"
     status: "Last Queue Status"
   footer:
-    mail_to: "hundc@musc.edu"
-    mail_link: "Sign Up For the SPARC Request Listserv"
-    mail_subject: "SPARC Request Listserv"
-    link_one_text: "SPARC Request Blog"
-    link_one_url: "http://sparcrequestblog.com/"
-    link_two_text: "SCTR"
-    link_two_url: "http://sctr.musc.edu"
-    link_three_text: "SPARC Request Home"
+    mail_to: ""
+    mail_link: ""
+    mail_subject: ""
+    link_one_text: "I-CART Newsletter"
+    link_one_url: "https://list.uiowa.edu/scripts/wa.exe?SUBED1=ICTS-I-CART&A=1"
+    link_two_text: "SPARC Request Blog"
+    link_two_url: "http://sparcrequestosblog.com/"
+    link_three_text: "SPARC Request at MUSC"
     link_three_url: "http://academicdepartments.musc.edu/sctr/sparc_request"
   identity:
     approved: "Account approved"
@@ -545,7 +549,7 @@ en:
     create_report: "Create Report"
     defined_reports_desc: "Please select a defined report below and click to proceed with report customizations."
     defined_reports: "Defined Reports"
-    intro: "Welcome to the SPARC Request Reporting Module. Please select a report type to proceed."
+    intro: "Welcome to the I-CART Request Reporting Module. Please select a report type to proceed."
     proceed: "Proceed"
     return_to_admin_portal: "Return to Admin Portal"
   study_tracker:
@@ -643,9 +647,9 @@ en:
   # Indirect cost rates, default values used to prepopulate forms
   indirect_cost_rates:
     internal_and_college: "0"
-    industry: "30"
-    foundation_and_investigator: "25"
-    federal: "49.5"
+    industry: "25"
+    foundation_and_investigator: "15"
+    federal: "51"
 
   pricing_setup:
     pricing_setup_display_date: "Pricing setup's 'display date'"
@@ -662,9 +666,11 @@ en:
   # Javascript localizations
   ajax_error: "An error happened processing your request: "
   cart:
-    remove_request_confirm: "This action will delete this service request and you will be redirected to your user portal. Click OK to proceed."
+    remove_request_confirm: "This action will delete this service request and you will be redirected to the dashboard. Click OK to proceed."
     new_request_dialog1: "New Request?"
     new_request_dialog2: "Is this a new research study or project?"
+    request_submitted1: "Delete Service Warning"
+    request_submitted2: "Deleting this service from the service cart will be irreversible and will cause it to be deleted from the associated protocol (%{protocol_id}). Are you sure you want to proceed?"
   catalog_manager_js:
     clinical_provider_remove: "Are you sure you want to remove this Fulfillment Provider?"
     cm_rights_remove: "Are you sure you want to remove rights for this user from the Catalog Manager?"
@@ -682,6 +688,7 @@ en:
     service_remove: "Are you sure you want to remove this Related Service?"
     super_user_remove: "Are you sure you want to remove this Super User?"
     survey_delete: "Are you sure you want to remove this Associated Survey?"
+
   cwf_js:
     calendar_changed: "Changes to patient calendars need to be saved, click 'Stay on page' and save the form to save the calendar, or click 'Leave page' to leave the page and dismiss your changes."
     subject_changed: "Changes to subjects need to be saved. Click 'Cancel' to return to the page and save the form, or 'OK' to leave the page and dismiss your changes."
@@ -735,13 +742,13 @@ en:
     header1: "Authorized Users have been edited or added in"
     header2: "for your"
     header3: "listed below."
-    link1: "SPARC Request"
+    link1: "I-CART Request"
     link2: "please click here."
     name: "Name:"
     p_id: "Protocol ID:"
     p_info: "Protocol Information"
     proxy: "Proxy Rights"
-    received: "You have received a new notification on your SPARC Request User Dashboard. Please login  @ %{portal_root_url} to retrieve it. Thank you."
+    received: "You have received a new notification on your I-CART Request User Dashboard. Please login  @ %{portal_root_url} to retrieve it. Thank you."
     role: "Role:"
     s_name: "Sponsor Name"
     title1: "Short Title:"
@@ -770,7 +777,7 @@ en:
     fname: "First Name:"
     lname: "Last Name:"
     mail: "Email:"
-    message: "To create an account for the utilization of the SPARC Request application, please provide the following information:"
+    message: "To create an account for the utilization of the I-CART Request application, please provide the following information:"
     not_approved: "Close Window"
     phone: "Telephone Number:"
     reason: "Reason for account/login request:"
@@ -797,7 +804,6 @@ en:
     unread: "Mark as Unread"
     warning: "You can not send a message to yourself."
 
-  # Notifier
   notifier:
     action: "Action"
     admin_data: "Admin Information"
@@ -815,8 +821,8 @@ en:
     name: "Name:"
     notice:
       approve: "Approve Account"
-      body1: "Request for new SPARC Request account submitted and awaiting approval"
-      body2: "A new SPARC Request account is waiting for approval."
+      body1: "Request for new I-CART Request account submitted and awaiting approval"
+      body2: "A new I-CART Request account is waiting for approval."
       company: "Company"
       disapprove: "Disapprove Account"
       email: "Email"
@@ -837,11 +843,11 @@ en:
     ssr_ids: "Sub Service Request IDs:"
     ssr_id: "Sub Service Request ID:"
     status_change:
-      body1: "Request for new SPARC Request account status change"
-      body2: "Your request for a new SPARC Request account has been approved.  You may proceed with your service "
+      body1: "Request for new I-CART Request account status change"
+      body2: "Your request for a new I-CART Request account has been approved.  You may proceed with your service "
       body3: "request using your newly created"
       body4: "username and password."
-      body5: "Your request for a new SPARC Request account has NOT been approved."
+      body5: "Your request for a new I-CART Request account has NOT been approved."
     title1: "Short Title:"
     title2: "Project Title:"
     triggered_by: "Current Identity:"
@@ -863,7 +869,7 @@ en:
     department: "Department:"
     edit_user: "Edit User"
     email: "E-mail:"
-    epic_access: "Epic EMR Access?:*"
+    epic_access: "Epic EMR Access?:"
     era: "ERA Commons Name:"
     institution_prompt: "Select an Institution"
     institution: "Institution:"
@@ -877,7 +883,6 @@ en:
       view: 'View Rights'
     role_prompt: "Select a Role"
     role: "Role:*"
-    specify: "Please Specify:*"
     subspecialty_prompt: "Select a Subspecialty"
     subspecialty: "Subspecialty:"
 
@@ -897,7 +902,7 @@ en:
     create:
       study: "Create New Study"
       project: "Create New Project"
-    ctrc_services_exist: "SCTR Research Nexus services have been found on another Service Request %{protocol_id}-%{ssr_id} pertaining to this Project/Study %{short_title}. To edit this request, please contact the Nexus at 792-8688."
+    ctrc_services_exist: "Clinical Research Unit services have been found on another Service Request %{protocol_id}-%{ssr_id} pertaining to this Project/Study %{short_title}. Please remove the services from your cart and contact the CRU at iCartHelp@healthcare.uiowa.edu."
     date: "Submitted Date:"
     delete: "Delete"
     edit_original: "Edit Original"
@@ -907,7 +912,7 @@ en:
     greeting: "Welcome!"
     information: "Information:"
     loading: "Loading your Projects/Studies"
-    message1: "Within your dashboard, you can view (and/or edit and submit) service requests currently in SPARC Request, as well as all of those still in 'draft' status."
+    message1: "Within your dashboard, you can view (and/or edit and submit) service requests currently in I-CART Request, as well as all of those still in 'draft' status."
     message2: "Please note that Projects/Studies are listed in descending order."
     name: "Name:"
     no_authorized_users: "Currently no authorized users"
@@ -958,7 +963,7 @@ en:
 
   # Project/Study assignment page
   study_assignment:
-    current_project: "Current Project: <span>&nbsp</span>"
+    current_project: "Current Project: <span>&nbsp</span>"	
     current_study: "Current Study: <span>&nbsp</span>"
     edit_project: "Edit Project"
     edit_study: "Edit Study"
@@ -983,22 +988,22 @@ en:
 
   # Rails Root Page Messages
   rails_root:
-    message1: "Search for services above or browse the catalog to your left."
-    welcome: "Welcome to the SPARC Request Services Catalog"
+    message1: "I-CART is an online one-stop-shopping experience that efficiently manages all of your ICTS-related research requests and services. Anyone requesting to use ICTS services must use I-CART. If you need help planning your project, please select the appropriate consulting service to meet with a service manager."
+    welcome: "Welcome to the UIowa SPARC Request Services Catalog"
     # message2: "Click \"Add Services\" at the bottom of any service description to add it to your \"My Services\"."
     # message3: "To delete a service from \"My Services\", use the red X beside any service."
-    message4: "** Please Note: You may only select services applicable to ONE research study/project at a time.**"
+    message4: "I-CART is powered by Medical University of South Carolina’s Services, Pricing, & Applications for Research Centers (SPARC) request management system."
     message5: "Welcome to SPARC Request Version 4.0. We're happy to announce that Step 2 now includes the concept of clinical trial arms. You'll find other numerous enhancements and upgrades in Version 4.0. For more information and training documents, please visit our new website at"
     # <a>http://academicdepartments.musc.edu/sparc_request/</a>.
-    message6: "Please contact the SUCCESS Center at 792-8300 with any questions or to set up a demonstration!"
+    message6: "Please contact the PLACEHOLDER at xxx-xxxx with any questions or to set up a demonstration!"
     message7: "Check out our SPARC Request Blog ("
     message8: "). This feature allows you to follow our latest news and is a great way to ask questions of and leave feedback for the SPARC Request Team as well as communicate with both us and other SPARC Request Users."
     # message7: "Due to user feedback regarding the inclusion of Indirect Costs in the Grand Total of Study Costs, Indirect Costs (as a line item) have currently been removed from SPARC Request and will be reintroduced in the budget template tools in the Study Tracker Release. Please contact the SUCCESS Center at 792-8300 with any questions."
-    message9: "Website/Training: "
-    message9link: 'http://academicdepartments.musc.edu/sctr/sparc_request'
-    message10: "Blog: "
-    message10link: 'http://www.sparcrequestblog.com'
-    message11: "Pricing is consistent across locations unless otherwise stated."
+    message9: 'Search for services above or browse the catalog to your left. <strong>You may only select services applicable to ONE research study/project at a time</strong>. Please watch the following <a href="http://academicdepartments.musc.edu/sctr/sparc_request/training.html" target="_blank">training videos</a> to learn more.'
+    message9link: ''
+    message10: ""
+    message10link: ''
+    message11: ""
 
   # Related Service Requests (portal/admin/)
   related:
@@ -1017,7 +1022,7 @@ en:
     dashboard: "Dashboard"
     faq: "Help/FAQs"
     feedback: "Feedback"
-    redcap_survey: 'https://redcap.musc.edu/surveys/?s=A37TNJWJPL'
+    redcap_survey: "https://redcap.icts.uiowa.edu/redcap/surveys/?s=7LRHJ9NP3M"
 
   # Service Request approve epic rights
   approve_epic_rights:
@@ -1034,8 +1039,8 @@ en:
       provider: "Provider:"
       short_title: "Short Title: "
     download_button: "Download my Service Request"
-    instructions: "Thank you for submitting your service request(s) through SPARC Request. An email has been sent to each of your service providers and they should be contacting you soon. If you have any questions or concerns, please don't hesitate to contact the SUCCESS Center at 792-8300 or success@musc.edu."
-    portal_button: "Go to SPARC Request User Portal"
+    instructions: "Thank you for submitting your service request(s) through I-CART. An email has been sent to each of your service providers and they should be contacting you soon. If you have any questions or concerns, please don't hesitate to contact us at iCartHelp@healthcare.uiowa.edu"
+    portal_button: "Go to I-CART Dashboard"
     research_pricing_instructions : "You have successfully submitted a request to get a cost estimate. An email(s) has been submitted on your behalf, and we will respond to your request for a cost estimate shortly. Should you have any questions regarding your request(s), please contact the service provider contact(s) listed below."
 
   # Service Request Details form
@@ -1045,7 +1050,7 @@ en:
     number_of_subjects: "Estimated Total Number of Subjects"
     number_of_visits: "Estimated Total Number of Visits"
     one_time_fee_and_per_patient_instructions: "Next, please enter the following information specific to your research study/project. This information will help us generate applicable service fees for your review."
-    one_time_fee_instructions: "Please enter service details for SPARC Request Services that you selected"
+    one_time_fee_instructions: "Please enter service details for I-CART Request Services that you selected"
     per_patient_instructions: "Please enter the following information specific to your research study/project. This information will help us generate applicable service fees for your review."
     recruitment_end_date: "Estimated Recruitment End Date"
     recruitment_start_date: "Estimated Recruitment Start Date"
@@ -1072,7 +1077,7 @@ en:
         indirect_cost: "Total Indirect Costs"
     instructions: "<ul class='review_instructions'><li>Review your request.</li><li>Makes changes (if needed).</li><li>Save as draft for later, get a cost estimate, or submit to start services.</li></ul>"
     notes_header: "Service Request Notes"
-    participate_in_survey: "Would you like to participate in a brief 1 question SPARC Request satisfaction survey?"
+    participate_in_survey: "Would you like to participate in a brief 1 question I-CART Request satisfaction survey?"
     participate_in_survey_title: "System Satisfaction Survey"
     save_as_draft_notification: "This study will be saved as a draft, and no notifications or emails will be sent to the service providers. Do you wish to proceed?"
     save_as_draft_notification_title: "Notification"
@@ -1081,7 +1086,7 @@ en:
       funding_source: "Funding Source:"
       sponsor_name: "Sponsor Name:"
       short_title: "Short Title"
-      title: "Study/Project Information:"
+      title: "Study/Project Title:"
 
   # Service Requests
   service_requests:
@@ -1098,7 +1103,7 @@ en:
     detail_list:
       description1: "(Samples, hours, etc...)"
       description2: "(Slides, etc...)"
-      nan: "Please enter a valid number."
+      nan  : "Please enter a valid number."
       q_type: "Quantity Type"
       quantity: "Quantity"
       service: "Service"
@@ -1115,24 +1120,24 @@ en:
       text3: "Ready for Fulfillment:"
       text4: "Total Cost"
 
-  # Sign in page
+
   login_name: "Username:"
   login_password: "Password:"
   remember_user: "Remember me:"
   signin:
-    button1: "MUSC Users Click Here"
+    button1: "UIowa Users Click Here"
     button2: "Outside Users Click Here"
     button3: "Sign In"
-    message1: "MUSC Users- Sign in here"
+    message1: "UIowa Users- Sign in here"
     message2: ""
-    message3: "Outside Users- Sign in here with your SPARC Request account"
+    message3: "Outside Users- Sign in here with your I-CART Request account"
     message4: ""
 
   # Sign in popup
   create_new_account_link: "Outside Users: Don't have an account? Click here."
-  initial_signin_dialog: "You are not currently logged into SPARC Request. If you are affiliated with an institution and have an institutional login OR have created a SPARC Request account and have a SPARC Request login and password, please click the top button to proceed. If you are not currently affiliated with an institution OR do not have a SPARC Request login/password, please click the button on the bottom to proceed with creating a new account."
-  proceed_to_database_login: "Outside Users with existing SPARC Request Accounts"
-  proceed_to_shibboleth: "MUSC Users"
+  initial_signin_dialog: "You are not currently logged into I-CART Request. If you are affiliated with an institution and have an institutional login OR have created a I-CART Request account and have a I-CART Request login and password, please click the top button to proceed. If you are not currently affiliated with an institution OR do not have a I-CART Request login/password, please click the button on the bottom to proceed with creating a new account."
+  proceed_to_database_login: "Outside Users with existing I-CART Request Accounts"
+  proceed_to_shibboleth: "UIowa Users"
 
   # Steps navigation
   step_navigation:
@@ -1143,7 +1148,7 @@ en:
     step_5: "STEP 5: <br /> Submission <br /> Confirmation"
 
   ie_warning:
-    text1: "Your browser version is out of date. SPARC Request does not support Internet Explorer versions older than version 8."
+    text1: "Your browser version is out of date. I-CART Request does not support Internet Explorer versions older than version 8."
     text2: "Using versions lower than 8 can cause data curruption, and other serious problems using this tool."
 
   # Study/Project Shared
@@ -1164,7 +1169,7 @@ en:
   # Subsidy Page
   subsidy_page:
     additional_confirm: "Are you sure you want to leave? Any unsaved changes to this service request will be lost."
-    eligible_html: "The services selected below may be eligible for a <b><i>funding award</i></b> or subsidy to cover some or all of the costs of the services. For example, SCTR (CTSA) provides funding awards for the Research Nexus."
+    eligible_html: "The services selected below may be eligible for a <b><i>funding award</i></b> or subsidy to cover some or all of the costs of the services."
     not_eligible: "None of the services you have selected are eligible for a subsidy."
     overridden: "This request has been previously submitted and the subsidy can now only be edited by an Admin."
     request_additional: "To request additional research funding go to"
@@ -1179,9 +1184,10 @@ en:
 
   # Tag label overrides
   tags:
-    ctrc: "Nexus"
+    ctrc: "Clinical Research Support"
     clinical_work_fulfillment: "Fulfillment"
-    ctrc_clinical_services: "Nexus clinical services"
+    ctrc_clinical_services: "Clinical Research Support services"
+
 
   # Tooltip help dialogs
   cart_help:
@@ -1194,10 +1200,10 @@ en:
       answer_text3: "Add as many Authorized Users as you feel is pertinent. There is no limit."
       question_text4: "What is the difference  between a Research Study and a Project?"
       answer_text4: "A Research Study is an individual research protocol with defined aims and outcomes."
-      question_text5: "How is SPARC Request calculating my indirect costs?"
-      answer_text5: "The original requester for your study/project defined both the funding source of the study/project and the indirect cost rate. SPARC Request uses this data to calculate your total overall indirect costs."
-      question_text6: "I\'m stuck! Who can I contact for assistance with SPARC Request?"
-      answer_text6: "The SUCCESS Center is happy to assist you! Please contact us at success@musc.edu or (843) 792-3357."
+      question_text5: "How is I-CART Request calculating my indirect costs?"
+      answer_text5: "The original requester for your study/project defined both the funding source of the study/project and the indirect cost rate. I-CART Request uses this data to calculate your total overall indirect costs."
+      question_text6: "I'm stuck! Who can I contact for assistance with an I-CART Request?"
+      answer_text6: "We are happy to assist you! Please contact us at iCartHelp@healthcare.uiowa.edu"
 
   # User details partial
   user_details:
@@ -1216,15 +1222,14 @@ en:
     phone: "Phone"
     role: "Role"
     role_select: "Select a Role"
+    specify: "Please Specify:*"
     subspecialty: "Subspecialty:"
     subspecialty_prompt: "Select a Subspecialty"
     update_button: "Update Authorized User"
-
-  # User list partial
   user_list:
     actions: "Actions"
     check_apply: "Check the appropriate securities for Epic access:"
-    epic_access: "Epic EMR Access?"
+    epic_access: "Epic EMR Access?:*"
     information: "Research Study/Project Authorized Users"
     message: "(Select appropriate level of study/project rights)"
     proxy_rights: "Proxy Rights"
@@ -1233,13 +1238,65 @@ en:
     rights3: "Request/Approve Services:"
     rights4: "Authorize/Change"
     rights5: "Study Charges:"
-
-  # User search partial
   user_search:
-    advanced_user_search_title: "Click here to add users to SPARC and then return to this page to add them to this study/project."
+    advanced_user_search_title: "Click here to add users to I-CART and then return to this page to add them to this study/project."
     help_block: "Unable to find a user? Please try the"
     help_block_link_text: "Advanced User Search"
     message: "To begin to search and add authorized users to this study/project, type in the first or last name of the user.  Select as appropriate."
     search_box_header: "User Search"
     search_placeholder: "Search for user..."
-
+  # user details partial
+  additional_details:
+    admin:
+      add_question_button: "Add Question"
+      cancel_button: "Cancel"
+      catalog_manager: "Catalog Manager"
+      close_button: "Close"
+      delete_all_questions_button: "Delete All"
+      delete_question_button: "Delete Selected"
+      form_creation_error: "prohibited this form from being saved:"
+      form_creation_panel_header: "Additional Details Form Creator"
+      form_creation_questions_header: "Questions"
+      form_data_preview_header: "Form Data"
+      form_grid_add_new_button: "Add new Additional Details Form"
+      form_grid_label: "Additional Detail Forms for "
+      form_tab_label: "Additional Details"
+      home: "Additional Details"
+      import_export_button: "Import / Export Form"
+      import_export_modal_header: "Import or Export an Additional Detail Form"
+      import_export_panel_header: 'Select All and then "Copy" to Export or "Paste" to Import'
+      portal: "Dashboard"
+      portal_admin: "Portal Admin"
+      question_modal_add_update_question_button: " Question"
+      question_modal_clear_question_button: "Clear Question"
+      question_modal_condition_field: "Show the question ONLY if..."
+      question_modal_description_field: "Description"
+      question_modal_header: " a Question"
+      question_modal_key_field: "Key"
+      question_modal_question_field: "Question"
+      question_modal_required_field: "Required"
+      question_modal_type_field: "Type"
+      question_modal_values_field: "Values"
+      request_services: "Request Services"
+      response_export_all_data_button: "Export All Data"
+      response_export_grid_label: "Export Responses for "
+      response_grid_label: "Additional Details for "
+      response_grid_label: "Administer Responses for "
+      response_tab_label: "Responses"
+      save_form_button: "Save Form"
+      service_request_not_found: "The Service Request ID was not found."
+      show_response_header: "Response"
+      unauthorized: "You are not authorized to view this page."
+    organization_form:
+      label: "Additional Details"
+      link_text_active: " [Enabled]"
+      link_text_inactive: "Add Additional Details"
+      pre_creation: "This service must be saved before additional details can be added."
+    portal:
+      required_questions: "Please complete the required Additional Details for this request."
+    portal_admin:
+      label: "Additional Details"
+    service_requests:
+      cancel_button: "Cancel"
+      questionnaire_label: "Please Answer the Following Questions"
+      save_button: "Save"
