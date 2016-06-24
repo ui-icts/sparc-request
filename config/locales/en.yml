@@ -132,6 +132,7 @@ uiowa:
       qty_type: "Qty Type"
       service_rate: "Service Rate"
       services: "Services"
+      status: 'Status'
       subjects: "# Subjects"
       total_per_patient: "Total Per Patient"
       total_per_study: "Total Per Study"
