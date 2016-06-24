@@ -1,11 +1,4 @@
 GIT
-  remote: git://github.com/swanandp/acts_as_list.git
-  revision: 0a4ad6b22bc601443f98bd7b9a9445d4fe26b749
-  specs:
-    acts_as_list (0.7.2)
-      activerecord (>= 3.0)
-
-GIT
   remote: https://github.com/jleonardw9/grouped_validations.git
   revision: dc4207a7966fe691a240a47718b3d9689861a76f
   branch: master
@@ -26,6 +19,13 @@ GIT
       rails-observers (~> 0.1)
       sass
       uuidtools (~> 2.1)
+
+GIT
+  remote: https://github.com/swanandp/acts_as_list
+  revision: cf26784e1c96ccf26bf4c989a3ec1c790ce8c2d7
+  specs:
+    acts_as_list (0.7.4)
+      activerecord (>= 3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -575,3 +575,6 @@ DEPENDENCIES
   will_paginate
   will_paginate-bootstrap
   x-editable-rails
+
+BUNDLED WITH
+   1.11.2
