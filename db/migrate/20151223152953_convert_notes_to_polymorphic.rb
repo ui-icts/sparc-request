@@ -17,6 +17,22 @@ class ConvertNotesToPolymorphic < ActiveRecord::Migration
       note.update_column(:notable_type, "Appointment")
     end
 
+    ## We faile right here
+    #Mysql2::Error: Cannot drop index 'index_notes_on_sub_service_request_id': needed in a foreign key constraint: ALTER TABLE `notes` DROP `sub_service_request_id`/Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/abstract_mysql_adapter.rb:305:in `query'
+#/Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/abstract_mysql_adapter.rb:305:in `block in execute'
+# /Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/abstract_adapter.rb:473:in `block in log'
+# /Users/cortman/.gem/ruby/2.1.5/gems/activesupport-4.2.4/lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+# /Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/abstract_adapter.rb:467:in `log'
+# /Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/abstract_mysql_adapter.rb:305:in `execute'
+# /Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/mysql2_adapter.rb:231:in `execute'
+# /Users/cortman/.gem/ruby/2.1.5/gems/activerecord-4.2.4/lib/active_record/connection_adapters/abstract/schema_statements.rb:415:in `remove_column'
+    # I wonder if it's because they don't f
+    #
+    
+    # Need to remove foreign keys we've added
+    remove_foreign_key :notes, name: 'Fk_40'
+    remove_foreign_key :notes, name: 'Fk_notes_appointment_id'
+
     remove_column :notes, :sub_service_request_id, :integer
     remove_column :notes, :appointment_id, :integer
 
