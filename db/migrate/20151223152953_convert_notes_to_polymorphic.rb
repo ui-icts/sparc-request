@@ -30,8 +30,14 @@ class ConvertNotesToPolymorphic < ActiveRecord::Migration
     #
     
     # Need to remove foreign keys we've added
-    remove_foreign_key :notes, name: 'Fk_40'
-    remove_foreign_key :notes, name: 'Fk_notes_appointment_id'
+    begin
+      remove_foreign_key :notes, name: 'Fk_40'
+      remove_foreign_key :notes, name: 'Fk_notes_appointment_id'
+    rescue => error
+      puts "Error removing foreign keys, might be ok if they don't exist"
+      puts "If the migration still succeeds don't worry about it. If it fails, this might be part of the problem"
+      puts error
+    end
 
     remove_column :notes, :sub_service_request_id, :integer
     remove_column :notes, :appointment_id, :integer
