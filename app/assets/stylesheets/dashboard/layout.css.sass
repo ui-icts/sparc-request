@@ -1,3 +1,22 @@
+// Copyright © 2011 MUSC Foundation for Research Development
+// All rights reserved.
+
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+// 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+// 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+// disclaimer in the documentation and/or other materials provided with the distribution.
+
+// 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
+// derived from this software without specific prior written permission.
+
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+// BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+// SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+// TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 .panel-heading
   h3
     white-space: nowrap
@@ -85,18 +104,12 @@ $brand-danger:  #d9534f
 // ------------------------------------------------>
 .header_logo_2
   height: 100px /* added */
-// added	
-#welcome_msg 
-  width: 950px
-  text-align: right
-  padding: 6px
-  background: white url(/assets/welcome_msg_background_gradient.png) left top repeat-x
 
 html, body
   height: 100%
 
 body
-  background: #F0F0F0 /* changed */
+  background: white url(/assets/dashboard/background_gradient.png) left top repeat-x
   color: #222222
   font-family: Verdana, Arial, Helvetica, sans-serif
   font-size: 75%
@@ -157,10 +170,6 @@ h2.title
 
 
 #container #header
-  padding-left: 5px /* added */
-  background: #383838 /* added */
-  
-#header
   height: 102px
   display: table
   margin: 0 auto
@@ -176,7 +185,7 @@ h2.title
 
 #container #department_title
   width: 510px
-  margin: 0px 0px 0 0px
+  margin: 22px 15px 0 -30px
   text-align: center
   a
     font-weight: bold
@@ -205,9 +214,9 @@ h2.title
   width: 941px
 #title
   color: #00346A
-  margin-top: 40px
+  margin-top: 50px
   background: white url(/assets/dashboard/puzzle_pieces.png) no-repeat
-  height: 82px
+  height: 92px
   h1
     padding: 10px 25px 0
     a
@@ -473,13 +482,11 @@ div.permissions_dialog
     th
       text-align: left
     td
-      padding: 10px 0 /* changed from 20px */
+      padding: 20px 0
     td.sender div
-      width: 90px /* changed from 130px */
-    td.srid div
-      width: 50px /* added */
+      width: 130px
     td.subject div
-      width: 160px /* changed from 170px */
+      width: 170px
     .image_placeholder
       padding: 0px
       div
@@ -521,7 +528,9 @@ div.permissions_dialog
   margin-top: 3px
 .user-buttons
   margin: 8px auto auto 10px
+.consolidated_request
   background: url(/assets/dashboard/yellowbutton_report.png) no-repeat
+  padding-left: 20px
 .add-services-button
   width: 230px
   height: 26px
@@ -1171,7 +1180,7 @@ div.permissions_dialog
       list-style: square !important
       list-style-position: inside
 
-#processing_request 
+#processing_request
   background: #fff
   border: 1px solid #000
   left: 42%

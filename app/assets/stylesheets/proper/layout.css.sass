@@ -75,7 +75,8 @@ a
   background: #003366 !important
 
 body
-  background: #F0F0F0
+  /* since not using gradient I want x and y repeat */
+  background: white url("/assets/background_gradient.png") left top repeat
   color: #222222
   font-family: "Calibri", "Helvetica Neue", Helvetica, sans-serif
   font-size: 75%
@@ -159,6 +160,7 @@ button
 
   #content
     background: #FFF
+    // height: 1050px
     height: 100%
     width: 960px
     border-left: outset 1px black
