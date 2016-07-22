@@ -13,14 +13,12 @@ RSpec.describe ServiceRequestsController do
 
     context 'without params[:admin_offset]' do
 
-      before { get :show, id: service_request.id }
+      before(:each) do
+        xhr :get, :show, id: service_request.id
+      end
 
       it 'should set protocol' do
         expect(assigns(:protocol)).to eq service_request.protocol
-      end
-
-      it 'should set service_list' do
-        expect(assigns(:service_list)).to eq service_request.service_list.with_indifferent_access
       end
 
       it 'should not set admin_offset' do
@@ -30,14 +28,12 @@ RSpec.describe ServiceRequestsController do
 
     context 'with params[:admin_offset]' do
 
-      before { get :show, id: service_request.id, admin_offset: 10 }
+      before(:each) do
+        xhr :get, :show, id: service_request.id, admin_offset: 10
+      end
 
       it 'should set protocol' do
         expect(assigns(:protocol)).to eq service_request.protocol
-      end
-
-      it 'should set service_list' do
-        expect(assigns(:service_list)).to eq service_request.service_list.with_indifferent_access
       end
 
       it 'should set admin_offset' do

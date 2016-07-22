@@ -26,12 +26,14 @@ $(document).ready ->
     $("#report_selection").show()
 
   $(document).on "change", ".reporting_field", ->
-    window.check_deps()
-    if $(this).data("resolve") and $(this).val() != ""
-      res = $(this).data("resolve")
-      $(res).prop('disabled', false)
-      cattype = $(this).val()
-      optionswitch(cattype, res)
+    parent_id = "#" + $(this).attr('id')
+    window.check_deps(parent_id)
+    if $(this).val() != ""
+      $(".check_dep_class.needs_update").each ->
+        $(this).removeClass('needs_update')
+        $(this).prop('disabled', false)
+        cattype = $(parent_id).val()
+        optionswitch(cattype, "#" + $(this).attr('id'))
 
   $(document).on "submit", "#reporting_form", (event) ->
     empty = $('.required_field').filter ->
@@ -76,47 +78,25 @@ rewriteoption = (myfilter, res) ->
     return optionlisting
 
 window.create_date_pickers = (from, to) ->
-  $("#{from}").datepicker
-    changeMonth: true,
-    changeYear: true,
-    dateFormat: "yy-mm-dd",
-    numberOfMonths: 3,
-    onClose: (selectedDate) ->
-      unless selectedDate == ""
-        $("#{to}").datepicker( "option", "minDate", selectedDate )
+  $("#{from}").datetimepicker(format: 'YYYY-MM-DD', allowInputToggle: true)
+  $("#{to}").datetimepicker(format: 'YYYY-MM-DD', allowInputToggle: true, useCurrent: false)
 
-  $("#{to}").datepicker
-    changeMonth: true,
-    changeYear: true,
-    dateFormat: "yy-mm-dd",
-    numberOfMonths: 3,
-    onClose: (selectedDate) ->
-      unless selectedDate == ""
-        $("#{from}").datepicker( "option", "maxDate", selectedDate )
+  $("#{from}").on "dp.change", (e) ->
+    $("#{to}").data('DateTimePicker').minDate(e.date)
 
-  minDate = $("#{from}").data("from")
-  maxDate = $("#{to}").data("to")
-
-  if minDate
-    $("#{from}").datepicker("option", "minDate", new Date(minDate))
-    $("#{to}").datepicker("option", "minDate", new Date(minDate))
-
-  if maxDate
-    $("#{from}").datepicker("option", "maxDate", new Date(maxDate))
-    $("#{to}").datepicker("option", "maxDate", new Date(maxDate))
+  $("#{to}").on "dp.change", (e) ->
+    $("#{from}").data('DateTimePicker').maxDate(e.date)
 
 window.create_single_date_pickers = ->
-  $('.date_field').datepicker
-    changeMonth: true,
-    changeYear: true,
-    dateFormat: "yy-mm-dd",
-    numberOfMonths: 3,
+  $(".datetimepicker").datetimepicker(format: 'YYYY-MM-DD', allowInputToggle: true)
 
-window.check_deps = ->
+window.check_deps = (parent_id) ->
   $(".check_dep_class").each ->
     dep = $(this).data("dependency")
-    if $(dep).val() == ""
+    if dep.match(parent_id)
+      $(this).addClass("needs_update")
       $(this).val("")
-      $(dep).data("resolve", "#" + $(this).attr('id'))
+
+    if $(dep).val() == ""
       $(this).prop('disabled', true)
 
