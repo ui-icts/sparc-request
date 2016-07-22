@@ -153,6 +153,7 @@ after "deploy:restart", "delayed_job:restart"
 before "deploy:migrate", 'mysql:backup' 
 before "deploy", 'mysql:backup' 
 after "mysql:backup", "mysql:cleanup_backups"
+after "deploy:update_code", "deploy:migrate"
 
 require 'capistrano/ext/multistage'
 require 'bundler/capistrano'
