@@ -96,7 +96,7 @@ SparcRails::Application.configure do
 
   config.middleware.use ExceptionNotification::Rack,
     email: {
-      email_prefix: "[RSMT #{ENV['HOSTNAME']} Exception]"
+      email_prefix: "[RSMT #{ENV['HOSTNAME']} Exception]",
       sender_address: '"notifier" <no-reply@uiowa.edu>',
       exception_recipients: %w(chris-ortman@uiowa.edu james-schappet@uiowa.edu)
     }
