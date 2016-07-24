@@ -92,12 +92,13 @@ SparcRails::Application.configure do
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
   config.action_mailer.default_url_options = { host: 'sparc.musc.edu' }
+  config.action_mailer.delivery_method = :sendmail
 
   config.middleware.use ExceptionNotification::Rack,
     email: {
-      ignore_if: ->(env, exception) { ['128.23.150.107'].include?(env['REMOTE_ADDR']) },
-      sender_address: 'donotreply@musc.edu',
-      exception_recipients: ['catesa@musc.edu', 'johstu@musc.edu', 'leonarjp@musc.edu', 'wiel@musc.edu', 'lohrp@musc.edu', 'holtw@musc.edu']
+      email_prefix: "[RSMT #{ENV['HOSTNAME']} Exception]",
+      sender_address: '"notifier" <no-reply@uiowa.edu>',
+      exception_recipients: %w(chris-ortman@uiowa.edu james-schappet@uiowa.edu)
     }
 
 end
