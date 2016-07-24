@@ -6,7 +6,7 @@ set :deploy_to, "#{deploy_root}/#{application}"
 set :rails_env, "production"
 set :branch, "test"
 
-fetch(:host, 'localhost')
+host = fetch(:host, 'localhost')
 role :web, host
 role :app, host, :primary => true
 role :db, host, :primary => true
