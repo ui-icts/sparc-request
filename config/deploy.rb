@@ -21,7 +21,7 @@
 set :bundle_without, [:development, :test]
 
 set :application, "sparc-rails"
-set :repository,  "git@github.com:sparc-request/sparc-request.git"
+set :repository,  "ssh://git@git.its.uiowa.edu:7999/icts/sparc-request.git"
 set :deploy_root, "/var/www/rails"
 set :days_to_keep_backups, 30
 
