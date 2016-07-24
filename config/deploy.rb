@@ -21,7 +21,7 @@
 set :bundle_without, [:development, :test]
 
 set :application, "sparc-rails"
-set :repository,  "git@github.com:sparc-request/sparc-request.git"
+set :repository,  "ssh://git@git.its.uiowa.edu:7999/icts/sparc-request.git"
 set :deploy_root, "/var/www/rails"
 set :days_to_keep_backups, 30
 
@@ -32,8 +32,8 @@ set :user, "capistrano"
 set :use_sudo, false
 ssh_options[:forward_agent] = true
 
-set :stages, %w(testing demo demo2 staging production testing_rails_4)
-set :default_stage, "testing"
+set :stages, %w(development staging)
+set :default_stage, "development"
 
 after "deploy:update_code", "db:symlink"
 
@@ -153,6 +153,7 @@ after "deploy:restart", "delayed_job:restart"
 before "deploy:migrate", 'mysql:backup' 
 before "deploy", 'mysql:backup' 
 after "mysql:backup", "mysql:cleanup_backups"
+after "deploy:update_code", "deploy:migrate"
 
 require 'capistrano/ext/multistage'
 require 'bundler/capistrano'
