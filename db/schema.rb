@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160608151717) do
+ActiveRecord::Schema.define(version: 20160726202357) do
 
   create_table "admin_rates", force: :cascade do |t|
     t.integer  "line_item_id", limit: 4
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 20160608151717) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  add_index "admin_rates", ["line_item_id"], name: "Fk_admin_rates_line_item_id", using: :btree
 
   create_table "affiliations", force: :cascade do |t|
     t.integer  "protocol_id", limit: 4
@@ -290,12 +292,16 @@ ActiveRecord::Schema.define(version: 20160608151717) do
     t.datetime "updated_at",            null: false
   end
 
+  add_index "epic_queues", ["protocol_id"], name: "Fk_epic_queues_protocol_id", using: :btree
+
   create_table "epic_rights", force: :cascade do |t|
     t.integer  "project_role_id", limit: 4
     t.string   "right",           limit: 255
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
+
+  add_index "epic_rights", ["project_role_id"], name: "Fk_epic_rights_project_role_id", using: :btree
 
   create_table "excluded_funding_sources", force: :cascade do |t|
     t.integer  "subsidy_map_id", limit: 4
@@ -465,7 +471,9 @@ ActiveRecord::Schema.define(version: 20160608151717) do
     t.datetime "updated_at",                    null: false
   end
 
+  add_index "messages", ["from"], name: "Fk_messages_from", using: :btree
   add_index "messages", ["notification_id"], name: "index_messages_on_notification_id", using: :btree
+  add_index "messages", ["to"], name: "Fk_messages_to", using: :btree
 
   create_table "notes", force: :cascade do |t|
     t.integer  "identity_id",  limit: 4
@@ -613,6 +621,7 @@ ActiveRecord::Schema.define(version: 20160608151717) do
 
   add_index "procedures", ["appointment_id"], name: "index_procedures_on_appointment_id", using: :btree
   add_index "procedures", ["line_item_id"], name: "index_procedures_on_line_item_id", using: :btree
+  add_index "procedures", ["service_id"], name: "Fk_procedures_service_id", using: :btree
   add_index "procedures", ["visit_id"], name: "index_procedures_on_visit_id", using: :btree
 
   create_table "project_roles", force: :cascade do |t|
@@ -745,6 +754,8 @@ ActiveRecord::Schema.define(version: 20160608151717) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
   end
+
+  add_index "reports", ["sub_service_request_id"], name: "Fk_reports_sub_service_request_id", using: :btree
 
   create_table "research_types_info", force: :cascade do |t|
     t.integer  "protocol_id",              limit: 4
@@ -1099,7 +1110,9 @@ ActiveRecord::Schema.define(version: 20160608151717) do
     t.datetime "updated_at",                   null: false
   end
 
+  add_index "toast_messages", ["from"], name: "Fk_toast_messages_from", using: :btree
   add_index "toast_messages", ["sending_class_id"], name: "index_toast_messages_on_sending_class_id", using: :btree
+  add_index "toast_messages", ["to"], name: "Fk_toast_messages_to", using: :btree
 
   create_table "tokens", force: :cascade do |t|
     t.integer  "service_request_id", limit: 4
