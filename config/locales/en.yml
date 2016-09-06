@@ -944,7 +944,7 @@ en:
     core: "Core"
     cpt_code: "CPT Code"
     css_class: "Color"
-    ctrc_label: "Clinical Research Support"	
+    ctrc_label: "Administrative Approvals"	
     default_statuses: "Default Statuses:"
     description: "Description"
     disabled: "Do not display in I-CART"
@@ -2063,7 +2063,7 @@ en:
 
   # Tag label overrides
   tags:
-    ctrc: "Clinical Research Support"
+    ctrc: "Administrative Aprovals"
     clinical_work_fulfillment: "Fulfillment"
     ctrc_clinical_services: "Clinical Research Support services"
 
