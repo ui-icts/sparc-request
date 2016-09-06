@@ -65,7 +65,6 @@ class Identity < ActiveRecord::Base
   has_many :catalog_managers, dependent: :destroy
   has_many :clinical_providers, dependent: :destroy
   has_many :protocol_service_requests, through: :protocols, source: :service_requests
-  has_many :requested_service_requests, class_name: 'ServiceRequest', foreign_key: 'service_requester_id'
   has_many :catalog_manager_rights, class_name: 'CatalogManager'
   has_many :service_providers, dependent: :destroy
   has_many :received_toast_messages, class_name: 'ToastMessage', foreign_key: 'to', dependent: :destroy
@@ -124,6 +123,10 @@ class Identity < ActiveRecord::Base
   # Returns this user's first and last name humanized.
   def full_name
     "#{first_name.try(:humanize)} #{last_name.try(:humanize)}".lstrip.rstrip
+  end
+
+  def last_name_first
+    "#{last_name.try(:humanize)}, #{first_name.try(:humanize)}"
   end
 
  # Returns this user's first and last name humanized, with their email.
@@ -232,7 +235,7 @@ class Identity < ActiveRecord::Base
 
   # Only users with request or approve rights can edit.
   def can_edit_service_request? sr
-    (sr.service_requester_id == self.id or sr.service_requester_id.nil?) || has_correct_project_role?(sr)
+    has_correct_project_role?(sr)
   end
 
   # If a user has request or approve rights AND the request is editable, then the user can edit.
@@ -279,21 +282,6 @@ class Identity < ActiveRecord::Base
     end
 
     false
-  end
-
-  # Determines whether the user has permission to access the admin portal for a given organization.
-  # Returns true if the user is a super user or service provider for the given organization or
-  # any of its parents. (Recursively calls itself to climb the tree of parents)
-  def can_edit_fulfillment? organization
-    arr = []
-    arr << self.super_users.map(&:organization_id)
-    arr << self.service_providers.map(&:organization_id)
-    arr = arr.flatten.uniq
-    if organization.type == 'Institution'
-      arr.include? organization.id
-    else
-      can_edit_fulfillment? organization.parent or arr.include? organization.id
-    end
   end
 
   ###############################################################################

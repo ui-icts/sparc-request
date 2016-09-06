@@ -51,6 +51,7 @@ class LineItem < ActiveRecord::Base
   accepts_nested_attributes_for :fulfillments, :allow_destroy => true
 
   delegate :one_time_fee, to: :service
+  delegate :status, to: :sub_service_request
 
   validates :service_id, numericality: true, presence: true
   validates :service_request_id, numericality:  true
@@ -76,11 +77,11 @@ class LineItem < ActiveRecord::Base
   end
 
   def in_process_date=(date)
-    write_attribute(:in_process_date, Time.strptime(date, "%m-%d-%Y")) if date.present?
+    write_attribute(:in_process_date, Time.strptime(date, "%m/%d/%Y")) if date.present?
   end
 
   def complete_date=(date)
-    write_attribute(:complete_date, Time.strptime(date, "%m-%d-%Y")) if date.present?
+    write_attribute(:complete_date, Time.strptime(date, "%m/%d/%Y")) if date.present?
   end
 
   def quantity_must_be_smaller_than_max_and_greater_than_min
@@ -382,6 +383,24 @@ class LineItem < ActiveRecord::Base
     end
 
     return true
+  end
+
+  def display_service_abbreviation
+    service = self.service
+
+    if service.abbreviation.blank?
+      service_abbreviation = service.name
+    elsif service.cpt_code and !service.cpt_code.blank?
+      service_abbreviation = service.abbreviation + " (#{service.cpt_code})"
+    else
+      service_abbreviation = service.abbreviation
+    end
+
+    unless self.sub_service_request.ssr_id.nil?
+      service_abbreviation = "(#{self.sub_service_request.ssr_id}) " + service_abbreviation
+    end
+
+    service_abbreviation
   end
 
   private

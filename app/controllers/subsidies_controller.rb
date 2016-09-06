@@ -23,12 +23,14 @@ class SubsidiesController < ApplicationController
 
   def create
     @sub_service_request = SubServiceRequest.find params[:subsidy][:sub_service_request_id]
-    @subsidy = PendingSubsidy.create(sub_service_request_id: @sub_service_request.id, pi_contribution: @sub_service_request.direct_cost_total)
+    @subsidy = PendingSubsidy.new(sub_service_request_id: @sub_service_request.id)
+    @subsidy.percent_subsidy = @subsidy.default_percentage
+    @subsidy.save(validate: false)
   end
 
   def update
-    format_pi_contribution_param
-    unless @subsidy.update_attributes(params[:subsidy])
+    format_percent_subsidy_param
+    unless @subsidy.update_attributes(params[:subsidy].except(:pi_contribution))
       @errors = @subsidy.errors.full_messages
     end
   end
@@ -44,11 +46,9 @@ class SubsidiesController < ApplicationController
     @sub_service_request = @subsidy.sub_service_request
   end
 
-  # Refomat pi_contribution string to characters other than numbers and . delimiter,
-  # Convert to float, and multiply by 100 to get cents for db
-  def format_pi_contribution_param
-    if !params[:subsidy].nil? && params[:subsidy][:pi_contribution].present?
-      params[:subsidy][:pi_contribution] = (params[:subsidy][:pi_contribution].gsub(/[^\d^\.]/, '').to_f * 100)
+  def format_percent_subsidy_param
+    if !params[:subsidy].nil? && params[:subsidy][:percent_subsidy].present?
+      params[:subsidy][:percent_subsidy] = (params[:subsidy][:percent_subsidy].gsub(/[^\d^\.]/, '').to_f)
     end
   end
 end

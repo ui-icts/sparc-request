@@ -28,39 +28,42 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
   before_filter :protocol_authorizer_edit,                        only: [:edit, :update, :update_protocol_type]
 
   def index
-
     admin_orgs   = @user.authorized_admin_organizations
     @admin       = !admin_orgs.empty?
 
-    default_filter_params = { show_archived: 0 }
+    @default_filter_params = { show_archived: 0 }
 
     # if we are an admin we want to default to admin organizations
     if @admin
       @organizations = Dashboard::IdentityOrganizations.new(@user.id).admin_organizations_with_protocols
-      default_filter_params[:admin_filter] = "for_admin #{@user.id}"
+      @default_filter_params[:admin_filter] = "for_admin #{@user.id}"
     else
       @organizations = Dashboard::IdentityOrganizations.new(@user.id).general_user_organizations_with_protocols
-      default_filter_params[:admin_filter] = "for_identity #{@user.id}"
+      @default_filter_params[:admin_filter] = "for_identity #{@user.id}"
       params[:filterrific][:admin_filter] = "for_identity #{@user.id}" if params[:filterrific]
     end
+
     @filterrific =
       initialize_filterrific(Protocol, params[:filterrific],
-        default_filter_params: default_filter_params,
+        default_filter_params: @default_filter_params,
         select_options: {
           with_status: AVAILABLE_STATUSES.invert,
-          with_organization: Dashboard::GroupedOrganizations.new(@organizations).collect_grouped_options
+          with_organization: Dashboard::GroupedOrganizations.new(@organizations).collect_grouped_options,
+          with_owner: build_with_owner_params
         },
         persistence_id: false #resets filters on page reload
       ) || return
 
-    @protocols = @filterrific.find.page(params[:page])
+    @protocols          = @filterrific.find.page(params[:page])
 
-    @admin_protocols  = Protocol.for_admin(@user.id).pluck(:id)
-    @protocol_filters = ProtocolFilter.latest_for_user(@user.id, 5)
+    @admin_protocols    = Protocol.for_admin(@user.id).pluck(:id)
+    @protocol_filters   = ProtocolFilter.latest_for_user(@user.id, 5)
     #toggles the display of the navigation bar, instead of breadcrumbs
     @show_navbar      = true
     @show_messages    = true
     session[:breadcrumbs].clear
+
+    setup_sorting_variables
 
     respond_to do |format|
       format.html
@@ -94,7 +97,10 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
 
   def create
     protocol_class = params[:protocol][:type].capitalize.constantize
-    @protocol = protocol_class.new(params[:protocol])
+
+    attrs = fix_date_params
+
+    @protocol = protocol_class.new(attrs)
     @protocol.study_type_question_group_id = StudyTypeQuestionGroup.active_id
 
     if @protocol.valid?
@@ -125,7 +131,7 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
     end
 
     @protocol.populate_for_edit
- 
+
     session[:breadcrumbs].
       clear.
       add_crumbs(protocol_id: @protocol.id, edit_protocol: true)
@@ -139,9 +145,7 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
   end
 
   def update
-    attrs               = params[:protocol]
-    attrs[:start_date]  = Time.strptime(attrs[:start_date], "%m-%d-%Y") if attrs[:start_date]
-    attrs[:end_date]    = Time.strptime(attrs[:end_date],   "%m-%d-%Y") if attrs[:end_date]
+    attrs = fix_date_params
 
     permission_to_edit  = @authorization.present? ? @authorization.can_edit? : false
 
@@ -226,8 +230,26 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
 
   private
 
+  def build_with_owner_params
+    service_providers = Identity.joins(:service_providers).where(service_providers: {
+                                organization: Organization.authorized_for_identity(current_user.id) })
+                                .distinct.order("last_name")
+                                
+    service_providers.map{|s| [s.last_name_first, s.id]}
+  end
+
   def find_protocol
     @protocol = Protocol.find(params[:id])
+  end
+
+  def setup_sorting_variables
+    # Set filterrific params for sorting logic, store sorted by to re-apply styling
+    @filterrific_params = params[:filterrific] ? params[:filterrific].except(:sorted_by) : @default_filter_params
+    @page               = params[:page]
+    @sorted_by          = params[:filterrific][:sorted_by] if params[:filterrific]
+    @sort_name          = @sorted_by.split(' ')[0] if @sorted_by
+    @sort_order         = @sorted_by.split(' ')[1] if @sorted_by
+    @new_sort_order     = (@sort_order == 'asc' ? 'desc' : 'asc') if @sort_order
   end
 
   def conditionally_activate_protocol
@@ -239,4 +261,35 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
       @protocol.activate
     end
   end
+
+  def convert_date_for_save attrs, date_field
+    if attrs[date_field] && attrs[date_field].present?
+      attrs[date_field] = Time.strptime(attrs[date_field], "%m/%d/%Y")
+    end
+
+    attrs
+  end
+
+  def fix_date_params
+    attrs               = params[:protocol]
+
+    #### fix dates so they are saved correctly ####
+    attrs                                        = convert_date_for_save attrs, :start_date
+    attrs                                        = convert_date_for_save attrs, :end_date
+    attrs                                        = convert_date_for_save attrs, :funding_start_date
+    attrs                                        = convert_date_for_save attrs, :potential_funding_start_date
+
+    if attrs[:human_subjects_info_attributes]
+      attrs[:human_subjects_info_attributes]     = convert_date_for_save attrs[:human_subjects_info_attributes], :irb_approval_date
+      attrs[:human_subjects_info_attributes]     = convert_date_for_save attrs[:human_subjects_info_attributes], :irb_expiration_date
+    end
+
+    if attrs[:vertebrate_animals_info_attributes]
+      attrs[:vertebrate_animals_info_attributes] = convert_date_for_save attrs[:vertebrate_animals_info_attributes], :iacuc_approval_date
+      attrs[:vertebrate_animals_info_attributes] = convert_date_for_save attrs[:vertebrate_animals_info_attributes], :iacuc_expiration_date
+    end
+
+    attrs
+  end
+
 end

@@ -24,9 +24,14 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   helper_method :xeditable?
   before_filter :setup_navigation
+  before_filter :set_highlighted_link  # default is to not highlight a link
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
+
+  def set_highlighted_link  # default value, override inside controllers
+    @highlighted_link ||= ''
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u|  u.permit!}
@@ -79,12 +84,12 @@ class ApplicationController < ActionController::Base
 
     if USE_NEWS_FEED
       page = Nokogiri::HTML(open("https://www.sparcrequestblog.com"))
-      headers = page.css('.entry-header').take(3)
+      articles = page.css('article.post').take(3)
       @news = []
-      headers.each do |header|
-        @news << {title: header.at_css('.entry-title').text,
-                  link: header.at_css('.entry-title a')[:href],
-                  date: header.at_css('.date').text }
+      articles.each do |article|
+        @news << {title: (article.at_css('.entry-title') ? article.at_css('.entry-title').text : ""),
+                  link: (article.at_css('.entry-title a') ? article.at_css('.entry-title a')[:href] : ""),
+                  date: (article.at_css('.date') ? article.at_css('.date').text : "") }
       end
     end
   end
@@ -244,7 +249,7 @@ class ApplicationController < ActionController::Base
                             "PROTOCOL#{params[:protocol_id]}"
       else # otherwise associate the service request with this protocol
         @service_request.protocol_id = params[:protocol_id]
-        @service_request.service_requester_id = current_user.id
+        @service_request.sub_service_requests.update_all(service_requester_id: current_user.id)
       end
     end
 
@@ -265,14 +270,13 @@ class ApplicationController < ActionController::Base
 
     # we have a current user
     if current_user
-      if @sub_service_request.nil? and current_user.can_edit_service_request?(@service_request)
+      if @sub_service_request.nil? and (@service_request.status == 'first_draft' || current_user.can_edit_service_request?(@service_request))
         return true
       elsif @sub_service_request and current_user.can_edit_sub_service_request?(@sub_service_request)
         return true
       end
-
     # the service request is in first draft and has yet to be submitted (catalog page only)
-    elsif @service_request.status == 'first_draft' and @service_request.service_requester_id.nil?
+    elsif @service_request.status == 'first_draft'
       return true
     elsif !@service_request.status.nil? # this is a previous service request so we should attempt to sign in
       authenticate_identity!

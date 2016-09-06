@@ -41,6 +41,7 @@ class Protocol < ActiveRecord::Base
   has_many :study_type_answers,           dependent: :destroy
   has_many :notes, as: :notable,          dependent: :destroy
   has_many :study_type_questions,         through: :study_type_question_group
+  has_many :documents,                    dependent: :destroy
 
   belongs_to :study_type_question_group
 
@@ -132,23 +133,27 @@ class Protocol < ActiveRecord::Base
       :admin_filter,
       :show_archived,
       :with_status,
-      :with_organization
+      :with_organization,
+      :with_owner,
+      :sorted_by
     ]
   )
 
   scope :search_query, -> (search_term) {
     # Searches protocols based on short_title, title, id, and associated_users
     # Protects against SQL Injection with ActiveRecord::Base::sanitize
-    like_search_term = ActiveRecord::Base::sanitize("%#{search_term}%")
+
+    # inserts ! so that we can escape special characters
+    escaped_search_term = search_term.to_s.gsub(/[!%_]/) { |x| '!' + x }
+
+    like_search_term = ActiveRecord::Base::sanitize("%#{escaped_search_term}%")
     exact_search_term = ActiveRecord::Base::sanitize(search_term)
 
     #TODO temporary replacement for "MATCH(identities.first_name, identities.last_name) AGAINST (#{exact_search_term})"
-    where_clause = search_term.to_s.split.map do |term|
-      "CONCAT(identities.first_name, identities.last_name) LIKE #{ActiveRecord::Base::sanitize("%#{term}%")}"
-    end
+    where_clause = ["CONCAT(identities.first_name, ' ', identities.last_name) LIKE #{like_search_term} escape '!'"]
 
-    where_clause += ["protocols.short_title like #{like_search_term}",
-      "protocols.title like #{like_search_term}",
+    where_clause += ["protocols.short_title like #{like_search_term} escape '!'",
+      "protocols.title like #{like_search_term} escape '!'",
       "protocols.id = #{exact_search_term}"]
 
     joins(:identities).
@@ -198,6 +203,27 @@ class Protocol < ActiveRecord::Base
     return nil if org_id.reject!(&:blank?) == []
     joins(:sub_service_requests).
     where(sub_service_requests: { organization_id: org_id }).distinct
+  }
+
+  scope :with_owner, -> (owner_id) {
+    return nil if owner_id.reject!(&:blank?) == []
+    joins(:sub_service_requests).
+    where(sub_service_requests: {owner_id: owner_id}).
+    where.not(sub_service_requests: {status: 'first_draft'})
+  }
+
+  scope :sorted_by, -> (key) {
+    arr         = key.split(' ')
+    sort_name   = arr[0]
+    sort_order  = arr[1]
+    case sort_name
+    when 'id'
+      order("id #{sort_order.upcase}")
+    when 'short_title'
+      order("TRIM(REPLACE(short_title, CHAR(9), ' ')) #{sort_order.upcase}")
+    when 'pis'
+      joins(project_roles: :identity).where(project_roles: { role: 'primary-pi' }).order(".identities.first_name #{sort_order.upcase}")
+    end
   }
 
   def is_study?
@@ -443,35 +469,11 @@ class Protocol < ActiveRecord::Base
     return self.service_requests.detect { |sr| !['first_draft'].include?(sr.status) }
   end
 
-  def has_per_patient_per_visit? current_request, portal
+  def has_line_items_of_type?(current_request, portal, type)
     return self.service_requests.detect do |sr|
-      if sr.has_per_patient_per_visit_services?
-        if ['first_draft'].include?(sr.status)
-          if portal
-            false
-          elsif current_request == sr
-            true
-          end
-        else
-          true
-        end
-      end
-    end
-  end
-
-  def has_one_time_fees? current_request, portal
-    return self.service_requests.detect do |sr|
-      if sr.has_one_time_fee_services?
-        if ['first_draft'].include?(sr.status)
-          if portal
-            false
-          elsif current_request == sr
-            true
-          end
-        else
-          true
-        end
-      end
+      next unless ((type == "otf") ? sr.has_one_time_fee_services? : sr.has_per_patient_per_visit_services?)
+      #Only return first_draft sr's if NOT in portal, AND the current_request == the sr variable
+      sr.status == "first_draft" ? (!portal && current_request == sr) : true
     end
   end
 

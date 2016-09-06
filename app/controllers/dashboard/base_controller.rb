@@ -26,6 +26,11 @@ class Dashboard::BaseController < ActionController::Base
   before_filter :authenticate_identity!
   before_filter :set_user
   before_filter :establish_breadcrumber
+  before_filter :set_highlighted_link
+
+  def set_highlighted_link
+    @highlighted_link ||= 'sparc_dashboard'
+  end
 
   def current_user
     current_identity
@@ -48,16 +53,18 @@ class Dashboard::BaseController < ActionController::Base
     # Admins should be able to view too
     unless @authorization.can_view? || @admin
       @protocol = nil
-      render partial: 'service_requests/authorization_error', locals: { error: 'You are not allowed to access this protocol.' }
+      render partial: 'dashboard/shared/authorization_error',
+        locals: { error: 'You are not allowed to access this protocol.' }
     end
   end
 
   def protocol_authorizer_edit
     @authorization  = ProtocolAuthorizer.new(@protocol, @user)
-    
+
     unless @authorization.can_edit? || @admin
       @protocol = nil
-      render partial: 'service_requests/authorization_error', locals: { error: 'You are not allowed to edit this protocol.' }
+      render partial: 'dashboard/shared/authorization_error',
+        locals: { error: 'You are not allowed to edit this protocol.' }
     end
   end
 
