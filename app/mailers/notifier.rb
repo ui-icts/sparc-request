@@ -25,10 +25,8 @@ class Notifier < ActionMailer::Base
   def ask_a_question quick_question
     @quick_question = quick_question
 
-    # TODO: this process needs to be moved to a helper method
-    # it's repeated in each action with slightly different information
-    email = Rails.env == 'production' ? ADMIN_MAIL_TO : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "New Question from #{I18n.t('application_title')}" : "[#{Rails.env.capitalize} - EMAIL TO #{ADMIN_MAIL_TO}] New Question from #{I18n.t('application_title')}"
+    email = ADMIN_MAIL_TO
+    subject = "New Question from #{I18n.t('application_title')}"
 
     mail(:to => email, :from => @quick_question.from, :subject => subject)
   end
@@ -36,8 +34,10 @@ class Notifier < ActionMailer::Base
   def new_identity_waiting_for_approval identity
     @identity = identity
 
-    email = Rails.env == 'production' ? ADMIN_MAIL_TO : DEFAULT_MAIL_TO
-    cc = Rails.env == 'production' ? NEW_USER_CC : nil
+    email = ADMIN_MAIL_TO
+    cc = NEW_USER_CC
+
+    ##REVIEW: This subject appears incorrect? Copy paste from previous method?
     subject = Rails.env == 'production' ? "New Question from #{I18n.t('application_title')}" : "[#{Rails.env.capitalize} - EMAIL TO #{ADMIN_MAIL_TO} AND CC TO #{NEW_USER_CC}] Request for new #{I18n.t('application_title')} account submitted and awaiting approval"
 
     mail(:to => email, :cc => cc, :from => @identity.email, :subject => subject)
@@ -61,8 +61,8 @@ class Notifier < ActionMailer::Base
     attachments["service_request_#{@service_request.protocol.id}.xlsx"] = xls
 
     # only send these to the correct person in the production env
-    email = Rails.env == 'production' ? @identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} service request" : "[#{Rails.env.capitalize} - EMAIL TO #{@identity.email}] #{I18n.t('application_title')} service request"
+    email = @identity.email
+    subject = "#{I18n.t('application_title')} service request"
 
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
@@ -83,8 +83,8 @@ class Notifier < ActionMailer::Base
 
     attachments["service_request_#{@service_request.protocol.id}.xlsx"] = xls
 
-    email = Rails.env == 'production' ?  submission_email_address : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} service request" : "[#{Rails.env.capitalize} - EMAIL TO #{submission_email_address}] #{I18n.t('application_title')} service request"
+    email =  submission_email_address
+    subject = "#{I18n.t('application_title')} service request"
 
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
@@ -119,8 +119,8 @@ class Notifier < ActionMailer::Base
     end
 
     # only send these to the correct person in the production env
-    email = Rails.env == 'production' ? service_provider.identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{@protocol.id} - #{I18n.t('application_title')} service request" : "#{@protocol.id} - [#{Rails.env.capitalize} - EMAIL TO #{service_provider.identity.email}] #{I18n.t('application_title')} service request"
+    email = service_provider.identity.email
+    subject = "#{@protocol.id} - #{I18n.t('application_title')} service request"
 
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
@@ -128,9 +128,10 @@ class Notifier < ActionMailer::Base
   def account_status_change identity, approved
     @approved = approved
 
+    ##REVIEW: Why do we care what the from is?
     email_from = Rails.env == 'production' ? ADMIN_MAIL_TO : DEFAULT_MAIL_TO
-    email_to = Rails.env == 'production' ? identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} account request - status change" : "[#{Rails.env.capitalize} - EMAIL TO #{identity.email}] #{I18n.t('application_title')} account request - status change"
+    email_to = identity.email
+    subject = "#{I18n.t('application_title')} account request - status change"
 
     mail(:to => email_to, :from => email_from, :subject => subject)
   end
@@ -142,7 +143,7 @@ class Notifier < ActionMailer::Base
   def provide_feedback feedback
     @feedback = feedback
 
-    email_to = Rails.env == 'production' ? FEEDBACK_MAIL_TO : DEFAULT_MAIL_TO
+    email_to = FEEDBACK_MAIL_TO
     email_from = @feedback.email.blank? ? DEFAULT_MAIL_TO : @feedback.email
 
     mail(:to => email_to, :from => email_from, :subject => "Feedback")
@@ -155,8 +156,8 @@ class Notifier < ActionMailer::Base
     @service_request = sub_service_request.service_request
     @ssr = sub_service_request
 
-    email_to = Rails.env == 'production' ? identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} - service request deleted" : "[#{Rails.env.capitalize} - EMAIL TO #{identity.email}] #{I18n.t('application_title')} - service request deleted"
+    email_to = identity.email
+    subject = "#{I18n.t('application_title')} - service request deleted"
 
     mail(:to => email_to, :from => NO_REPLY_FROM, :subject => subject)
   end
@@ -174,7 +175,7 @@ class Notifier < ActionMailer::Base
     @protocol = protocol
     @primary_pi = @protocol.primary_principal_investigator
 
-    email_to = Rails.env == 'production' ? @primary_pi.email : DEFAULT_MAIL_TO
+    email_to = @primary_pi.email
     subject = 'Epic Rights User Approval'
 
     mail(:to => email_to, :from => NO_REPLY_FROM, :subject => subject)
