@@ -98,6 +98,10 @@ class RemoveUiowaForeignKeys < ActiveRecord::Migration
     remove_foreign_key 'visit_groups', name: 'Fk_100'
     remove_foreign_key 'visits', name: 'Fk_98'
     remove_foreign_key 'visits', name: 'Fk_99'
+    remove_foreign_key 'notes', name: 'Fk_40'
+    remove_foreign_key 'notes', name: 'Fk_notes_appointment_id'
+    remove_foreign_key 'user_notifications', name: 'Fk_91'
+    remove_foreign_key 'user_notifications', name: 'Fk_92'
 
   end
 end
