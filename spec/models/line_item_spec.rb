@@ -241,9 +241,9 @@ RSpec.describe "Line Item" do
       context "direct costs for one time fees with fulfillments" do
 
         let!(:otf_line_item) { create(:line_item, service_request_id: service_request.id, service_id: service.id, sub_service_request_id: sub_service_request.id, quantity: 5, units_per_quantity: 1) }
-        let!(:fulfillment1)  { create(:fulfillment, quantity: 5, line_item_id: otf_line_item.id, date: Date.yesterday) }
-        let!(:fulfillment2)  { create(:fulfillment, quantity: 5, line_item_id: otf_line_item.id, date: Date.today) }
-        let!(:fulfillment3)  { create(:fulfillment, quantity: 5, line_item_id: otf_line_item.id, date: Date.today) }
+        let!(:fulfillment1)  { create(:fulfillment, quantity: 5, line_item_id: otf_line_item.id, date: Date.yesterday.strftime("%m/%d/%Y"), time: 1.23) }
+        let!(:fulfillment2)  { create(:fulfillment, quantity: 5, line_item_id: otf_line_item.id, date: Date.today.strftime("%m/%d/%Y"), time: 1.23) }
+        let!(:fulfillment3)  { create(:fulfillment, quantity: 5, line_item_id: otf_line_item.id, date: Date.today.strftime("%m/%d/%Y"), time: 1.23) }
         let!(:pricing_map2)  { create(:pricing_map, service_id: service.id, unit_type: 'ea', effective_date: Date.today, display_date: Date.today, full_rate: 600, exclude_from_indirect_cost: 0, unit_minimum: 1)}
 
         it "should correctly calculate a line item's cost that has multiple fulfillments" do
@@ -253,7 +253,7 @@ RSpec.describe "Line Item" do
 
         it "should correctly calculate a line item's cost that has a unit factor greater than one" do
           pricing_map2.update_attributes(unit_factor: 5)
-          fulfillment3 = create(:fulfillment, quantity: 6, line_item_id: otf_line_item.id, date: Date.today)
+          fulfillment3 = create(:fulfillment, quantity: 6, line_item_id: otf_line_item.id, date: Date.today.strftime("%m/%d/%Y"), time: 1.23)
           # ceiling(quantity:16/unit_factor:5) * rate:(percentage:0.5 * cost:600)
           expect(otf_line_item.reload.direct_cost_for_one_time_fee_with_fulfillments(Date.today, Date.today)).to eq(1200.0)
         end
@@ -294,18 +294,25 @@ RSpec.describe "Line Item" do
     end
   end
 
-  context "methods" do
+  context "service abbreviation" do
+    let!(:organization) { create(:organization) }
+    let!(:protocol)     { create(:study_without_validations, primary_pi: create(:identity)) }
+    let!(:sr)           { create(:service_request_without_validations, protocol: protocol) }
+    let!(:ssr)          { create(:sub_service_request_without_validations, service_request: sr, organization: organization) }
+    let!(:service)      { create(:service, abbreviation: 'abc') }
+    let!(:line_item)    { create(:line_item_without_validations, service: service, sub_service_request: ssr) }
+
     before :each do
-      add_visits
-      build_clinical_data
+      ssr.update_attribute(:ssr_id, "0001")
     end
 
-    describe "remove procedures" do
-      it "should destroy all procedures linked to this line_item" do
-        li_id = line_item2.id
-        line_item2.destroy
-        expect(Procedure.find_by_line_item_id(li_id)).to eq(nil)
-      end
+    it "should return the abbreviation" do
+      expect(line_item.display_service_abbreviation).to eq("(0001) abc")
+    end
+
+    it "should concatenate cpt code to the abbreviation if it exists" do
+      service.update_attributes(cpt_code: "def")
+      expect(line_item.display_service_abbreviation).to eq("(0001) abc (def)")
     end
   end
 end

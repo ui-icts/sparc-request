@@ -171,7 +171,7 @@ RSpec.describe Service, type: :model do
 
   describe "display attribute" do
 
-    let!(:service) { create(:service, name: "Foo", abbreviation: "abc") }
+    let!(:service)    { create(:service, name: "Foo", abbreviation: "abc") }
 
     context "service name" do
 
@@ -182,18 +182,6 @@ RSpec.describe Service, type: :model do
       it "should concatenate cpt code to the name if it exists" do
         service.update_attributes(cpt_code: "Bar")
         expect(service.display_service_name).to eq("Foo (Bar)")
-      end
-    end
-
-    context "service abbreviation" do
-
-      it "should return the abbreviation" do
-        expect(service.display_service_abbreviation).to eq("abc")
-      end
-
-      it "should concatenate cpt code to the abbreviation if it exists" do
-        service.update_attributes(cpt_code: "def")
-        expect(service.display_service_abbreviation).to eq("abc (def)")
       end
     end
   end
@@ -220,56 +208,19 @@ RSpec.describe Service, type: :model do
     end
   end
 
-  describe 'current_pricing_map' do
+  # This method is only used for the service pricing report
+  describe 'pricing map for date' do
 
-    it 'should raise an exception if there are no pricing maps' do
+    it 'should return false if there are no pricing maps' do
       service = create(:service)
-      service.pricing_maps.delete_all
-      expect(lambda { service.current_pricing_map }).to raise_exception(ArgumentError)
+      expect(service.pricing_map_for_date('1999-04-14')).to eq(false)
     end
 
-    it 'should return the only pricing map if there is one pricing map and it is in the past' do
-      service = create(:service, pricing_map_count: 1)
-      service.pricing_maps[0].display_date = Date.today - 1
-      expect(service.current_pricing_map).to eq service.pricing_maps[0]
-    end
-
-    it 'should return the most recent pricing map in the past if there is more than one' do
-      service = create(:service, pricing_map_count: 2)
-      service.pricing_maps[0].display_date = Date.today - 1
-      service.pricing_maps[1].display_date = Date.today - 2
-      expect(service.current_pricing_map).to eq service.pricing_maps[0]
-    end
-
-    it 'should return the pricing map in the past if one is in the past and one is in the future' do
-      service = create(:service, pricing_map_count: 2)
-      service.pricing_maps[0].display_date = Date.today + 1
-      service.pricing_maps[1].display_date = Date.today - 1
-      expect(service.current_pricing_map).to eq service.pricing_maps[1]
-    end
-  end
-
-  describe 'pricing_map_for_date' do
-
-    it 'should raise an exception if there are no pricing maps' do
+    it 'should return the most current pricing map with a display date on or after a given date' do
       service = create(:service)
-      service.pricing_maps.delete_all
-      expect(lambda { service.current_pricing_map }).to raise_exception(ArgumentError)
+      new_map = create(:pricing_map_without_validations, display_date: '2014-04-12', service: service)
+      expect(expect(service.pricing_map_for_date('2014-04-14')).to eq(service.pricing_maps.first))
     end
-
-    it 'should return the pricing map for the given date if there is a pricing map with a display date of that date' do
-      service = create(:service, pricing_map_count: 5)
-      base_date = Date.parse('2012-01-01')
-      service.pricing_maps[0].display_date = base_date + 1
-      service.pricing_maps[1].display_date = base_date
-      service.pricing_maps[2].display_date = base_date - 1
-      service.pricing_maps[3].display_date = base_date - 2
-      service.pricing_maps[4].display_date = base_date - 3
-      expect(service.pricing_map_for_date(base_date)).to eq service.pricing_maps[1]
-    end
-
-    # most of these tests would be duplicates of those for
-    # current_pricing_map
   end
 
   describe 'current_effective_pricing_map' do

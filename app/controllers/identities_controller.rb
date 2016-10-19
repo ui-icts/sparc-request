@@ -44,19 +44,22 @@ class IdentitiesController < ApplicationController
 
   def add_to_protocol
     @can_edit = params[:can_edit]
-    @error = nil
-    @error_field = nil
+    @errors = {}
+
     if params[:project_role][:role].blank?
-      @error = "Role can't be blank"
-      @error_field = 'role'
+      @errors[:user_role] = "Role can't be blank"
     elsif params[:project_role][:role] == 'other' and params[:project_role][:role_other].blank?
-      @error = "'Other' role can't be blank"
-      @error_field = 'role'
+      @errors[:user_role] = "'Other' role can't be blank"
+    end
+
+    if params[:identity][:credentials] == 'other' and params[:identity][:credentials_other].blank?
+      @errors[:credentials_other] = "'Other' credential can't be blank"
     end
 
     @protocol_type = session[:protocol_type]
 
     identity = Identity.find params[:identity][:id]
+    params[:identity].delete(:id) # we can't mass assign ID
     identity.update_attributes params[:identity]
 
     # {"identity_id"=>"11968", "first_name"=>"Colin", "last_name"=>"Alstad", "email"=>"alstad@musc.edu", "phone"=>"843-792-5378", "role"=>"pi", "role_other"=>"",
@@ -66,11 +69,13 @@ class IdentitiesController < ApplicationController
 
     # should check if this is an existing project role
     if params[:project_role][:id].blank?
+      params[:project_role].delete(:id) # we can't mass assign ID
       @project_role = ProjectRole.new params[:project_role]
       @project_role.set_default_rights
       @project_role.identity = identity
     else
       @project_role = ProjectRole.find params[:project_role][:id]
+      params[:project_role].delete(:id) # we can't mass assign ID
       @project_role.update_attributes params[:project_role]
       @project_role.set_default_rights
     end

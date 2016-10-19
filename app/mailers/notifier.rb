@@ -25,10 +25,8 @@ class Notifier < ActionMailer::Base
   def ask_a_question quick_question
     @quick_question = quick_question
 
-    # TODO: this process needs to be moved to a helper method
-    # it's repeated in each action with slightly different information
-    email = Rails.env == 'production' ? ADMIN_MAIL_TO : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "New Question from #{I18n.t('application_title')}" : "[#{Rails.env.capitalize} - EMAIL TO #{ADMIN_MAIL_TO}] New Question from #{I18n.t('application_title')}"
+    email = ADMIN_MAIL_TO
+    subject = "New Question from #{I18n.t('application_title')}"
 
     mail(:to => email, :from => @quick_question.from, :subject => subject)
   end
@@ -36,75 +34,84 @@ class Notifier < ActionMailer::Base
   def new_identity_waiting_for_approval identity
     @identity = identity
 
-    email = Rails.env == 'production' ? ADMIN_MAIL_TO : DEFAULT_MAIL_TO
-    cc = Rails.env == 'production' ? NEW_USER_CC : nil
+    email = ADMIN_MAIL_TO
+    cc = NEW_USER_CC
+
+    ##REVIEW: This subject appears incorrect? Copy paste from previous method?
     subject = Rails.env == 'production' ? "New Question from #{I18n.t('application_title')}" : "[#{Rails.env.capitalize} - EMAIL TO #{ADMIN_MAIL_TO} AND CC TO #{NEW_USER_CC}] Request for new #{I18n.t('application_title')} account submitted and awaiting approval"
 
     mail(:to => email, :cc => cc, :from => @identity.email, :subject => subject)
   end
 
   def notify_user(project_role, service_request, xls, approval, user_current)
+    @status = service_request.status
+    @notes = []
     @identity = project_role.identity
     @role = project_role.role
-
-    @approval_link = nil
-    if approval and project_role.project_rights == 'approve'
-      @approval_link = approve_changes_service_request_url(service_request, :approval_id => approval.id)
-    end
+    @full_name = @identity.full_name
 
     @protocol = service_request.protocol
     @service_request = service_request
-    @portal_link = USER_PORTAL_LINK + "?default_protocol=#{@protocol.id}"
-    @portal_text = "To VIEW and/or MAKE any changes to this request, please click here."
-    @provide_arm_info = false
+    @service_requester_id = @service_request.sub_service_requests.first.service_requester_id
 
-    @triggered_by = user_current.id
-    @ssr_ids = service_request.sub_service_requests.map{ |ssr| ssr.id }.join(", ")
+    @portal_link = DASHBOARD_LINK + "/protocols/#{@protocol.id}"
 
+    @ssrs_to_be_displayed = service_request.sub_service_requests
+    
     attachments["service_request_#{@service_request.protocol.id}.xlsx"] = xls
 
     # only send these to the correct person in the production env
-    email = Rails.env == 'production' ? @identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} service request" : "[#{Rails.env.capitalize} - EMAIL TO #{@identity.email}] #{I18n.t('application_title')} service request"
+    email = @identity.email
+    subject = "#{I18n.t('application_title')} service request"
 
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
 
-  def notify_admin(service_request, submission_email_address, xls, user_current)
+  def notify_admin(service_request, submission_email_address, xls, user_current, ssr_to_be_displayed)
+    @notes = service_request.notes
+    @status = service_request.status
+    @role = 'none'
+    @full_name = submission_email_address
+
     @protocol = service_request.protocol
     @service_request = service_request
-    @role = 'none'
-    @approval_link = nil
-    @portal_link = USER_PORTAL_LINK + "admin"
+    @service_requester_id = @service_request.sub_service_requests.first.service_requester_id
+    @ssrs_to_be_displayed = [ssr_to_be_displayed]
+
+    @portal_link = DASHBOARD_LINK + "/protocols/#{@protocol.id}"
     @portal_text = "Administrators/Service Providers, Click Here"
-    @provide_arm_info = false
-
-    @triggered_by = user_current.id
-    @ssr_ids = service_request.sub_service_requests.map{ |ssr| ssr.id }.join(", ")
 
     attachments["service_request_#{@service_request.protocol.id}.xlsx"] = xls
 
-    # only send these to the correct person in the production env
-    email = Rails.env == 'production' ?  submission_email_address : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} service request" : "[#{Rails.env.capitalize} - EMAIL TO #{submission_email_address}] #{I18n.t('application_title')} service request"
+    email =  submission_email_address
+    subject = "#{I18n.t('application_title')} service request"
 
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
 
-  def notify_service_provider service_provider, service_request, attachments_to_add, user_current, audit_report=nil, ssr_deleted=false
+  def notify_service_provider(service_provider, service_request, attachments_to_add, user_current, audit_report=nil, ssr_deleted=false)
+    @notes = service_request.notes
+    @status = service_request.status
+    @role = 'none'
+    @full_name = service_provider.identity.full_name
+
     @protocol = service_request.protocol
     @service_request = service_request
-    @role = 'none'
-    @approval_link = nil
+    @service_requester_id = @service_request.sub_service_requests.first.service_requester_id
+
     @audit_report = audit_report
-    @provide_arm_info = audit_report.nil? ? true : SubServiceRequest.find(@audit_report[:sub_service_request_id]).has_per_patient_per_visit_services?
     @ssr_deleted = ssr_deleted
-
-    @portal_link = USER_PORTAL_LINK + "admin"
+    
+    @portal_link = DASHBOARD_LINK + "/protocols/#{@protocol.id}"
     @portal_text = "Administrators/Service Providers, Click Here"
 
-    @triggered_by = user_current.id
-    @ssr_ids = service_request.sub_service_requests.map{ |ssr| ssr.id }.join(", ")
+    # if the current user is service provider, only show SSR's that are associated with them
+    @ssrs_to_be_displayed = []
+    @service_request.sub_service_requests.each do |ssr|
+      if service_provider.identity.is_service_provider?(ssr)
+        @ssrs_to_be_displayed << ssr
+      end
+    end
 
     attachments_to_add.each do |file_name, document|
       next if document.nil?
@@ -112,8 +119,8 @@ class Notifier < ActionMailer::Base
     end
 
     # only send these to the correct person in the production env
-    email = Rails.env == 'production' ? service_provider.identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{@protocol.id} - #{I18n.t('application_title')} service request" : "#{@protocol.id} - [#{Rails.env.capitalize} - EMAIL TO #{service_provider.identity.email}] #{I18n.t('application_title')} service request"
+    email = service_provider.identity.email
+    subject = "#{@protocol.id} - #{I18n.t('application_title')} service request"
 
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
@@ -121,9 +128,10 @@ class Notifier < ActionMailer::Base
   def account_status_change identity, approved
     @approved = approved
 
+    ##REVIEW: Why do we care what the from is?
     email_from = Rails.env == 'production' ? ADMIN_MAIL_TO : DEFAULT_MAIL_TO
-    email_to = Rails.env == 'production' ? identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} account request - status change" : "[#{Rails.env.capitalize} - EMAIL TO #{identity.email}] #{I18n.t('application_title')} account request - status change"
+    email_to = identity.email
+    subject = "#{I18n.t('application_title')} account request - status change"
 
     mail(:to => email_to, :from => email_from, :subject => subject)
   end
@@ -135,7 +143,7 @@ class Notifier < ActionMailer::Base
   def provide_feedback feedback
     @feedback = feedback
 
-    email_to = Rails.env == 'production' ? FEEDBACK_MAIL_TO : DEFAULT_MAIL_TO
+    email_to = FEEDBACK_MAIL_TO
     email_from = @feedback.email.blank? ? DEFAULT_MAIL_TO : @feedback.email
 
     mail(:to => email_to, :from => email_from, :subject => "Feedback")
@@ -148,8 +156,8 @@ class Notifier < ActionMailer::Base
     @service_request = sub_service_request.service_request
     @ssr = sub_service_request
 
-    email_to = Rails.env == 'production' ? identity.email : DEFAULT_MAIL_TO
-    subject = Rails.env == 'production' ? "#{I18n.t('application_title')} - service request deleted" : "[#{Rails.env.capitalize} - EMAIL TO #{identity.email}] #{I18n.t('application_title')} - service request deleted"
+    email_to = identity.email
+    subject = "#{I18n.t('application_title')} - service request deleted"
 
     mail(:to => email_to, :from => NO_REPLY_FROM, :subject => subject)
   end
@@ -167,7 +175,7 @@ class Notifier < ActionMailer::Base
     @protocol = protocol
     @primary_pi = @protocol.primary_principal_investigator
 
-    email_to = Rails.env == 'production' ? @primary_pi.email : DEFAULT_MAIL_TO
+    email_to = @primary_pi.email
     subject = 'Epic Rights User Approval'
 
     mail(:to => email_to, :from => NO_REPLY_FROM, :subject => subject)

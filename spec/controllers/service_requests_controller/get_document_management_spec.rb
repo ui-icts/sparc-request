@@ -1,49 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe ServiceRequestsController do
+  stub_controller
+  let_there_be_lane
+
+  before :each do
+    session[:identity_id] = jug2.id
+  end
 
   describe 'GET document_management' do
+    it 'Should set @back to service_calendar if no SSR has or is eligible for a subsidy' do
+      organization        = create(:provider)
+      service_request     = create(:service_request_without_validations)
+      sub_service_request = create(:sub_service_request_without_validations,
+                                    service_request_id: service_request.id,
+                                    organization_id: organization.id)
 
-    stub_controller
+      xhr :get, :document_management, id: service_request.id
 
-    let_there_be_lane
-    let_there_be_j
-    build_service_request
-
-    before(:each) do
-      # stub initialize_service_request so we can stub @service_request's
-      # service_list method
-      expect(controller).to receive(:initialize_service_request) do
-        controller.instance_eval do
-          @service_request = ServiceRequest.find_by_id(params[:id])
-        end
-        expect(controller.instance_variable_get(:@service_request)).to receive(:service_list) { :service_list }
-      end
+      expect(assigns(:back)).to eq('service_calendar')
     end
 
-    context 'ServiceRequest has no Subsidies' do
-      before(:each) do
-        get :document_management, id: service_request.id        
-      end
+    it 'Should not set @back to service_calendar if no SSR has or is eligible for a subsidy' do
+      organization        = create(:provider)
+      service_request     = create(:service_request_without_validations)
+      sub_service_request = create(:sub_service_request_with_subsidy,
+                                    service_request_id: service_request.id,
+                                    organization_id: organization.id)
 
-      it "should set the service list to the service request's service list" do
-        expect(assigns(:service_list)).to eq :service_list
-      end
+      xhr :get, :document_management, id: service_request.id
 
-      it "should set @back to 'service_calendar'" do
-        expect(assigns(:back)).to eq 'service_calendar'
-      end
-    end
-
-    context 'ServiceRequest has Subsidies' do
-      before(:each) do
-        create(:subsidy, sub_service_request: service_request.sub_service_requests.first)
-        get :document_management, id: service_request.id
-      end
-
-      it "should set @service_list to the ServiceRequest's service list" do
-        expect(assigns(:service_list)).to eq :service_list
-      end
+      expect(assigns(:back)).to eq('service_subsidy')
     end
   end
+
 end

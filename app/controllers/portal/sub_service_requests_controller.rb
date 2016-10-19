@@ -29,7 +29,6 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     session[:sub_service_request_id] = @sub_service_request.id
     session[:service_request_id] = @sub_service_request.service_request_id
     session[:service_calendar_pages] = params[:pages] if params[:pages]
-
     if @user.can_edit_fulfillment? @sub_service_request.organization
       @user_toasts = @user.received_toast_messages.select {|x| x.sending_class == 'SubServiceRequest'}.select {|y| y.sending_class_id == @sub_service_request.id}
       @service_request = @sub_service_request.service_request
@@ -48,6 +47,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     else
       redirect_to portal_admin_index_path
     end
+
   end
 
   def update_from_fulfillment
@@ -58,7 +58,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     if @sub_service_request.update_attributes(params[:sub_service_request])
       @sub_service_request.update_based_on_status(saved_status)
       @sub_service_request.generate_approvals(@user, params)
-      @sub_service_request.distribute_surveys if @sub_service_request.status == 'complete' and @sub_service_request.status != saved_status #status is complete and it was something different before
+      @sub_service_request.distribute_surveys if @sub_service_request.is_complete? and @sub_service_request.status != saved_status #status is complete and it was something different before
       @service_request = @sub_service_request.service_request
       @protocol = @service_request.protocol
       @approvals = [@service_request.approvals, @sub_service_request.approvals].flatten
@@ -74,15 +74,20 @@ class Portal::SubServiceRequestsController < Portal::BaseController
   def update_from_project_study_information
     @sub_service_request = SubServiceRequest.find params[:id]
 
-    attrs = params[@protocol.type.downcase.to_sym]
-   
-    ###TODO temporarily disabling validation in Admin Portal
-    @protocol.attributes = attrs
-
-    if @protocol.save(:validate => false) #update_attributes attrs
-      redirect_to "/portal/admin/sub_service_requests/#{@sub_service_request.id}"
+    attrs = if @protocol.type.downcase.to_sym == :study && params[:study]
+      params[:study]
+    elsif @protocol.type.downcase.to_sym == :project && params[:project]
+      params[:project]
     else
-      @user_toasts = @user.received_toast_messages.select {|x| x.sending_class == 'SubServiceRequest'}
+      Hash.new
+    end
+
+    if @protocol.update_attributes(attrs)
+      redirect_to portal_admin_sub_service_request_path(@sub_service_request)
+    else
+      # @user_toasts set to an empty array for Wenjun's sanity until bootstrap is merged in
+      # @user_toasts = @user.received_toast_messages.select {|x| x.sending_class == 'SubServiceRequest'}
+      @user_toasts = []
       @service_request = @sub_service_request.service_request
       @protocol.populate_for_edit if @protocol.type == "Study"
       @candidate_one_time_fees, @candidate_per_patient_per_visit = @sub_service_request.candidate_services.partition {|x| x.one_time_fee}
@@ -92,7 +97,13 @@ class Portal::SubServiceRequestsController < Portal::BaseController
       @related_service_requests = @protocol.all_child_sub_service_requests
       @approvals = [@service_request.approvals, @sub_service_request.approvals].flatten
       @selected_arm = @service_request.arms.first
-      render :action => 'show'
+      # Sponsor name error showing up twice
+      unless @protocol.errors.messages[:sponsor_name].nil?
+        @protocol.errors.messages[:sponsor_name].uniq!
+      end
+      
+      render action: 'show'
+
     end
   end   
 
@@ -235,7 +246,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     # deletes a group of documents
     sub_service_request = SubServiceRequest.find(params[:id])
     service_request = sub_service_request.service_request
-    document = service_request.documents.find params[:document_id]
+    document = service_request.protocol.documents.find params[:document_id]
     @tr_id = "#document_id_#{document.id}"
 
     sub_service_request.documents.delete document
@@ -246,7 +257,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
   def edit_documents
     @sub_service_request = SubServiceRequest.find(params[:id])
     service_request = @sub_service_request.service_request
-    @document = service_request.documents.find params[:document_id]
+    @document = service_request.protocol.documents.find params[:document_id]
     @service_list = service_request.service_list
   end
 
@@ -308,7 +319,7 @@ class Portal::SubServiceRequestsController < Portal::BaseController
     # send e-mail to all folks with view and above
     @protocol.project_roles.each do |project_role|
       next if project_role.project_rights == 'none'
-      Notifier.notify_user(project_role, @service_request, xls, false, current_user).deliver unless project_role.identity.email.blank?
+      Notifier.notify_user(project_role, @service_request, xls, false, current_user).deliver_now unless project_role.identity.email.blank?
     end
 
     # Check to see if we need to send notifications for epic.

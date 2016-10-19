@@ -24,9 +24,11 @@ Capybara.ignore_hidden_elements = true
 RSpec.describe 'as a user on catalog page', js: true do
   before :each do
     default_catalog_manager_setup
+    wait_for_javascript_to_finish
   end
 
   it 'the user should create a pricing map' do
+
     core = Core.last
     click_link('MUSC Research Data Request (CDW)')
     within '#pricing' do
@@ -53,7 +55,6 @@ RSpec.describe 'as a user on catalog page', js: true do
 
       fill_in "pricing_maps_blank_pricing_map_full_rate", with: 4321
       fill_in "otf_quantity_type_", with: "hours"
-
       page.execute_script %Q{ $(".service_unit_factor").change() }
     end
 

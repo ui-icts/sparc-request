@@ -49,7 +49,7 @@ RSpec.describe ApplicationController, type: :controller do
   describe '#current_user' do
     it 'should call current_identity' do
       expect(controller).to receive(:current_identity)
-      controller.current_user
+      controller.send(:current_user)
     end
   end
 
@@ -61,12 +61,13 @@ RSpec.describe ApplicationController, type: :controller do
 
       context '@sub_service_request nil and Identity can edit @service_request' do
         it 'should authorize Identity' do
-          controller.instance_variable_set(:@service_request, :service_request)
+          sr = build(:service_request)
+          controller.instance_variable_set(:@service_request, sr)
           allow(jug2).to receive(:can_edit_service_request?)
-            .with(:service_request)
+            .with(sr)
             .and_return(true)
           expect(controller).to_not receive(:authorization_error)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
 
@@ -77,18 +78,19 @@ RSpec.describe ApplicationController, type: :controller do
             .with(:sub_service_request)
             .and_return(true)
           expect(controller).to_not receive(:authorization_error)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
 
       context '@sub_service_request nil and Identity cannot edit @service_request' do
         it 'should not authorize Identity' do
-          controller.instance_variable_set(:@service_request, :service_request)
+          sr = build(:service_request)
+          controller.instance_variable_set(:@service_request, sr)
           allow(jug2).to receive(:can_edit_service_request?)
-            .with(:service_request)
+            .with(sr)
             .and_return(false)
           expect(controller).to receive(:authorization_error)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
 
@@ -99,7 +101,7 @@ RSpec.describe ApplicationController, type: :controller do
             .with(:sub_service_request)
             .and_return(false)
           expect(controller).to receive(:authorization_error)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
     end
@@ -111,10 +113,10 @@ RSpec.describe ApplicationController, type: :controller do
 
       context 'ServiceRequest in first_draft and not submitted yet' do
         it 'should authorize Identity' do
-          service_request = instance_double('ServiceRequest', status: 'first_draft', service_requester_id: nil)
+          service_request = instance_double('ServiceRequest', status: 'first_draft')
           controller.instance_variable_set(:@service_request, service_request)
           expect(controller).to_not receive(:authorization_error)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
 
@@ -124,17 +126,17 @@ RSpec.describe ApplicationController, type: :controller do
           controller.instance_variable_set(:@service_request, service_request)
           expect(controller).to_not receive(:authorization_error)
           expect(controller).to receive(:authenticate_identity!)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
 
-      context 'ServiceRequest has non-nil service_requester_id and status' do
+      context 'ServiceRequest and status' do
         it 'should authorize Identity' do
-          service_request = instance_double('ServiceRequest', status: 'draft', service_requester_id: 1)
+          service_request = instance_double('ServiceRequest', status: 'draft')
           controller.instance_variable_set(:@service_request, service_request)
           expect(controller).to_not receive(:authorization_error)
           expect(controller).to receive(:authenticate_identity!)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
 
@@ -143,7 +145,7 @@ RSpec.describe ApplicationController, type: :controller do
           service_request = instance_double('ServiceRequest', status: nil)
           controller.instance_variable_set(:@service_request, service_request)
           expect(controller).to receive(:authorization_error)
-          controller.authorize_identity
+          controller.send(:authorize_identity)
         end
       end
     end

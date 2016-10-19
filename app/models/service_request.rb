@@ -24,16 +24,18 @@ class ServiceRequest < ActiveRecord::Base
 
   audited
 
-  belongs_to :service_requester, :class_name => "Identity", :foreign_key => "service_requester_id"
   belongs_to :protocol
   has_many :sub_service_requests, :dependent => :destroy
+  has_many :line_items, -> { includes(:service) }, :dependent => :destroy
+  has_many :line_items_visits, through: :line_items
   has_many :subsidies, through: :sub_service_requests
-  has_many :line_items, :include => [:service], :dependent => :destroy
   has_many :charges, :dependent => :destroy
   has_many :tokens, :dependent => :destroy
   has_many :approvals, :dependent => :destroy
-  has_many :documents, :dependent => :destroy
   has_many :arms, :through => :protocol
+  has_many :notes, as: :notable, dependent: :destroy
+
+  after_save :set_original_submitted_date
 
   validation_group :protocol do
     # validates :protocol_id, :presence => {:message => "You must identify the service request with a study/project before continuing."}
@@ -88,13 +90,11 @@ class ServiceRequest < ActiveRecord::Base
 
   attr_accessible :protocol_id
   attr_accessible :status
-  attr_accessible :service_requester_id
   attr_accessible :notes
   attr_accessible :approved
   attr_accessible :consult_arranged_date
   attr_accessible :pppv_complete_date
   attr_accessible :pppv_in_process_date
-  attr_accessible :requester_contacted_date
   attr_accessible :submitted_at
   attr_accessible :line_items_attributes
   attr_accessible :sub_service_requests_attributes
@@ -112,12 +112,6 @@ class ServiceRequest < ActiveRecord::Base
       errors.add(:protocol_id, "You must identify the service request with a study/project before continuing.")
     elsif not self.protocol.valid?
       errors.add(:protocol, "Errors in the selected study/project have been detected.  Please click Edit Study/Project to correct")
-    else
-      if self.has_ctrc_clinical_services?
-        if self.protocol && self.protocol.has_ctrc_clinical_services?(self.id)
-          errors.add(:ctrc_services, "SCTR Research Nexus Services have been removed")
-        end
-      end
     end
 
     if self.line_items.empty?
@@ -140,7 +134,7 @@ class ServiceRequest < ActiveRecord::Base
       end
     end
 
-    unless (direction == 'back' and status == 'first_draft')
+    unless direction == 'back' && ((status == 'first_draft') || (status == 'draft' && !submitted_at.present?))
       #validate start date and end date
       if protocol
         if protocol.start_date.nil?
@@ -183,7 +177,7 @@ class ServiceRequest < ActiveRecord::Base
   end
 
   def service_calendar_page(direction)
-    return if direction == 'back' and status == 'first_draft'
+    return if direction == 'back' && ((status == 'first_draft') || (status == 'draft' && !submitted_at.present?))
     return unless has_per_patient_per_visit_services?
 
     if USE_EPIC
@@ -304,7 +298,7 @@ class ServiceRequest < ActiveRecord::Base
   end
 
   def create_line_item(args)
-    quantity = args.delete(:quantity) || 1
+    quantity = args.delete('quantity') || args.delete(:quantity) || 1
     if line_item = self.line_items.create(args)
 
       if line_item.service.one_time_fee
@@ -349,15 +343,21 @@ class ServiceRequest < ActiveRecord::Base
     page
   end
 
-  def service_list is_one_time_fee=nil
-    items = []
-    case is_one_time_fee
-    when nil
-      items = line_items
-    when true
-      items = one_time_fee_line_items
-    when false
-      items = per_patient_per_visit_line_items
+  def service_list(is_one_time_fee=nil, service_provider=nil, admin_ssr=nil)
+    items = if service_provider
+      service_provider_line_items(service_provider, line_items)
+    elsif admin_ssr
+      admin_ssr.line_items
+    else
+      line_items
+    end
+
+    items = if is_one_time_fee == true
+      items.select { |i| i.service.one_time_fee? }
+    elsif is_one_time_fee == false
+      items.select { |i| !i.service.one_time_fee? }
+    else
+      items
     end
 
     groupings = {}
@@ -395,6 +395,17 @@ class ServiceRequest < ActiveRecord::Base
     end
 
     groupings
+  end
+
+  # Returns the line items that a service provider is associated with
+  def service_provider_line_items(service_provider, items)
+    service_provider_items = []
+    items.map(&:sub_service_request_id).each do |ssr|
+      if service_provider.identity.is_service_provider?(SubServiceRequest.find(ssr))
+        service_provider_items << SubServiceRequest.find(ssr).line_items
+      end
+    end
+    service_provider_items.flatten.uniq
   end
 
   def has_one_time_fee_services?
@@ -486,26 +497,45 @@ class ServiceRequest < ActiveRecord::Base
 
   # Change the status of the service request and all the sub service
   # requests to the given status.
-  def update_status(new_status)
-    self.update_attributes(status: new_status)
+  def update_status(new_status, use_validation=true)
+    to_notify = []
+
+    self.assign_attributes(status: new_status)
 
     self.sub_service_requests.each do |ssr|
-      ssr.update_attributes(status: new_status)
+      next unless ssr.can_be_edited? && !ssr.is_complete?
+      available = AVAILABLE_STATUSES.keys
+      editable = EDITABLE_STATUSES[ssr.organization_id] || available
+
+      changeable = available & editable
+
+      if changeable.include? new_status
+        if ssr.status != new_status
+          ssr.update_attribute(:status, new_status)
+          to_notify << ssr.id
+        end
+      end
     end
+
+    self.save(validate: use_validation)
+    
+    to_notify
   end
 
   # Make sure that all the sub service requests have an ssr id
   def ensure_ssr_ids
-    next_ssr_id = self.protocol.next_ssr_id || 1
+    if self.protocol
+      next_ssr_id = self.protocol.next_ssr_id || 1
 
-    self.sub_service_requests.each do |ssr|
-      if not ssr.ssr_id then
-        ssr.update_attributes(ssr_id: "%04d" % next_ssr_id)
-        next_ssr_id += 1
+      self.sub_service_requests.each do |ssr|
+        if not ssr.ssr_id then
+          ssr.update_attributes(ssr_id: "%04d" % next_ssr_id)
+          next_ssr_id += 1
+        end
       end
-    end
 
-    self.protocol.update_attributes(next_ssr_id: next_ssr_id)
+      self.protocol.update_attributes(next_ssr_id: next_ssr_id)
+    end
   end
 
   def add_or_update_arms
@@ -550,17 +580,6 @@ class ServiceRequest < ActiveRecord::Base
     true #self.sub_service_requests.all?{|ssr| ssr.arms_editable?}
   end
 
-  # If the last sub service request on the service request is not editable,
-  # then a user should not be able to access the request though the 'Edit
-  # Original' button.
-  def is_editable?
-    if (self.sub_service_requests.count == 1) && !self.sub_service_requests.first.can_be_edited?
-      return false
-    end
-
-    return true
-  end
-
   def audit_report identity, start_date=self.previous_submitted_at.utc, end_date=Time.now.utc
     line_item_audits = AuditRecovery.where("audited_changes LIKE '%service_request_id: #{self.id}%' AND
                                       auditable_type = 'LineItem' AND user_id = #{identity.id} AND action IN ('create', 'destroy') AND
@@ -568,5 +587,18 @@ class ServiceRequest < ActiveRecord::Base
                                     .group_by(&:auditable_id)
 
     {:line_items => line_item_audits}
+  end
+
+  def has_non_first_draft_ssrs?
+    sub_service_requests.where.not(status: 'first_draft').any?
+  end
+
+  private
+
+  def set_original_submitted_date
+    if self.submitted_at && !self.original_submitted_date
+      self.original_submitted_date = self.submitted_at
+      self.save(validate: false)
+    end
   end
 end

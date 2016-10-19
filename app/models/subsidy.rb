@@ -22,39 +22,44 @@ class Subsidy < ActiveRecord::Base
   audited
 
   belongs_to :sub_service_request
+  has_many :notes, as: :notable
 
   attr_accessible :sub_service_request_id
-  attr_accessible :pi_contribution
-  attr_accessible :stored_percent_subsidy
   attr_accessible :overridden
+  attr_accessible :status
+  attr_accessible :percent_subsidy
 
-  def percent_subsidy
-    if self.pi_contribution.nil?
-      subsidy = 0.0
-    else
-      total = self.sub_service_request.direct_cost_total
-      subsidy = total - self.pi_contribution
-      subsidy = subsidy / total
+  delegate :organization, :direct_cost_total, to: :sub_service_request, allow_nil: true
+  delegate :subsidy_map, to: :organization, allow_nil: true
+  delegate :max_dollar_cap, :max_percentage, :default_percentage, to: :subsidy_map, allow_nil: true
+  alias_attribute :total_request_cost, :direct_cost_total
+
+  validate :contribution_caps
+
+  def pi_contribution
+    # This ensures that if pi_contribution is null (new record),
+    # then it will reflect the full cost of the request.
+    total_request_cost.to_f - (total_request_cost.to_f * percent_subsidy) || total_request_cost.to_f
+  end
+
+  # Generates error messages if user input is out of parameters
+  def contribution_caps
+    subsidy_cost = (total_request_cost.to_f - pi_contribution)
+    if pi_contribution < 0
+      errors.add(:pi_contribution, "can not be less than 0")
+    elsif max_dollar_cap.present? and max_dollar_cap > 0 and (subsidy_cost / 100.0) > max_dollar_cap
+      errors.add(:requested_funding, "can not be greater than the cap of #{max_dollar_cap}")
+    elsif max_percentage.present? and max_percentage > 0 and percent_subsidy * 100 > max_percentage
+      errors.add(:percent_subsidy, "can not be greater than the cap of #{max_percentage}")
+    elsif pi_contribution > total_request_cost
+      errors.add(:pi_contribution, "can not be greater than the total request cost")
+    elsif percent_subsidy == 0
+      errors.add(:percent_subsidy, "can not be 0")
     end
-
-    subsidy.nan? ? nil : subsidy
   end
-
-  def self.calculate_pi_contribution subsidy_percentage, total
-    contribution = (total * (subsidy_percentage.to_f / 100.00)).ceil
-    contribution = total - contribution
-    contribution.nan? ? contribution : contribution.ceil
-  end
-
-  def fix_pi_contribution subsidy_percentage
-    new_contribution = Subsidy.calculate_pi_contribution(subsidy_percentage, self.sub_service_request.direct_cost_total)
-    self.update_attributes(:pi_contribution => new_contribution)
-
-    new_contribution
-  end 
 
   def subsidy_audits
-    subsidy_audits = AuditRecovery.where("auditable_id = ? AND auditable_type = ?", self.id, "Subsidy").order(&:created_at)
+    subsidy_audits = AuditRecovery.where("auditable_id = ? AND auditable_type = ?", self.id, "Subsidy").order(:created_at)
     subsidy_audits
   end
 end

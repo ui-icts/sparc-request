@@ -27,6 +27,7 @@ RSpec.describe "service calendar", js: true do
   build_service_request_with_project()
 
   before :each do
+    create_visits
     visit service_calendar_service_request_path service_request.id
     arm1.reload
     arm2.reload
@@ -49,9 +50,8 @@ RSpec.describe "service calendar", js: true do
         fill_in "service_request_line_items_attributes_#{line_item.id}_quantity", with: 10
         page.execute_script('$(".line_item_quantity").change()')
         wait_for_javascript_to_finish
-        find(:xpath, "//a/img[@alt='Goback']/..").click
+        find('.return-to-previous').click
         wait_for_javascript_to_finish
-        sleep 3 # TODO: ugh: I got rid of all the sleeps, but I can't get rid of this one
         expect(LineItem.find(line_item.id).quantity).to eq(10)
       end
 
@@ -59,7 +59,7 @@ RSpec.describe "service calendar", js: true do
         fill_in "service_request_line_items_attributes_#{line_item.id}_units_per_quantity", with: 10
         page.execute_script('$(".units_per_quantity").change()')
         wait_for_javascript_to_finish
-        find(:xpath, "//a/img[@alt='Goback']/..").click
+        find('.return-to-previous').click
         wait_for_javascript_to_finish
         expect(LineItem.find(line_item.id).units_per_quantity).to eq(10)
       end
@@ -69,15 +69,17 @@ RSpec.describe "service calendar", js: true do
 
       describe 'unit minimum too low' do
 
-        it 'should throw js error' do
+        it 'should retain original total direct cost' do
           fill_in "service_request_line_items_attributes_#{line_item.id}_units_per_quantity", with: 1
           page.execute_script('$(".units_per_quantity").change()')
           wait_for_javascript_to_finish
 
-          accept_alert("Quantity please enter a quantity greater than or equal to") do
-            fill_in "service_request_line_items_attributes_#{line_item.id}_quantity", with: 0
-            find("th.number_of_units_header").click
-          end
+          fill_in "service_request_line_items_attributes_#{line_item.id}_quantity", with: 0
+          wait_for_javascript_to_finish
+          page.execute_script('$(".line_item_quantity").change()')
+          wait_for_javascript_to_finish
+          
+          expect(page).to have_css('.otf_total_direct_cost', text: '$50.00')
         end
       end
 
@@ -92,6 +94,18 @@ RSpec.describe "service calendar", js: true do
           wait_for_javascript_to_finish
 
           expect(page).to have_css('#unit_max_error', text: 'more than the maximum allowed')
+        end
+
+        it 'should retain original total direct cost' do
+          fill_in "service_request_line_items_attributes_#{line_item.id}_units_per_quantity", with: 1
+          page.execute_script('$(".units_per_quantity").change()')
+          wait_for_javascript_to_finish
+
+          fill_in "service_request_line_items_attributes_#{line_item.id}_quantity", with: 55
+          page.execute_script('$(".line_item_quantity").change()')
+          wait_for_javascript_to_finish
+
+          expect(page).to have_css('.otf_total_direct_cost', text: '$50.00')
         end
       end
     end
@@ -119,52 +133,50 @@ RSpec.describe "service calendar", js: true do
 
       describe 'sorting visits around' do
 
-        it 'should move visit 1 to the end position' do
+        it 'should move visit 1 to the spevified position' do
           wait_for_javascript_to_finish
-          first(:xpath, "//a[@class='move_visits']").click
+          first('.move_visits').click
           wait_for_javascript_to_finish
           select("Visit 1", from: "visit_to_move_1")
-          select("Move to last position", from: "move_to_position_1")
+          wait_for_javascript_to_finish
+          select("Insert at 2 - Visit 2", from: "move_to_position_#{arm1.id}")
+          wait_for_javascript_to_finish
           find('#submit_move').click
           wait_for_javascript_to_finish
-          select("Visits 6 - 10 of 10", from: "jump_to_visit_#{arm1.id}")
-          wait_for_javascript_to_finish
-
-          expect(page).to have_css("input.visit_name[value='Visit 1']")
+          expect(arm1.visit_groups.first.name).to eq('Visit 2')
         end
 
         it 'should move visit 2 between visits 6 and 7' do
           wait_for_javascript_to_finish
-          first(:xpath, "//a[@class='move_visits']").click
+          first('.move_visits').click
           wait_for_javascript_to_finish
           select("Visit 2", from: "visit_to_move_1")
           wait_for_javascript_to_finish
-          select("Insert before 7 - Visit 7", from: "move_to_position_1")
+          select("Insert at 7 - Visit 7", from: "move_to_position_1")
           find('#submit_move').click
           wait_for_javascript_to_finish
-          select("Visits 6 - 10 of 10", from: "jump_to_visit_#{arm1.id}")
-          wait_for_javascript_to_finish
-
-          expect(page).to have_css("input.visit_name[value='Visit 2']")
+          expect(arm1.visit_groups[6].name).to eq("Visit 2")
         end
 
         it "should not mess up the visit ids" do
           arm1.visit_groups.each do |vg|
             wait_for_javascript_to_finish
-            first(:xpath, "//a[@class='move_visits']").click
+            first('.move_visits').click
             wait_for_javascript_to_finish
-            select("#{vg.name}", from: "visit_to_move_1")
-            select("Move to last position", from: "move_to_position_1")
+            select("#{vg.name}", from: "visit_to_move_#{arm1.id}")
+            # first option in move_to_position dropdown selected
             find('#submit_move').click
             wait_for_javascript_to_finish
           end
+
+          # TODO what are we testing here?
         end
       end
 
       context 'check all buttons' do
 
         describe "selecting check all row button and accepting the validation alert" do
-            
+
           it "should overwrite the quantities in the row if they are not customized" do
             click_link "check_row_#{arm1.line_items_visits.first.id}_template"
             wait_for_javascript_to_finish
@@ -173,9 +185,9 @@ RSpec.describe "service calendar", js: true do
         end
 
         describe "selecting check all row button and canceling the validation alert" do
-            
+
           it "should not overwrite the quantities in the row if they are customized" do
-            
+
             Visit.update_all(research_billing_qty: 2)
             visit service_calendar_service_request_path service_request.id
             wait_for_javascript_to_finish
@@ -189,16 +201,16 @@ RSpec.describe "service calendar", js: true do
         end
 
         describe "selecting check all column button and accepting the validation alert" do
-            
+
           it "should overwrite the quantities in the column if they are not customized" do
-            first("#check_all_column_3").click
+            first("#check_all_column_1").click
             wait_for_javascript_to_finish
-            expect(first(".visits_3")).to be_checked
+            expect(first(".visits_1")).to be_checked
           end
         end
 
         describe "selecting check all column button and canceling the validation alert" do
-            
+
           it "should not overwrite the quantities in the column if they are customized" do
             Visit.update_all(research_billing_qty: 2)
             visit service_calendar_service_request_path service_request.id
@@ -237,19 +249,15 @@ RSpec.describe "service calendar", js: true do
       describe "increasing the 'R' billing quantity" do
         it "should increase the total cost" do
           fill_in("visits_#{@visit_id}_research_billing_qty", with: 10)
-          page.execute_script('$("#visits_2_research_billing_qty").change()')
+          find('body').click
           wait_for_javascript_to_finish
-          sleep 3 # TODO: ugh: I got rid of all the sleeps, but I can't get rid of this one
-
           expect(first(".pp_max_total_direct_cost.arm_#{arm1.id}", visible: true)).to have_exact_text("$300.00")
         end
 
         it "should update each visits maximum costs" do
           fill_in "visits_#{@visit_id}_research_billing_qty", with: 10
-          page.execute_script('$("#visits_2_research_billing_qty").change()')
+          find('body').click
           wait_for_javascript_to_finish
-          sleep 3 # TODO: ugh: I got rid of all the sleeps, but I can't get rid of this one
-
           all(".visit_column_2.max_direct_per_patient.arm_#{arm1.id}").each do |x|
             if x.visible?
               expect(x).to have_exact_text("$300.00")
@@ -279,17 +287,16 @@ RSpec.describe "service calendar", js: true do
           # Putting values in these fields should not increase the total
           # cost
           fill_in "visits_#{@visit_id}_insurance_billing_qty", with: 10
-          page.execute_script('$("#visits_2_insurance_billing_qty").change()')
+          find('body').click
           wait_for_javascript_to_finish
 
           fill_in "visits_#{@visit_id}_effort_billing_qty", with: 10
-          page.execute_script('$("#visits_2_effort_billing_qty").change()')
+          find('body').click
           wait_for_javascript_to_finish
 
           fill_in "visits_#{@visit_id}_research_billing_qty", with: 1
-          page.execute_script('$("#visits_2_research_billing_qty").change()')
+          find('body').click
           wait_for_javascript_to_finish
-          sleep 3
 
           all(".pp_max_total_direct_cost.arm_#{arm1.id}").each do |x|
             if x.visible?
@@ -313,15 +320,15 @@ RSpec.describe "service calendar", js: true do
         visit_id = @visit_id
 
         fill_in "visits_#{visit_id}_research_billing_qty", with: 10
-        page.execute_script('$("#visits_2_research_billing_qty").change()')
+        find('body').click
         wait_for_javascript_to_finish
 
         fill_in "visits_#{visit_id}_insurance_billing_qty", with: 10
-        page.execute_script('$("#visits_2_insurance_billing_qty").change()')
+        find('body').click
         wait_for_javascript_to_finish
 
         fill_in "visits_#{visit_id}_effort_billing_qty", with: 10
-        page.execute_script('$("#visits_2_effort_billing_qty").change()')
+        find('body').click
         wait_for_javascript_to_finish
 
         click_link "quantity_tab"
@@ -358,8 +365,7 @@ RSpec.describe "service calendar", js: true do
       it "should show total price for that visit" do
         find("#billing_strategy_tab").click
         wait_for_javascript_to_finish
-
-        within(".arm_1.visit.visit_column_#{@visit_id}") do
+        within(".arm_#{arm1.id}.visit.visit_column_2") do
           wait_for_javascript_to_finish
           fill_in "visits_#{@visit_id}_research_billing_qty", with: "5\r"
         end
@@ -383,6 +389,32 @@ RSpec.describe "service calendar", js: true do
         first('.visit_name').click
         wait_for_javascript_to_finish
         expect(page).to have_content("Click to rename your visits.")
+      end
+    end
+
+    describe 'saving as draft' do
+
+      it 'should save the request as draft if it is in first draft' do
+        service_request.update_attributes(status: 'first_draft')
+        sub_service_request.update_attributes(status: 'first_draft')
+        click_on 'Save as Draft'
+        wait_for_javascript_to_finish
+        expect(page).to have_content('Filter Protocols')
+      end
+
+      it 'should save the request as draft if it is in draft and has not been previously submitted' do
+        service_request.update_attributes(status: 'draft')
+        sub_service_request.update_attributes(status: 'draft')
+        click_on 'Save as Draft'
+        wait_for_javascript_to_finish
+        expect(page).to have_content('Filter Protocols')
+      end
+
+      it 'should not display the Save as Draft button if the request has been previously submitted' do
+        service_request.update_attribute(:submitted_at, Date.today)
+        visit service_calendar_service_request_path service_request.id
+        wait_for_javascript_to_finish
+        expect(page).to_not have_content('Save as Draft')
       end
     end
   end

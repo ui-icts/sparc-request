@@ -29,7 +29,7 @@ class Service < ActiveRecord::Base
                 {:display => "Corporate Rate", :value => "corporate"}, {:display => "Other Rate", :value => "other"},
                 {:display => "Member Rate", :value => "member"}]
 
-  belongs_to :organization, :include => [:pricing_setups]
+  belongs_to :organization, -> { includes(:pricing_setups) }
   belongs_to :revenue_code_range
   # set ":inverse_of => :service" so that the first pricing map can be validated before the service has been saved
   has_many :pricing_maps, :inverse_of => :service, :dependent => :destroy 
@@ -41,8 +41,8 @@ class Service < ActiveRecord::Base
   # TODO: Andrew thinks "related services" is a bad name
   has_many :service_relations, :dependent => :destroy
   has_many :related_services, :through => :service_relations
-  has_many :required_services, :through => :service_relations, :source => :related_service, :conditions => [ "optional = ? and is_available = ?", false, true ]
-  has_many :optional_services, :through => :service_relations, :source => :related_service, :conditions => [ "optional = ? and is_available = ?", true, true ]
+  has_many :required_services, -> { where("optional = ? and is_available = ?", false, true) }, :through => :service_relations, :source => :related_service
+  has_many :optional_services, -> { where("optional = ? and is_available = ?", true, true) }, :through => :service_relations, :source => :related_service
 
   # Services that depend on this service
   has_many :depending_service_relations, :class_name => 'ServiceRelation', :foreign_key => 'related_service_id'
@@ -58,6 +58,7 @@ class Service < ActiveRecord::Base
   attr_accessible :is_available
   attr_accessible :service_center_cost
   attr_accessible :cpt_code
+  attr_accessible :eap_id
   attr_accessible :charge_code
   attr_accessible :revenue_code
   attr_accessible :organization_id
@@ -70,14 +71,16 @@ class Service < ActiveRecord::Base
 
   validate :validate_pricing_maps_present
 
-  alias :process_ssrs_organization :organization
-
   ###############################################
   # Validations
   def validate_pricing_maps_present
     errors.add(:service, "must contain at least 1 pricing map.") if pricing_maps.length < 1
   end
   ###############################################
+
+  def process_ssrs_organization
+    organization.process_ssrs_parent
+  end
 
   # Return the parent organizations of the service.  Note that this
   # returns the organizations in the reverse order of
@@ -162,18 +165,6 @@ class Service < ActiveRecord::Base
     return service_name
   end
 
-  def display_service_abbreviation
-    if self.abbreviation.blank?
-      service_abbreviation = self.name
-    elsif self.cpt_code and !self.cpt_code.blank?
-      service_abbreviation = self.abbreviation + " (#{self.cpt_code})"
-    else
-      service_abbreviation = self.abbreviation
-    end
-
-    return service_abbreviation
-  end
-
   # Will check for nil display dates on the service's pricing maps
   def verify_display_dates
     is_valid = true
@@ -213,19 +204,21 @@ class Service < ActiveRecord::Base
     return pricing_map_for_date(Date.today)
   end
 
-  # Find a pricing map with a display date corresponding to the given
-  # date.
+  #This method is only used for the service pricing report
   def pricing_map_for_date(date)
-    raise ArgumentError, "Service has no pricing maps" if self.pricing_maps.empty?
+    unless pricing_maps.empty?
+      current_maps = self.pricing_maps.select { |x| x.display_date.to_date <= date.to_date }
+      if current_maps.empty?
+        return false
+      end
 
-    # TODO: use #where? (warning: potential performance issue)
-    current_maps = self.pricing_maps.select { |x| x.display_date.to_date <= date.to_date }
-    raise ArgumentError, "Service has no current pricing maps" if current_maps.empty?
+      sorted_maps = current_maps.sort { |lhs, rhs| lhs.display_date <=> rhs.display_date }
+      pricing_map = sorted_maps.last
 
-    sorted_maps = current_maps.sort { |lhs, rhs| lhs.display_date <=> rhs.display_date }
-    pricing_map = sorted_maps.last
-
-    return pricing_map
+      return pricing_map
+    else
+      return false
+    end
   end
 
   # Find a pricing map with an effective date for today's date.
@@ -265,7 +258,8 @@ class Service < ActiveRecord::Base
     if rate.nil?
       return 'N/A'
     else
-      return "#{Service.cents_to_dollars(rate)}"
+      rate = sprintf( '%0.2f', Service.cents_to_dollars(rate).to_f.round(2) )
+      return "#{rate}"
     end
   end
 

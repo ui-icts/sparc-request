@@ -219,6 +219,43 @@ RSpec.describe 'organization' do
     end
   end
 
+  describe 'update descendants availability' do
+
+    it 'should update all descendants availability to false when input is false' do 
+      provider  = create(:provider, is_available: true)
+      program   = create(:program, parent: provider, is_available: true)
+      core      = create(:core, parent: program, is_available: true)
+      service   = create(:service, organization: core, is_available: true)
+
+      provider.update_descendants_availability("false")
+
+      program.reload
+      core.reload
+      service.reload
+
+      expect(program.is_available).to eq(false)
+      expect(core.is_available).to eq(false)
+      expect(service.is_available).to eq(false)
+    end
+
+    it 'should not update all descendants availability when input is true' do 
+      provider  = create(:provider, is_available: true)
+      program   = create(:program, parent: provider, is_available: true)
+      core      = create(:core, parent: program, is_available: true)
+      service   = create(:service, organization: core, is_available: true)
+
+      provider.update_descendants_availability("true")
+
+      program.reload
+      core.reload
+      service.reload
+
+      expect(program.is_available).to eq(true)
+      expect(core.is_available).to eq(true)
+      expect(service.is_available).to eq(true)
+    end
+
+  end
 
   describe 'current_pricing_setup' do
 
@@ -425,15 +462,21 @@ RSpec.describe 'organization' do
       end
     end
 
-    context "patient visit calendar" do
+    describe 'has editable statuses?' do
 
-      let!(:core1)    { create(:core, show_in_cwf: true) }
-      let!(:core2)    { create(:core, show_in_cwf: true) }
-      describe "get cwf organizations" do
+      it 'should return true if the current organization or its parent have editable statuses' do
+        organization1 = Organization.create
+        organization2 = Organization.create(parent_id: organization1.id)
+        EDITABLE_STATUSES[organization1.id] = ['draft']
+        expect(organization2.has_editable_statuses?).to eq(true)
+        expect(organization1.has_editable_statuses?).to eq(true)
+      end
 
-        it "should return an array of all organizations flagged to show in clinical work fulfillment" do
-          expect(Organization.get_cwf_organizations).to include(core1, core2)
-        end
+      it 'should return false otherwise' do
+        organization1 = Organization.create
+        organization2 = Organization.create
+        EDITABLE_STATUSES[organization1.id] = ['draft']
+        expect(organization2.has_editable_statuses?).to eq(false)
       end
     end
   end

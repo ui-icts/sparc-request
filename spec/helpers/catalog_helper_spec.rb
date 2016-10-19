@@ -22,66 +22,6 @@ require 'rails_helper'
 
 RSpec.describe CatalogManager::CatalogHelper do
 
-  context '#node' do
-    let(:institution){
-      create(:institution,
-        name:                 'Medical University of South Carolina',
-        order:                1,
-        abbreviation:         'MUSC',
-        is_available:         1
-      )
-    }
-
-    let(:provider){
-      create(:provider,
-        name:                 'South Carolina Clinical and Translational Institute (SCTR)',
-        order:                1,
-        css_class:            'blue-provider',
-        parent_id:            institution.id,
-        abbreviation:         'SCTR1',
-        process_ssrs:         0,
-        is_available:         1
-      )
-    }
-
-    let(:program){
-      create(:program,
-        type:                 'Program',
-        name:                 'Office of Biomedical Informatics',
-        order:                1,
-        description:          'The Biomedical Informatics Programs goal is to integrate..',
-        parent_id:            provider.id,
-        abbreviation:         'Informatics',
-        process_ssrs:         0,
-        is_available:         1
-      )
-    }
-
-    it 'should return a organization node for js.tree' do
-      expect(helper.node(institution)).to eq "<a href=\"#\" cid=\"#{institution.id}\" class=\"institution\" object_type=\"institution\">Medical University of South Carolina</a>"
-    end
-
-    it 'should return a organization node for js.tree' do
-      expect(helper.node(institution, false)).to eq "<a href=\"#\" cid=\"#{institution.id}\" class=\"institution disabled_node\" object_type=\"institution\">Medical University of South Carolina</a>"
-    end
-
-    it 'should return a organization node for js.tree' do
-      expect(helper.node(provider)).to eq "<a href=\"#\" cid=\"#{provider.id}\" class=\"provider\" object_type=\"provider\">South Carolina Clinical and Translational Institute (SCTR)</a>"
-    end
-
-    it 'should return a organization node for js.tree' do
-      expect(helper.node(provider, false)).to eq "<a href=\"#\" cid=\"#{provider.id}\" class=\"provider disabled_node\" object_type=\"provider\">South Carolina Clinical and Translational Institute (SCTR)</a>"
-    end
-
-    it 'should return a organization node for js.tree' do
-      expect(helper.node(program)).to eq "<a href=\"#\" cid=\"#{program.id}\" class=\"program\" object_type=\"program\">Office of Biomedical Informatics</a>"
-    end
-
-    it 'should return a organization node for js.tree' do
-      expect(helper.node(program, false)).to eq "<a href=\"#\" cid=\"#{program.id}\" class=\"program disabled_node\" object_type=\"program\">Office of Biomedical Informatics</a>"
-    end
-  end
-
   context '#disable_pricing_setup' do
     it "should return whether or not it can edit a pricing setup based on date" do
       pricing_setup = create(:pricing_setup)
@@ -133,6 +73,29 @@ RSpec.describe CatalogManager::CatalogHelper do
     it "should return whether or not it can edit a pricing map based on date" do
       pricing_map = create(:pricing_map, effective_date: Date.parse('2018-01-01'))
       expect(helper.disable_pricing_map(pricing_map, false)).to eq(true)
+    end
+  end
+
+  context '#disabled_parent' do
+    it 'should return the name of the highest disabled organization in the tree' do
+      institution = create(:institution, name: 'Institution', is_available: true)
+      provider    = create(:provider, name: 'Provider', parent_id: institution.id, is_available: false)
+      program     = create(:program, name: 'Program', parent_id: provider.id, is_available: false)
+      core        = create(:core, name: 'Core', parent_id: program.id, is_available: false)
+
+      expect(helper.disabled_parent(core)).to eq(provider.name)
+    end
+  end
+
+  context '#disabled_service_parent' do
+    it 'should return the name of the highest disabled organization in the tree' do
+      institution = create(:institution, name: 'Institution', is_available: true)
+      provider    = create(:provider, name: 'Provider', parent_id: institution.id, is_available: false)
+      program     = create(:program, name: 'Program', parent_id: provider.id, is_available: false)
+      core        = create(:core, name: 'Core', parent_id: program.id, is_available: false)
+      service     = create(:service, name: 'Service', organization_id: core.id, is_available: false)
+
+      expect(helper.disabled_service_parent(service)).to eq(provider.name)
     end
   end
 end

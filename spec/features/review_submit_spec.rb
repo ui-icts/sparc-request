@@ -27,7 +27,10 @@ RSpec.describe "review page", js: true do
   let_there_be_lane
   let_there_be_j
   fake_login_for_each_test
-  build_service_request_with_project
+  build_service_request_with_study
+  build_study_type_question_groups
+  build_study_type_questions
+  build_study_type_answers
 
   before :each do
     file = File.join(Rails.root, 'surveys/system_satisfaction_survey.rb')
@@ -49,10 +52,12 @@ RSpec.describe "review page", js: true do
 
   describe "clicking submit" do
     it 'Should submit the page', js: true do
-      find("#submit_services2").click
+      find("#submit_services1").click
       wait_for_javascript_to_finish
-      click_button("No")
-      wait_for_javascript_to_finish
+      if SYSTEM_SATISFACTION_SURVEY
+        click_button("No")
+        wait_for_javascript_to_finish
+      end
       service_request_test = ServiceRequest.find(service_request.id)
       expect(service_request_test.status).to eq("submitted")
     end
@@ -71,9 +76,10 @@ RSpec.describe "review page", js: true do
         wait_for_javascript_to_finish
         find("button.ui-button .ui-button-text", text: "Yes").click
         wait_for_javascript_to_finish
-        expect(current_path).to eq(portal_root_path)
+        expect(current_path).to eq(dashboard_root_path)
       end
     end
+
     describe "clicking no in the notification" do
       it 'Should close the notification box and do nothing' do
         find("#save-as-draft").click
@@ -85,36 +91,15 @@ RSpec.describe "review page", js: true do
     end
   end
 
-  describe "clicking get a cost estimate and declining the system satisfaction survey" do
+  describe "clicking get a cost estimate and declining the system satisfaction survey (if turned on)" do
     it 'Should submit the page', js: true do
       find("#get_a_cost_estimate").click
-      find(:xpath, "//button/span[text()='No']/..").click
-      wait_for_javascript_to_finish
-      service_request_test = ServiceRequest.find(service_request.id)
-      expect(service_request_test.status).to eq("get_a_cost_estimate")
-    end
-  end
-
-  describe "clicking get a cost estimate and accepting the system satisfaction survey" do
-    it 'Should submit the page', js: true do
-      find("#get_a_cost_estimate").click
-      find(:xpath, "//button/span[text()='Yes']/..").click
-      wait_for_javascript_to_finish
-
-      # select Yes to next question and you should see text area for Yes
-      all("#r_1_answer_id_input input").first().click
-      wait_for_javascript_to_finish
-      fill_in "r_2_text_value", with: "I love it"
-
-      # select No to next question and you should see text area for No
-      all("#r_1_answer_id_input input").last().click
-      wait_for_javascript_to_finish
-      fill_in "r_3_text_value", with: "I hate it"
-
-      within(:css, "div.next_section") do
-        click_button 'Submit'
+      if SYSTEM_SATISFACTION_SURVEY
+        find(:xpath, "//button/span[text()='No']/..").click
         wait_for_javascript_to_finish
       end
+      service_request_test = ServiceRequest.find(service_request.id)
+      expect(service_request_test.status).to eq("get_a_cost_estimate")
     end
   end
 
@@ -126,10 +111,12 @@ RSpec.describe "review page", js: true do
       service2.update_attributes(send_to_epic: true, charge_code: nil, cpt_code: nil)
       service_request.protocol.update_attribute(:selected_for_epic, true)
       clear_emails
-      find("#submit_services2").click
+      find("#submit_services1").click
       wait_for_javascript_to_finish
-      click_button("No")
-      wait_for_javascript_to_finish
+      if SYSTEM_SATISFACTION_SURVEY
+        click_button("No")
+        wait_for_javascript_to_finish
+      end
       @email = all_emails.find { |email| email.subject == "Epic Rights Approval"}
       service_request.update_attributes(status: 'submitted')
     end
@@ -140,10 +127,10 @@ RSpec.describe "review page", js: true do
 
     # Table is filled correctly
     it 'should have the correct users in the table' do
-      project_role = project.project_roles.first
-      expect(@email.body).not_to have_content project.project_roles.last.identity.full_name
+      project_role = study.project_roles.first
+      expect(@email.body).not_to have_content study.project_roles.last.identity.full_name
 
-      n = Capybara::Node::Simple.new(@email.body.to_s).find("#project_role_#{project.project_roles.first.id}")
+      n = Capybara::Node::Simple.new(@email.body.to_s).find("#project_role_#{study.project_roles.first.id}")
       expect(n.find(".name")).to have_content project_role.identity.full_name
       expect(n.find(".role")).to have_content USER_ROLES.invert[project_role.role]
       expect(n.find(".epic_rights")).to have_content(EPIC_RIGHTS["view_rights"])
@@ -164,14 +151,14 @@ RSpec.describe "review page", js: true do
       end
 
       it "should send an email to the Primary PI" do
-        expect(@email.body).to have_content("The following SPARC Request users have requested access to Epic for your study ##{project.id}")
+        expect(@email.body).to have_content("The following SPARC Request users have requested access to Epic for your study ##{study.id}")
       end
 
       it "should have the correct users in the table" do
-        project_role = project.project_roles.first
-        expect(@email.body.to_s).not_to have_content project.project_roles.last.identity.full_name
+        project_role = study.project_roles.first
+        expect(@email.body.to_s).not_to have_content study.project_roles.last.identity.full_name
 
-        n = Capybara::Node::Simple.new(@email.body.to_s).find("#project_role_#{project.project_roles.first.id}")
+        n = Capybara::Node::Simple.new(@email.body.to_s).find("#project_role_#{study.project_roles.first.id}")
         expect(n.find(".name")).to have_content project_role.identity.full_name
         expect(n.find(".role")).to have_content USER_ROLES.invert[project_role.role]
         expect(n.find(".epic_rights")).to have_content(EPIC_RIGHTS["view_rights"])
@@ -183,7 +170,9 @@ RSpec.describe "review page", js: true do
       end
 
       it "should not send services missing cpt code and charge code" do
+
         visit Capybara::Node::Simple.new(@email.body.to_s).find_link("Send to Epic")['href']
+        wait_for_javascript_to_finish
         expect(page).to have_content "#{service2.name} does not have a CPT or a Charge code."
       end
     end
