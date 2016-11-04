@@ -21,6 +21,7 @@
 development:
   default_mail_to: catesa@musc.edu
   admin_mail_to: catesa@musc.edu
+  contact_us_mail_to: success@musc.edu
   feedback_mail_to: "glennj@musc.edu, hundc@musc.edu"
   new_user_cc: "amcates@gmail.com, no-reply@musc.edu"
   system_satisfaction_survey_cc: 'amcates@gmail.com, catesa@musc.edu'
@@ -83,6 +84,7 @@ development:
 test:
   default_mail_to: nobody@nowhere.com
   admin_mail_to: catesa@musc.edu
+  contact_us_mail_to: success@musc.edu
   feedback_mail_to: "glennj@musc.edu, hundc@musc.edu"
   new_user_cc: "amcates@gmail.com, no-reply@musc.edu"
   system_satisfaction_survey_cc: 'amcates@gmail.com, catesa@musc.edu'
