@@ -29,6 +29,7 @@ begin
   SEND_EMAILS_TO_REAL_USERS                 = application_config['send_emails_to_real_users']
 
   ADMIN_MAIL_TO                             = application_config['admin_mail_to']
+  CONTACT_US_MAIL_TO                        = application_config['contact_us_mail_to'] || 'success@musc.edu'
   EPIC_RIGHTS_MAIL_TO                       = application_config['approve_epic_rights_mail_to']
   FEEDBACK_MAIL_TO                          = application_config['feedback_mail_to']
   NEW_USER_CC                               = application_config['new_user_cc']
