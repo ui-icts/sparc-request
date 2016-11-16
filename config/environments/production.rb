@@ -97,7 +97,16 @@ SparcRails::Application.configure do
   config.after_initialize do
     # Need to do this after initialization so that obis_setup has run and our config is loaded
     if defined? ROOT_URL
-      config.action_mailer.default_url_options = { host: ROOT_URL.sub(/^http(s)?\:\/\//, '') } unless ROOT_URL.nil?
+      unless ROOT_URL.nil?
+        new_options = { host: ROOT_URL.sub(/^http(s)?\:\/\//, '') }
+        config.action_mailer.default_url_options = new_options
+
+        # By the time we run ActionMailer has already copied the options
+        # from config so we need to override here to really make the change
+        # We only set the default_url_options to keep the settings consistent
+        ActionMailer::Base.default_url_options = new_options
+
+      end
     end
   end
 
