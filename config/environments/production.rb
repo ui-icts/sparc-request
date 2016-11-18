@@ -91,8 +91,24 @@ SparcRails::Application.configure do
   # Log the query plan for queries taking more than this (works
   # with SQLite, MySQL, and PostgreSQL)
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
-  config.action_mailer.default_url_options = { host: 'sparc.musc.edu' }
+  
   config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.default_url_options = { host: "sparc.musc.edu" }
+  config.after_initialize do
+    # Need to do this after initialization so that obis_setup has run and our config is loaded
+    if defined? ROOT_URL
+      unless ROOT_URL.nil?
+        new_options = { host: ROOT_URL.sub(/^http(s)?\:\/\//, '') }
+        config.action_mailer.default_url_options = new_options
+
+        # By the time we run ActionMailer has already copied the options
+        # from config so we need to override here to really make the change
+        # We only set the default_url_options to keep the settings consistent
+        ActionMailer::Base.default_url_options = new_options
+
+      end
+    end
+  end
 
   config.middleware.use ExceptionNotification::Rack,
     email: {
