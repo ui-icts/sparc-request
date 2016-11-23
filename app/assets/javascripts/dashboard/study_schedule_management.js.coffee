@@ -207,7 +207,6 @@ $ ->
 
   $(document).on 'click', '#add_line_items_form_button', ->
     $(this).attr('disabled','disabled')
-    $(this).closest('form').submit()
 
   $(document).on 'click', '#remove_service_button', ->
     data =
