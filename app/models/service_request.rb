@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,6 +27,7 @@ class ServiceRequest < ActiveRecord::Base
   belongs_to :protocol
   has_many :sub_service_requests, :dependent => :destroy
   has_many :line_items, -> { includes(:service) }, :dependent => :destroy
+  has_many :services, through: :line_items
   has_many :line_items_visits, through: :line_items
   has_many :subsidies, through: :sub_service_requests
   has_many :charges, :dependent => :destroy
@@ -495,6 +496,10 @@ class ServiceRequest < ActiveRecord::Base
     identities.flatten.uniq
   end
 
+  def additional_detail_services
+    services.joins(:questionnaires).where(questionnaires: { active: true })
+  end
+
   # Change the status of the service request and all the sub service
   # requests to the given status.
   def update_status(new_status, use_validation=true)
@@ -506,11 +511,10 @@ class ServiceRequest < ActiveRecord::Base
       next unless ssr.can_be_edited? && !ssr.is_complete?
       available = AVAILABLE_STATUSES.keys
       editable = EDITABLE_STATUSES[ssr.organization_id] || available
-
       changeable = available & editable
 
-      if changeable.include? new_status
-        if ssr.status != new_status
+      if changeable.include?(new_status)
+        if (ssr.status != new_status) && UPDATABLE_STATUSES.include?(ssr.status)
           ssr.update_attribute(:status, new_status)
           to_notify << ssr.id
         end
@@ -518,7 +522,7 @@ class ServiceRequest < ActiveRecord::Base
     end
 
     self.save(validate: use_validation)
-    
+
     to_notify
   end
 
@@ -591,6 +595,26 @@ class ServiceRequest < ActiveRecord::Base
 
   def has_non_first_draft_ssrs?
     sub_service_requests.where.not(status: 'first_draft').any?
+  end
+
+  def ssrs_associated_with_service_provider (service_provider)
+    ssrs_to_be_displayed = []
+    self.sub_service_requests.each do |ssr|
+      if service_provider.identity.is_service_provider?(ssr)
+        ssrs_to_be_displayed << ssr
+      end
+    end
+    ssrs_to_be_displayed
+  end
+
+  def ssrs_to_be_displayed_in_email(service_provider, audit_report, ssr_destroyed, ssr_id)
+    if ssr_destroyed
+      ssr = SubServiceRequest.find(ssr_id)
+      ssrs_to_be_displayed = [ssr] if service_provider.identity.is_service_provider?(ssr)
+    else
+      ssrs_to_be_displayed = self.ssrs_associated_with_service_provider(service_provider)
+    end
+    ssrs_to_be_displayed
   end
 
   private
