@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -61,6 +61,7 @@ begin
   SYSTEM_SATISFACTION_SURVEY                = application_config['system_satisfaction_survey'] || false
   NO_REPLY_FROM                             = application_config['no_reply_from']
   EDITABLE_STATUSES                         = application_config['editable_statuses'] || {}
+  UPDATABLE_STATUSES                        = application_config['updatable_statuses'] || []
   REMOTE_SERVICE_NOTIFIER_PROTOCOL          = application_config['remote_service_notifier_protocol']
   REMOTE_SERVICE_NOTIFIER_HOST              = application_config['remote_service_notifier_host']
   REMOTE_SERVICE_NOTIFIER_PATH              = application_config['remote_service_notifier_path']
@@ -98,6 +99,7 @@ end
 begin
   constant_file                  = File.join(Rails.root, 'config', 'constants'+CONSTANTS_YML_OVERRIDE+'.yml')
   config                         = YAML::load_file(constant_file)
+  ADDITIONAL_DETAIL_QUESTION_TYPES = config['additional_detail_question_types']
   AFFILIATION_TYPES              = config['affiliations']
   IMPACT_AREAS                   = config['impact_areas']
   EPIC_RIGHTS                    = config['epic_rights']
