@@ -331,7 +331,7 @@ en:
         humans:
           header: "Human Subjects"
           nct_number: "NCT# (National Clinical Trials Number):"
-          hr_number: "HR #:"
+          hr_number: "HawkIRB #:"
           pro_number: "PRO #:"
           record_irb: "IRB of Record:"
           submission_type: "Submission Type:"
