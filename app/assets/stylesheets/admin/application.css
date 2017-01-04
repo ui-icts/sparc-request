@@ -21,5 +21,6 @@
 /* bootstrap-accessibility requires that the JS file be loaded at the bottom of the layout template (application.html.haml) */
 
 /*
+ *= require admin/ui-grid.min
  *= require_self
 */
