@@ -30,7 +30,7 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
     admin_orgs   = @user.authorized_admin_organizations
     @admin       = !admin_orgs.empty?
 
-    @default_filter_params = { show_archived: 0 }
+    @default_filter_params = { show_archived: 0, sorted_by: 'id desc' }
 
     # if we are an admin we want to default to admin organizations
     if @admin
@@ -53,10 +53,10 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
         persistence_id: false #resets filters on page reload
       ) || return
 
-    @protocols          = @filterrific.find.page(params[:page])
+    @protocols        = @filterrific.find.page(params[:page])
+    @admin_protocols  = Protocol.for_admin(@user.id).pluck(:id)
+    @protocol_filters = ProtocolFilter.latest_for_user(@user.id, 5)
 
-    @admin_protocols    = Protocol.for_admin(@user.id).pluck(:id)
-    @protocol_filters   = ProtocolFilter.latest_for_user(@user.id, 5)
     #toggles the display of the navigation bar, instead of breadcrumbs
     @show_navbar      = true
     @show_messages    = true
@@ -73,7 +73,6 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
   def show
     @submissions = @protocol.submissions
     respond_to do |format|
-      format.js   { render }
       format.html {
         session[:breadcrumbs].clear.add_crumbs(protocol_id: @protocol.id)
         @permission_to_edit = @authorization.present? ? @authorization.can_edit? : false
@@ -83,6 +82,7 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
         render
       }
       format.xlsx {
+        @statuses_hidden = params[:statuses_hidden] || %w(draft first_draft)
         response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}) Consolidated Corporate Study Budget.xlsx\""
       }
     end
@@ -94,6 +94,8 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
     @protocol.requester_id  = current_user.id
     @protocol.populate_for_edit
     session[:protocol_type] = params[:protocol_type]
+    gon.rm_id_api_url = RESEARCH_MASTER_API
+    gon.rm_id_api_token = RMID_API_TOKEN
   end
 
   def create
@@ -126,6 +128,8 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
     @permission_to_edit = @authorization.nil? ? false : @authorization.can_edit?
     @in_dashboard       = true
     @protocol.populate_for_edit
+    gon.rm_id_api_url = RESEARCH_MASTER_API
+    gon.rm_id_api_token = RMID_API_TOKEN
 
     session[:breadcrumbs].
       clear.
@@ -140,12 +144,14 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
   end
 
   def update
-    if params[:updated_protocol_type] == 'true' && params[:protocol][:type] == 'Study'
-      @protocol.update_attribute(:type, params[:protocol][:type])
+    protocol_type = params[:protocol][:type]
+    @protocol = @protocol.becomes(protocol_type.constantize) unless protocol_type.nil?
+    if params[:updated_protocol_type] == 'true' && protocol_type == 'Study'
+      @protocol.update_attribute(:type, protocol_type)
       @protocol.activate
-      @protocol = Protocol.find(params[:id]) #Protocol reload
+      @protocol.reload
     end
-    
+
     attrs               = fix_date_params
     permission_to_edit  = @authorization.present? ? @authorization.can_edit? : false
     # admin is not able to activate study_type_question_group
@@ -168,12 +174,12 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
     # Setting type and study_type_question_group, not actually saving
     @protocol.type      = params[:type]
     @protocol.study_type_question_group_id = StudyTypeQuestionGroup.active_id
-    
+
     @protocol_type = params[:type]
 
     @protocol = @protocol.becomes(@protocol_type.constantize) unless @protocol_type.nil?
     @protocol.populate_for_edit
-    
+
     flash[:success] = t(:protocols)[:change_type][:updated]
     if @protocol_type == "Study" && @protocol.sponsor_name.nil? && @protocol.selected_for_epic.nil?
       flash[:alert] = t(:protocols)[:change_type][:new_study_warning]
@@ -232,7 +238,7 @@ class Dashboard::ProtocolsController < Dashboard::BaseController
 
     attrs
   end
-  
+
   def fix_date_params
     attrs               = params[:protocol]
 

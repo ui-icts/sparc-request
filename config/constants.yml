@@ -27,6 +27,7 @@ impact_areas: { 'pediatrics': 'Pediatrics',
                'stroke': 'Stroke',
                'diabetes': 'Diabetes',
                'cancer': 'Cancer',
+               'community': 'Community Engagement',
                'other': 'Other' }
 subject_ethnicities: { 'american_indian_alaska_native': 'American Indian/Alaska Native',
                       'asian': 'Asian',
