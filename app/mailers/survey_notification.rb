@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,7 +27,7 @@ class SurveyNotification < ActionMailer::Base
 
     email = ADMIN_MAIL_TO
     cc = SYSTEM_SATISFACTION_SURVEY_CC
-    subject = "System satisfaction survey completed in #{I18n.t('application_title')}"
+    subject = "System satisfaction survey completed in #{t(:mailer)[:application_title]}"
 
     mail(:to => email, :cc => cc, :from => @identity.email, :subject => subject)
   end
@@ -37,7 +37,7 @@ class SurveyNotification < ActionMailer::Base
     @surveys = surveys
     @ssr = ssr
     email = @identity.email
-    subject = "#{I18n.t('application_title')} Survey Notification"
+    subject = "#{t(:mailer)[:application_title]} Survey Notification"
     mail(:to => email, :from => NO_REPLY_FROM, :subject => subject)
   end
 

@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -36,7 +36,19 @@ class LineItemsVisit < ActiveRecord::Base
   attr_accessible :subject_count  # number of subjects for this visit grouping
   attr_accessible :hidden
 
+  validates_numericality_of :subject_count
+  validate :subject_count_valid
+
   after_save :set_arm_edited_flag_on_subjects
+
+  # Destroy parent Arm if the last LineItemsVisit was destroyed
+  after_destroy :release_parent
+
+  def subject_count_valid
+    if subject_count && subject_count > arm.subject_count
+      errors.add(:blank, I18n.t('errors.line_items_visits.subject_count_invalid', arm_subject_count: arm.subject_count))
+    end
+  end
 
   def set_arm_edited_flag_on_subjects
     self.arm.set_arm_edited_flag_on_subjects
@@ -179,12 +191,6 @@ class LineItemsVisit < ActiveRecord::Base
     self.visits.create(visit_group_id: visit_group.id)
   end
 
-  ##TODO: This should not exist, arm.remove_visit does this correctly
-  def remove_visit visit_group
-    visit = self.visits.find_by_visit_group_id(visit_group.id)
-    visit.delete
-  end
-
   def procedures
     self.visits.map {|x| x.appointments.map {|y| y.procedures.select {|z| z.line_item_id == self.line_item_id}}}.flatten
   end
@@ -212,5 +218,14 @@ class LineItemsVisit < ActiveRecord::Base
 
   def any_visit_quantities_customized?
     visits.any?(&:quantities_customized?)
+  end
+
+  private
+
+  def release_parent
+    # Destroy parent Arm if the last LineItemsVisit was destroyed
+    if LineItemsVisit.where(arm_id: arm_id).none?
+      Arm.find(arm_id).destroy
+    end
   end
 end

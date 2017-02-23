@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -23,7 +23,5 @@ class NavigationsController < ApplicationController
   before_filter :authorize_identity
   def index
     @institutions = Institution.all
-    #@service_request = current_user.service_requests.find session[:service_request_id]
-    @service_request = ServiceRequest.find session[:service_request_id]
   end
 end

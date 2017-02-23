@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -37,6 +37,9 @@ FactoryGirl.define do
     federal_non_phs_sponsor      { Faker::Lorem.word }
     federal_phs_sponsor          { Faker::Lorem.word }
     requester_id                 1
+    start_date                   { '2015-10-15' }
+    end_date                     { '2015-10-15' }
+    selected_for_epic            false
 
     trait :without_validations do
       to_create { |instance| instance.save(validate: false) }
@@ -72,6 +75,16 @@ FactoryGirl.define do
       archived false
     end
 
+    trait :blank_funding_start_dates do
+      funding_start_date ""
+      potential_funding_start_date ""
+    end
+
+    trait :blank_start_and_end_dates do
+      start_date nil
+      end_date nil
+    end
+
     trait :with_sub_service_request_in_cwf do
       after(:create) do |protocol, evaluator|
         service_request = create(:service_request, protocol: protocol)
@@ -93,25 +106,12 @@ FactoryGirl.define do
       project_role nil
     end
 
-    # TODO: get this to work!
-    # after(:build) do |protocol, evaluator|
-    #   create_list(:project_role, evaluator.project_role_count,
-    #     protocol: protocol, identity: evaluator.pi)
-    # end
-
     after(:build) do |protocol, evaluator|
       protocol.build_ip_patents_info(attributes_for(:ip_patents_info)) unless protocol.ip_patents_info
       protocol.build_human_subjects_info(attributes_for(:human_subjects_info)) unless protocol.human_subjects_info
       protocol.build_investigational_products_info(attributes_for(:investigational_products_info)) unless protocol.investigational_products_info
       protocol.build_research_types_info(attributes_for(:research_types_info)) unless protocol.research_types_info
       protocol.build_vertebrate_animals_info(attributes_for(:vertebrate_animals_info)) unless protocol.vertebrate_animals_info
-    end
-
-    after(:create) do |protocol, evaluator|
-      # TODO: replace
-      if evaluator.identity && evaluator.project_rights && evaluator.role
-        create(:project_role, protocol_id: protocol.id, identity_id: evaluator.identity.id, project_rights: evaluator.project_rights, role: evaluator.role)
-      end
     end
 
     before(:create) do |protocol, evaluator|
@@ -133,6 +133,7 @@ FactoryGirl.define do
     factory :archived_study_without_validations, traits: [:without_validations, :study, :archived]
     factory :protocol_federally_funded, traits: [:funded, :federal]
     factory :protocol_with_sub_service_request_in_cwf, traits: [:with_sub_service_request_in_cwf, :funded, :federal]
+    factory :study_with_blank_dates, traits: [:study, :pending, :blank_funding_start_dates, :blank_start_and_end_dates]
   end
 
   factory :study, parent: :protocol, class: 'Study' do

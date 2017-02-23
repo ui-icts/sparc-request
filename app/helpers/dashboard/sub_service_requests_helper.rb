@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -96,6 +96,10 @@ module Dashboard::SubServiceRequestsHelper
     return (sub_service_request.direct_cost_total / 100.0)
   end
 
+  def user_display_protocol_total protocol, service_request
+    return (protocol.grand_total(service_request) / 100.0)
+  end
+
   def effective_current_total sub_service_request
     sub_service_request.set_effective_date_for_cost_calculations
     total = (sub_service_request.direct_cost_total / 100.0)
@@ -191,10 +195,10 @@ module Dashboard::SubServiceRequestsHelper
     render 'dashboard/notifications/dropdown.html', sub_service_request: ssr, user: user
   end
 
-  def ssr_actions_display(ssr, user, permission_to_edit, admin_orgs)
+  def ssr_actions_display(ssr, user, permission_to_edit, admin_orgs, show_view_ssr_back)
     admin_access = (admin_orgs & ssr.org_tree).any?
 
-    ssr_view_button(ssr)+
+    ssr_view_button(ssr, show_view_ssr_back)+
     ssr_edit_button(ssr, user, permission_to_edit)+
     ssr_admin_button(ssr, user, permission_to_edit, admin_access)
   end
@@ -203,15 +207,49 @@ module Dashboard::SubServiceRequestsHelper
     ssr.owner.full_name if ssr.owner_id.present?
   end
 
+  def display_ssr_submissions(ssr)
+    line_items = ssr.line_items.includes(service: :questionnaires).includes(:submission).to_a.select(&:has_incomplete_additional_details?)
+
+    if line_items.any?
+      protocol    = ssr.protocol
+      submissions = ""
+
+      line_items.each do |li|
+        submissions +=  content_tag(
+                          :option,
+                          "#{li.service.name}",
+                          data: {
+                            service_id: li.service.id,
+                            protocol_id: protocol.id,
+                            line_item_id: li.id
+                          }
+                        )
+      end
+
+      content_tag(
+        :select,
+        submissions.html_safe,
+        title: t(:dashboard)[:service_requests][:additional_details][:selectpicker],
+        class: 'selectpicker complete-details',
+        data: {
+          style: 'btn-danger',
+          counter: 'true'
+        }
+      )
+    else
+      ''
+    end
+  end
+
   private
 
-  def ssr_view_button(ssr)
-    content_tag(:button, t(:dashboard)[:service_requests][:actions][:view], class: 'view-service-request btn btn-primary btn-sm', type: 'button', data: { sub_service_request_id: ssr.id })
+  def ssr_view_button(ssr, show_view_ssr_back)
+    content_tag(:button, t(:dashboard)[:service_requests][:actions][:view], class: 'view-service-request btn btn-primary btn-sm', type: 'button', data: { sub_service_request_id: ssr.id, show_view_ssr_back: show_view_ssr_back.to_s })
   end
 
   def ssr_edit_button(ssr, user, permission_to_edit)
     # The SSR must not be locked, and the user must either be an authorized user or an authorized admin
-    if ssr.can_be_edited? && permission_to_edit && !ssr.is_complete?
+    if ssr.can_be_edited? && permission_to_edit
       content_tag(:button, t(:dashboard)[:service_requests][:actions][:edit], class: 'edit-service-request btn btn-warning btn-sm', type: 'button', data: { permission: permission_to_edit.to_s, url: "/service_requests/#{ssr.service_request.id}/catalog?sub_service_request_id=#{ssr.id}"})
     else
       ''

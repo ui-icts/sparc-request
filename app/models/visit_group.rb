@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -40,24 +40,20 @@ class VisitGroup < ActiveRecord::Base
 
   acts_as_list scope: :arm
 
-  after_create :set_default_name
   after_save :set_arm_edited_flag_on_subjects
   before_destroy :remove_appointments
 
-  with_options if: :day? do |vg|
-    # with respect to the other VisitGroups associated with the same arm
-    vg.validate :day_must_be_in_order
-    vg.validates :day, numericality: { only_integer: true }
-  end
+  validates :name, presence: true
+  validates :position, presence: true
+  validates :window_before,
+            :window_after,
+            presence: true, numericality: { only_integer: true }
+  validates :day, presence: true, numericality: { only_integer: true }
+
+  validate :day_must_be_in_order
 
   def set_arm_edited_flag_on_subjects
     self.arm.set_arm_edited_flag_on_subjects
-  end
-
-  def set_default_name
-    if name.nil? || name == ""
-      self.update_attributes(:name => "Visit #{self.position}")
-    end
   end
 
   def <=> (other_vg)
@@ -65,7 +61,7 @@ class VisitGroup < ActiveRecord::Base
   end
 
   def insertion_name
-    "insert before " + name
+    "Before #{name}" + (day.present? ? " (Day #{day})" : "")
   end
 
   ### audit reporting methods ###
@@ -84,8 +80,13 @@ class VisitGroup < ActiveRecord::Base
     visits.any? { |visit| ((visit.quantities_customized?) && (visit.line_items_visit.line_item.service_request_id == service_request.id)) }
   end
 
+  # TODO: remove after day_must_be_in_order validation is fixed.
+  def in_order?
+    arm.visit_groups.where("position < ? AND day >= ? OR position > ? AND day <= ?", position, day, position, day).none?
+  end
 
   private
+
   def remove_appointments
     appointments = self.appointments
     appointments.each do |app|
@@ -98,11 +99,7 @@ class VisitGroup < ActiveRecord::Base
   end
 
   def day_must_be_in_order
-    position_col = VisitGroup.arel_table[:position]
-    day_col = VisitGroup.arel_table[:day]
-
-    if arm.visit_groups.where(position_col.lt(position).and(day_col.gteq(day)).or(
-                              position_col.gt(position).and(day_col.lteq(day)))).any?
+    unless in_order?
       errors.add(:day, 'must be in order')
     end
   end

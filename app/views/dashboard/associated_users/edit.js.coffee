@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -18,6 +18,8 @@
 # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-$("#modal_place").html("<%= escape_javascript(render(partial: 'dashboard/associated_users/user_form', locals: { protocol: @protocol, project_role: @protocol_role, identity: @identity, current_pi: @current_pi, header_text: @header_text })) %>")
+$("#modal_place").html("<%= escape_javascript(render(partial: 'associated_users/user_form', locals: { protocol: @protocol, project_role: @protocol_role, identity: @identity, current_pi: @current_pi, header_text: @header_text })) %>")
 $("#modal_place").modal 'show'
 $(".selectpicker").selectpicker()
+
+window.update_disabled_hidden_form_items()

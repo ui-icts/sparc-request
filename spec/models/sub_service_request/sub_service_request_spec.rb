@@ -1,5 +1,5 @@
 # coding: utf-8
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -266,65 +266,10 @@ RSpec.describe 'SubServiceRequest' do
           sub_service_request.update_attributes(status: "on_hold")
           expect(sub_service_request.can_be_edited?).to eq(false)
         end
-      end
 
-      before :each do
-        EDITABLE_STATUSES[ssr1.organization.id] = ['first_draft', 'draft', 'submitted', nil, 'get_a_cost_estimate', 'awaiting_pi_approval']
-      end
-
-      context "update based on status" do
-
-        it "should place a sub service request under a new service request if conditions are met" do
-          sr_count = service_request.protocol.service_requests.count
-          ssr1.update_attributes(status: 'on_hold')
-          ssr1.update_based_on_status('submitted')
-          expect(ssr1.service_request.id).not_to eq(service_request.id)
-          expect(service_request.protocol.service_requests.count).to be > sr_count
-        end
-
-        it "should assign the ssrs line items to the new service request" do
-          ssr1.update_attributes(status: 'on_hold')
-          ssr1.update_based_on_status('submitted')
-          expect(ssr1.line_items.first.service_request_id).not_to eq(service_request.id)
-          expect(line_item2.service_request_id).to eq(service_request.id)
-        end
-
-        it "should not place a sub service request under a new service request if there is only one ssr" do
-          ssr2.destroy
-          sub_service_request.destroy
-          ssr1.update_attributes(status: 'on_hold')
-          ssr1.update_based_on_status('submitted')
-          expect(ssr1.service_request.id).to eq(service_request.id)
-        end
-
-        it "should not place a sub service request under a new service request if the ssr is not tagged with ctrc" do
-          ssr2.update_attributes(status: 'on_hold')
-          ssr2.update_based_on_status('submitted')
-          expect(ssr2.service_request.id).to eq(service_request.id)
-        end
-
-        it "should not place a sub service request under a new service request if the ssr is being switched to another uneditable status" do
-          ssr1.update_attributes(status: 'on_hold')
-          ssr1.update_based_on_status('complete')
-          expect(ssr1.service_request.id).to eq(service_request.id)
-        end
-      end
-
-      context "candidate statuses" do
-
-        before :each do
-          org1.tag_list = "ctrc"
-          org1.save
-        end
-
-        it "should contain 'ctrc approved' and 'ctrc review' if the organization is ctrc" do
-          sub_service_request.update_attributes(organization_id: org1.id)
-          expect(sub_service_request.candidate_statuses).to include('ctrc approved', 'ctrc review')
-        end
-
-        it "should not contain ctrc statuses if the organization is not ctrc" do
-          sub_service_request.update_attributes(organization_id: org2.id)
-          expect(sub_service_request.candidate_statuses).not_to include('ctrc approved', 'ctrc review')
+        it 'should should return false if the status is complete' do
+          sub_service_request.update_attributes(status: 'complete')
+          expect(sub_service_request.can_be_edited?).to eq(false)
         end
       end
     end

@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -25,9 +25,6 @@ module CapybaraSupport
       last_name:             'Glenn',
       first_name:            'Julia',
       ldap_uid:              'jug2@musc.edu',
-      institution:           'medical_university_of_south_carolina',
-      college:               'college_of_medecine',
-      department:            'other',
       email:                 'glennj@musc.edu',
       credentials:           'BS,    MRA',
       catalog_overlord:      true,

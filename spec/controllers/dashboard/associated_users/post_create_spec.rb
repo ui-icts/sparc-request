@@ -1,3 +1,23 @@
+# Copyright © 2011-2016 MUSC Foundation for Research Development~
+# All rights reserved.~
+
+# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:~
+
+# 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.~
+
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following~
+# disclaimer in the documentation and/or other materials provided with the distribution.~
+
+# 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products~
+# derived from this software without specific prior written permission.~
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,~
+# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT~
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL~
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS~
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR~
+# TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.~
+
 require 'rails_helper'
 
 RSpec.describe Dashboard::AssociatedUsersController do
@@ -29,16 +49,16 @@ RSpec.describe Dashboard::AssociatedUsersController do
         log_in_dashboard_identity(obj: identity)
 
         @new_project_roles_attrs = {identity_id: other_user.id}
-        associated_user_creator = instance_double(Dashboard::AssociatedUserCreator,
+        associated_user_creator = instance_double(AssociatedUserCreator,
           successful?: true)
-        allow(Dashboard::AssociatedUserCreator).to receive(:new).
+        allow(AssociatedUserCreator).to receive(:new).
           and_return(associated_user_creator)
 
         xhr :post, :create, protocol_id: protocol.id, project_role: @new_project_roles_attrs, format: :js
       end
 
-      it "should use Dashboard::AssociatedUserCreator to create ProjectRole" do
-        expect(Dashboard::AssociatedUserCreator).to have_received(:new).
+      it "should use AssociatedUserCreator to create ProjectRole" do
+        expect(AssociatedUserCreator).to have_received(:new).
           with(@new_project_roles_attrs)
       end
 
@@ -58,18 +78,18 @@ RSpec.describe Dashboard::AssociatedUsersController do
         @new_project_roles_attrs = {identity_id: other_user.id}
         new_project_role = build_stubbed(:project_role)
         allow(new_project_role).to receive(:errors).and_return("my errors")
-        associated_user_creator = instance_double(Dashboard::AssociatedUserCreator,
+        associated_user_creator = instance_double(AssociatedUserCreator,
           successful?: false,
           protocol_role: new_project_role)
 
-        allow(Dashboard::AssociatedUserCreator).to receive(:new).
+        allow(AssociatedUserCreator).to receive(:new).
           and_return(associated_user_creator)
 
         xhr :post, :create, protocol_id: protocol.id, project_role: @new_project_roles_attrs, format: :js
       end
 
-      it "should use Dashboard::AssociatedUserCreator to (attempt) to create ProjectRole" do
-        expect(Dashboard::AssociatedUserCreator).to have_received(:new).
+      it "should use AssociatedUserCreator to (attempt) to create ProjectRole" do
+        expect(AssociatedUserCreator).to have_received(:new).
           with(@new_project_roles_attrs)
       end
 
@@ -88,12 +108,12 @@ RSpec.describe Dashboard::AssociatedUsersController do
 
         @new_project_roles_attrs  = {identity_id: identity.id}
         project_role              = instance_double(ProjectRole, can_edit?: true, can_view?: true)
-        associated_user_creator   = instance_double(Dashboard::AssociatedUserCreator,
+        associated_user_creator   = instance_double(AssociatedUserCreator,
           successful?: true)
 
         allow(associated_user_creator).to receive(:protocol_role).
           and_return(project_role)
-        allow(Dashboard::AssociatedUserCreator).to receive(:new).
+        allow(AssociatedUserCreator).to receive(:new).
           and_return(associated_user_creator)
         
         xhr :post, :create, protocol_id: protocol.id, project_role: @new_project_roles_attrs, format: :js

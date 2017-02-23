@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -26,21 +26,28 @@ begin
   # Flag must be enabled for the system to
   # send emails to actual users.
   # Otherwise all emails will be routed to DEFAULT_MAIL_TO
-  SEND_EMAILS_TO_REAL_USERS                 = application_config['send_emails_to_real_users']
+  SEND_EMAILS_TO_REAL_USERS                 = application_config['send_emails_to_real_users'] || false
 
   ADMIN_MAIL_TO                             = application_config['admin_mail_to']
-  CONTACT_US_MAIL_TO                        = application_config['contact_us_mail_to'] || 'success@musc.edu'
   EPIC_RIGHTS_MAIL_TO                       = application_config['approve_epic_rights_mail_to']
   FEEDBACK_MAIL_TO                          = application_config['feedback_mail_to']
+  CONTACT_US_MAIL_TO                        = application_config['contact_us_mail_to']
+  CONTACT_US_CC                             = application_config['contact_us_cc']
+  LISTSERV_MAIL_TO                          = application_config['listserv_mail_to']
   NEW_USER_CC                               = application_config['new_user_cc']
   SYSTEM_SATISFACTION_SURVEY_CC             = application_config['system_satisfaction_survey_cc']
   ROOT_URL                                  = application_config['root_url']
   DASHBOARD_LINK                            = application_config['dashboard_link']
+  RESEARCH_MASTER_ENABLED                   = application_config['research_master_enabled'] || false
+  RESEARCH_MASTER_LINK                      = application_config['research_master_link']
+  RESEARCH_MASTER_API                       = application_config['research_master_api']
+  RMID_API_TOKEN                            = application_config['rmid_api_token']
   HEADER_LINK_1                             = application_config['header_link_1']
-  HEADER_LINK_2                             = application_config['header_link_2']
+  HEADER_LINK_2_PROPER                      = application_config['header_link_2_proper']
+  HEADER_LINK_2_DASHBOARD                   = application_config['header_link_2_dashboard']
   HEADER_LINK_3                             = application_config['header_link_3']
   USE_INDIRECT_COST                         = application_config['use_indirect_cost']
-  USE_SHIBBOLETH                             = application_config['use_shiboleth']
+  USE_SHIBBOLETH                            = application_config['use_shiboleth']
   USE_SHIBBOLETH_ONLY                       = application_config['use_shibboleth_only']
   USE_LDAP                                  = application_config['use_ldap']
   SUPPRESS_LDAP_FOR_USER_SEARCH             = application_config['suppress_ldap_for_user_search'] || nil
@@ -61,6 +68,7 @@ begin
   SYSTEM_SATISFACTION_SURVEY                = application_config['system_satisfaction_survey'] || false
   NO_REPLY_FROM                             = application_config['no_reply_from']
   EDITABLE_STATUSES                         = application_config['editable_statuses'] || {}
+  UPDATABLE_STATUSES                        = application_config['updatable_statuses'] || []
   REMOTE_SERVICE_NOTIFIER_PROTOCOL          = application_config['remote_service_notifier_protocol']
   REMOTE_SERVICE_NOTIFIER_HOST              = application_config['remote_service_notifier_host']
   REMOTE_SERVICE_NOTIFIER_PATH              = application_config['remote_service_notifier_path']
@@ -75,6 +83,7 @@ begin
   CREATE_AN_ACCOUNT                         = application_config['create_an_account']
   ABOUT_SPARC_URL                           = application_config['about_sparc_url'] || nil
   USE_FEEDBACK_LINK                         = application_config['use_feedback_link'] || false
+  FEEDBACK_LINK                             = application_config['feedback_link'] || "#"
   NAVBAR_LINKS                              = application_config['navbar_links'] || {}
 
   if LOCALE_OVERRIDE
@@ -98,6 +107,7 @@ end
 begin
   constant_file                  = File.join(Rails.root, 'config', 'constants'+CONSTANTS_YML_OVERRIDE+'.yml')
   config                         = YAML::load_file(constant_file)
+  ADDITIONAL_DETAIL_QUESTION_TYPES = config['additional_detail_question_types']
   AFFILIATION_TYPES              = config['affiliations']
   IMPACT_AREAS                   = config['impact_areas']
   EPIC_RIGHTS                    = config['epic_rights']
@@ -106,8 +116,11 @@ begin
   STUDY_TYPES                    = config['study_types']
   STUDY_TYPE_QUESTIONS           = config['study_type_questions']
   STUDY_TYPE_QUESTIONS_VERSION_2 = config['study_type_questions_version_2']
+  STUDY_TYPE_QUESTIONS_VERSION_3 = config['study_type_questions_version_3']
   STUDY_TYPE_ANSWERS             = config['study_type_answers']
   STUDY_TYPE_ANSWERS_VERSION_2   = config['study_type_answers_version_2']
+  STUDY_TYPE_ANSWERS_VERSION_3   = config['study_type_answers_version_3']
+  STUDY_TYPE_NOTES               = config['study_type_notes']
   FUNDING_STATUSES               = config['funding_statuses']
   ACCORDION_COLOR_OPTIONS        = config['accordion_color_options']
   PROXY_RIGHTS                   = config['proxy_rights']

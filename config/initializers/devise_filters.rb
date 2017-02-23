@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,7 +27,6 @@ module DeviseFilters
       Devise::RegistrationsController,
       Devise::PasswordsController
     ].each do |controller|
-      controller.before_filter :prepare_catalog
       controller.before_filter :initialize_service_request
     end
 

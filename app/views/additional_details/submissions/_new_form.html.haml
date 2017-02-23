@@ -1,0 +1,17 @@
+= f.hidden_field :protocol_id, value: params[:protocol_id]
+= f.hidden_field :questionnaire_id, value: @questionnaire.id
+= f.hidden_field :line_item_id, value: params[:line_item_id]
+- @questionnaire.items.each do |item|
+  = f.fields_for :questionnaire_responses do |qr|
+    - if item.required?
+      = qr.hidden_field :required, value: true
+    = qr.hidden_field :item_id, value: item.id
+    %div{ class: "form-group item-#{item.id}" }
+      = qr.label item.content
+      = render "additional_details/submissions/form_partials/#{item.item_type}_form_partial", item: item, qr: qr
+      - if qr.object.errors.any?
+        .alert.alert-danger
+          %ul.list-unstyled
+            - qr.object.errors.full_messages.each do |message|
+              %li
+                = message

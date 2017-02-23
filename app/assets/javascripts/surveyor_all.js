@@ -1,4 +1,4 @@
-// Copyright © 2011 MUSC Foundation for Research Development
+// Copyright © 2011-2016 MUSC Foundation for Research Development
 // All rights reserved.
 
 // Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -24,4 +24,3 @@
 //= require surveyor/jquery.selectToUISlider
 //= require surveyor/jquery.surveyor
 //= require surveyor/jquery.maskedinput
-//= require survey_submit

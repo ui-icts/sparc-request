@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -82,8 +82,9 @@ module Dashboard::ServiceRequestsHelper
 
   def owners_for_select(ssr)
     if ssr
-      unless ssr.candidate_owners.empty?
-        candidate_owners = ssr.candidate_owners.map {|x| [x.full_name, x.id]}
+      owners = ssr.candidate_owners
+      if owners.any?
+        candidate_owners = owners.map {|x| [x.full_name, x.id]}
         return options_for_select(candidate_owners, ssr.owner_id)
       else
         return options_for_select([])

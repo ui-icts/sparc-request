@@ -1,3 +1,23 @@
+# Copyright © 2011-2016 MUSC Foundation for Research Development~
+# All rights reserved.~
+
+# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:~
+
+# 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.~
+
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following~
+# disclaimer in the documentation and/or other materials provided with the distribution.~
+
+# 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products~
+# derived from this software without specific prior written permission.~
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,~
+# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT~
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL~
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS~
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR~
+# TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.~
+
 require 'rails_helper'
 require 'support/pages/dashboard/notes/index_modal'
 
@@ -33,9 +53,10 @@ module Dashboard
         # these appear after selecting a user
         element :credentials_dropdown, "button[data-id='project_role_identity_attributes_credentials']"
         element :specify_other_credentials, "#project_role_identity_attributes_credentials_other"
-        element :institution_dropdown, "button[data-id='project_role_identity_attributes_institution']"
-        element :college_dropdown, "button[data-id='project_role_identity_attributes_college']"
-        element :department_dropdown, "button[data-id='project_role_identity_attributes_department']"
+        element :institution_dropdown, "button[data-id='select-pro-org-institution']"
+        element :college_dropdown, "button[data-id='select-pro-org-college']"
+        element :department_dropdown, "button[data-id='select-pro-org-department']"
+        element :division_dropdown, "button[data-id='select-pro-org-division']"
         element :role_dropdown, "button[data-id='project_role_role']"
         element :specify_other_role, "#project_role_role_other"
         # rights radio buttons
@@ -51,8 +72,8 @@ module Dashboard
         element :cancel_button, :button, text: "Close"
       end
 
-      element :enabled_add_document_button, '#document-new:not(.disabled)', text: 'Add a New Document'
-      element :disabled_add_document_button, '#document-new.disabled', text: 'Add a New Document'
+      element :enabled_add_document_button, '#document-new:not(.disabled)', text: 'Add a Document'
+      element :disabled_add_document_button, '#document-new.disabled', text: 'Add a Document'
       sections :documents, '#documents-table tbody tr' do
         element :enabled_edit_button, ".document-edit:not(.disabled)"
         element :disabled_edit_button, ".document-edit.disabled"
@@ -61,7 +82,7 @@ module Dashboard
       end
 
       # modal appears after clicking Add Document Button
-      section :document_modal, '.modal-dialog', text: /(Add a New|Edit) Document/ do
+      section :document_modal, '.modal-dialog', text: /(Add|Edit) Document/ do
         element :x_button, "button.close"
 
         element :doc_type_dropdown, "button[data-id='document_doc_type']"
@@ -75,15 +96,17 @@ module Dashboard
         element :cancel_button, :button, text: "Close"
       end
 
-      # big panel of service requests: the consolidated buttongs and the
+      # big panel of service requests: the consolidated buttons and the
       # following :service_requests sections
       element :view_consolidated_request_button, :button, text: "View Consolidated Request"
       element :export_consolidated_request_link, :link, text: "Export Consolidated Request"
       element :add_services_button, '#add-services-button'
+      # submenu options that shows after clicking either consolidated request button
+      element :consolidated_request_all, "a", text: /All/
+      element :consolidated_request_exclude_draft, "a", text: /Exclude Draft/
 
       # actual service request panels
       sections :service_requests, '.panel-primary', text: /Service Request: \d+/ do
-        element :notes_button, :button, text: "Notes"
         element :modify_request_button, :button, text: "Modify Request"
 
         sections :ssrs, 'tbody tr' do
@@ -93,6 +116,7 @@ module Dashboard
           element :view_button, :button, "View"
           element :edit_button, :button, "Edit"
           element :admin_edit_button, :button, "Admin Edit"
+          element :complete_details_select, :button, text: "Complete Details"
         end
       end
 
@@ -102,9 +126,16 @@ module Dashboard
         element :submit_button, 'button[type="submit"]'
       end
 
+      section :new_submission_form, 'form#new_submission' do
+        element :submit_button, :link, "Create Submission"
+      end
+
       section :index_notes_modal, Dashboard::Notes::IndexModal, '#notes-modal'
 
       element :view_ssr_modal, ".user-view-ssr-modal"
+
+      # Modal displaying consolidated request
+      element :consolidated_request_modal, ".modal-dialog", text: /Consolidated Request Summary/
     end
   end
 end

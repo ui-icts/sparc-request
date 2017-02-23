@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -29,22 +29,9 @@ RSpec.describe "VisitGroup" do
   let!(:visit1)      { create(:visit, visit_group_id: visit_group.id)}         
   let!(:visit2)      { create(:visit, visit_group_id: visit_group.id)}         
 
-  context "setting the default name" do
-
-    it "should set a default name based on its position" do
-      expect(visit_group.name).to eq("Visit 1")
-    end
-
-    it "should not set the name if it already has one" do
-      visit_group.update_attributes(name: "Foobar")
-      visit_group.set_default_name
-      expect(visit_group.name).to eq("Foobar")
-    end
-  end
-
   describe 'any visit quantities customized' do
-
-    let!(:arm)               { create(:arm) }
+    let!(:protocol)          { create(:protocol_without_validations) }
+    let!(:arm)               { create(:arm, protocol: protocol) }
     let!(:line_items_visit1) { create(:line_items_visit, arm_id: arm.id, line_item_id: line_item.id) }
     let!(:visit_group)       { create(:visit_group, arm_id: arm.id)}
     let!(:visit1)            { create(:visit, line_items_visit_id: line_items_visit1.id, visit_group_id: visit_group.id) }

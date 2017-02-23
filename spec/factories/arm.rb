@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -20,9 +20,9 @@
 
 FactoryGirl.define do
   factory :arm do
-    name { Faker::Lorem.sentence(3) }
-    subject_count 1
-    visit_count 1
+    sequence(:name) { |n| "Arm #{n}" }
+    subject_count   1
+    visit_count     1
 
     transient do
       line_item_count   0
@@ -39,8 +39,8 @@ FactoryGirl.define do
 
         vgs = []
         arm.visit_count.times do |n|
-          vgs << arm.visit_groups.create(position: n + 1, day: n,
-                        window_before: nil, window_after: nil)
+          vgs << arm.visit_groups.create(name: "Visit #{n}", position: n + 1, day: n,
+                        window_before: 0, window_after: 0)
         end
 
         evaluator.line_item_count.times do |n|

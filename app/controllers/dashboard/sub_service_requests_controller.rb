@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -34,10 +34,22 @@ class Dashboard::SubServiceRequestsController < Dashboard::BaseController
     @admin_orgs           = @user.authorized_admin_organizations
     @sub_service_requests = service_request.sub_service_requests.where.not(status: 'first_draft') # TODO: Remove Historical first_draft SSRs and remove this
     @permission_to_edit   = protocol.project_roles.where(identity: @user, project_rights: ['approve', 'request']).any?
+    @show_view_ssr_back   = params[:show_view_ssr_back]
   end
 
   def show
     respond_to do |format|
+      format.html { # Admin Edit
+        cookies['admin-tab'] = 'details-tab' unless cookies['admin-tab']
+        session[:service_calendar_pages] = params[:pages] if params[:pages]
+        session[:breadcrumbs].add_crumbs(protocol_id: @sub_service_request.protocol.id, sub_service_request_id: @sub_service_request.id).clear(:notifications)
+
+        @service_request  = @sub_service_request.service_request
+        @protocol         = @sub_service_request.protocol
+
+        render
+      }
+
       format.js { # User Modal Show
         arm_id                            = params[:arm_id] if params[:arm_id]
         page                              = params[:page]   if params[:page]
@@ -48,32 +60,22 @@ class Dashboard::SubServiceRequestsController < Dashboard::BaseController
           session[:service_calendar_pages][arm_id]  = page
         end
 
-        @service_request  = @sub_service_request.service_request
-        @service_list     = @service_request.service_list
-        @line_items       = @sub_service_request.line_items
-        @protocol         = @service_request.protocol
-        @tab              = 'calendar'
-        @portal           = true
-        @thead_class      = 'default_calendar'
-        @review           = true
-        @selected_arm     = Arm.find arm_id if arm_id
-        @pages            = {}
-
+        @service_request    = @sub_service_request.service_request
+        @service_list       = @service_request.service_list
+        @line_items         = @sub_service_request.line_items
+        @protocol           = @service_request.protocol
+        @tab                = 'calendar'
+        @portal             = true
+        @admin              = false
+        @review             = true
+        @merged             = false
+        @consolidated       = false
+        @show_view_ssr_back = params[:show_view_ssr_back] == "true"
+        @pages              = {}
         @service_request.arms.each do |arm|
           new_page = (session[:service_calendar_pages].nil?) ? 1 : session[:service_calendar_pages][arm.id.to_s].to_i
           @pages[arm.id] = @service_request.set_visit_page(new_page, arm)
         end
-
-        render
-      }
-
-      format.html { # Admin Edit
-        cookies['admin-tab'] = 'details-tab' unless cookies['admin-tab']
-        session[:service_calendar_pages] = params[:pages] if params[:pages]
-        session[:breadcrumbs].add_crumbs(protocol_id: @sub_service_request.protocol.id, sub_service_request_id: @sub_service_request.id).clear(:notifications)
-        
-        @service_request  = @sub_service_request.service_request
-        @protocol         = @sub_service_request.protocol
 
         render
       }
@@ -82,7 +84,10 @@ class Dashboard::SubServiceRequestsController < Dashboard::BaseController
 
   def update
     if @sub_service_request.update_attributes(params[:sub_service_request])
-      @sub_service_request.update_past_status(current_user)
+      
+      if survey = Survey.find_by(access_code:'sctr-customer-satisfaction-survey')
+        @sub_service_request.distribute_surveys if @sub_service_request.is_complete? && @sub_service_request.organization.associated_surveys.where(survey_id: survey.id).any? #status is complete and ssr has an associated_survey with survey access_code of 'sctr-customer-satisfaction-survey'
+      end
       flash[:success] = 'Request Updated!'
     else
       @errors = @sub_service_request.errors
@@ -130,7 +135,7 @@ class Dashboard::SubServiceRequestsController < Dashboard::BaseController
 
   def push_to_epic
     begin
-      @sub_service_request.service_request.protocol.push_to_epic(EPIC_INTERFACE)
+      @sub_service_request.service_request.protocol.push_to_epic(EPIC_INTERFACE, "admin_push", current_user.id)
       flash[:success] = 'Request Pushed to Epic!'
     rescue
       flash[:alert] = $!.message

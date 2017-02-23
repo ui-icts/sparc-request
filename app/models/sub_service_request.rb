@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -25,6 +25,7 @@ class SubServiceRequest < ActiveRecord::Base
   audited
 
   after_save :update_org_tree
+  after_save :update_past_status
 
   belongs_to :service_requester, class_name: "Identity", foreign_key: "service_requester_id"
   belongs_to :owner, :class_name => 'Identity', :foreign_key => "owner_id"
@@ -68,9 +69,12 @@ class SubServiceRequest < ActiveRecord::Base
   attr_accessible :documents
   attr_accessible :service_requester_id
   attr_accessible :requester_contacted_date
+  attr_accessible :submitted_at
 
   accepts_nested_attributes_for :line_items, allow_destroy: true
   accepts_nested_attributes_for :payments, allow_destroy: true
+
+  validates :ssr_id, presence: true, uniqueness: { scope: :service_request_id }
 
   scope :in_work_fulfillment, -> { where(in_work_fulfillment: true) }
 
@@ -82,10 +86,13 @@ class SubServiceRequest < ActiveRecord::Base
     write_attribute(:requester_contacted_date, Time.strptime(date, "%m/%d/%Y")) if date.present?
   end
 
-  # Make sure that @prev_status is set whenever status is changed for update_past_status method.
   def status= status
     @prev_status = self.status
     super(status)
+  end
+
+  def previously_submitted?
+    !submitted_at.nil?
   end
 
   def formatted_status
@@ -229,7 +236,7 @@ class SubServiceRequest < ActiveRecord::Base
     return total
   end
 
-  # Returns the grant total cost of the sub-service-request
+  # Returns the grand total cost of the sub-service-request
   def grand_total
     self.direct_cost_total + self.indirect_cost_total
   end
@@ -301,13 +308,21 @@ class SubServiceRequest < ActiveRecord::Base
     self.organization.tag_list.include? "ctrc"
   end
 
+  #A request is locked if the organization it's in isn't editable
+  def is_locked?
+    if organization.has_editable_statuses?
+      return !EDITABLE_STATUSES[find_editable_id(self.organization.id)].include?(self.status)
+    end
+    false
+  end
+
   # Can't edit a request if it's placed in an uneditable status
   def can_be_edited?
     if organization.has_editable_statuses?
-       self_or_parent_id = find_editable_id(self.organization.id)
-       EDITABLE_STATUSES[self_or_parent_id].include?(self.status)
+      self_or_parent_id = find_editable_id(self.organization.id)
+      EDITABLE_STATUSES[self_or_parent_id].include?(self.status) && !is_complete?
     else
-      true
+      !is_complete?
     end
   end
 
@@ -324,14 +339,9 @@ class SubServiceRequest < ActiveRecord::Base
     end
   end
 
-  # If the ssr can't be edited AND it's a request that restricts editing AND there are multiple ssrs under it's service request
-  # (no need to create a new sr if there's only one ssr) AND it's previous status was an editable one
-  # AND it's new status is an uneditable one, then create a new sr and place the ssr under it. Probably don't need the last condition.
-  def update_based_on_status previous_status
-    if !self.can_be_edited? && organization.has_editable_statuses? && (self.service_request.sub_service_requests.count > 1) &&
-                            EDITABLE_STATUSES[self.organization.id].include?(previous_status) &&
-                            !EDITABLE_STATUSES[self.organization.id].include?(self.status)
-      self.switch_to_new_service_request
+  def set_to_draft(admin)
+    if !admin && status != 'draft'
+      self.update_attributes(status: 'draft')
     end
   end
 
@@ -367,26 +377,11 @@ class SubServiceRequest < ActiveRecord::Base
     !self.in_work_fulfillment?
   end
 
-  # TODO: Verify that this method is no longer needed or being used
-  def candidate_statuses
-    candidates = ["draft", "submitted", "in process", "complete"]
-    #candidates.unshift("submitted") if self.can_be_edited?
-    #candidates.unshift("draft") if self.can_be_edited?
-    candidates << "ctrc review" if self.ctrc?
-    candidates << "ctrc approved" if self.ctrc?
-    candidates << "awaiting pi approval"
-    candidates << "on hold"
-
-    candidates
-  end
-
-  # Callback which gets called after the ssr is saved to ensure that the
-  # past status is properly updated.  It should not normally be
-  # necessarily to call this method.
-  def update_past_status identity
-    old_status = self.past_statuses.last
-    if @prev_status and (not old_status or old_status.status != @prev_status)
-      self.past_statuses.create(status: @prev_status, date: Time.now, changed_by_id: identity.id)
+  def update_past_status
+    if !@prev_status.blank? && @prev_status != self.status
+      past_status = self.past_statuses.create(status: @prev_status, date: Time.now)
+      user_id = AuditRecovery.where(auditable_id: past_status.id, auditable_type: 'PastStatus').first.user_id
+      past_status.update_attribute(:changed_by_id, user_id)
     end
   end
 
@@ -447,23 +442,17 @@ class SubServiceRequest < ActiveRecord::Base
   ##########################
   ## SURVEY DISTRIBUTTION ##
   ##########################
-
+  # Distributes all available surveys to primary pi and ssr requester
   def distribute_surveys
-
-    # e-mail primary PI and requester
     primary_pi = service_request.protocol.primary_principal_investigator
-    requester = service_request.service_requester
-
     # send all available surveys at once
     available_surveys = line_items.map{|li| li.service.available_surveys}.flatten.compact.uniq
-
     # do nothing if we don't have any available surveys
-
     unless available_surveys.blank?
       SurveyNotification.service_survey(available_surveys, primary_pi, self).deliver
     # only send survey email to both users if they are unique
-      if primary_pi != requester
-        SurveyNotification.service_survey(available_surveys, requester, self).deliver
+      if primary_pi != service_requester
+        SurveyNotification.service_survey(available_surveys, service_requester, self).deliver
       end
     end
   end
@@ -476,10 +465,11 @@ class SubServiceRequest < ActiveRecord::Base
 
   # filtered audit trail based off service requests and only return data that we need
   # in future may want to return full filtered audit trail, currently this is only used in e-mailing service providers
-  def audit_report identity, start_date, end_date=Time.now.utc
+  def audit_report(identity, start_date, end_date=Time.now.utc)
     filtered_audit_trail = {:line_items => []}
 
     full_trail = service_request.audit_report(identity, start_date, end_date)
+
     full_line_items_audits = full_trail[:line_items]
 
     full_line_items_audits.each do |k, audits|

@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -22,7 +22,7 @@ $("#filterrific_results").html("<%= escape_javascript(render( '/dashboard/protoc
 $(".selectpicker").selectpicker()
 
 <% if @sorted_by %>
+$(".protocol-sort span").removeClass('sort-active')
 $(".protocol-sort[name='<%= @sort_name %>'] .<%= @sort_order %>").addClass('sort-active')
-$(".protocol-sort[name='<%= @sort_name %>'] .<%= @new_sort_order %>").removeClass('sort-active')
 $(".protocol-sort[name='<%= @sort_name %>']").data('sort-order', "<%= @new_sort_order %>")
 <% end %>

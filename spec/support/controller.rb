@@ -1,5 +1,5 @@
 # coding: utf-8
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -56,3 +56,7 @@ def stub_portal_controller
 end
 
 alias :stub_catalog_manager_controller :stub_portal_controller
+
+def find_before_filters
+  controller._process_action_callbacks.select{ |f| f.kind == :before }.map(&:filter)
+end

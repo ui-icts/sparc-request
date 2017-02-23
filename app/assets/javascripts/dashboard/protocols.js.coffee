@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -24,6 +24,9 @@
 $(document).ready ->
   Sparc.protocol =
     ready: ->
+      getSRId = () ->
+        $('input[name="service_request_id"]').val()
+
       $('.service-requests-table').on 'all.bs.table', ->
         $(this).find('.selectpicker').selectpicker() #Find descendant selectpickers
 
@@ -72,6 +75,9 @@ $(document).ready ->
           url:  "/dashboard/protocols/#{protocol_id}/archive.js"
           data: { protocol_id: protocol_id }
 
+      $(document).on 'submit', '#filterrific-no-ajax-auto-submit', ->
+        $('#filterrific_sorted_by').val("#{$('.protocol-sort').data('sort-name')} #{$('.protocol-sort').data('sort-order')}")
+
       $(document).on 'click', '#save_filters_link', ->
         data = {} #Grab form values
 
@@ -83,7 +89,7 @@ $(document).ready ->
         if data["filterrific[with_status][]"].length
           data["filterrific[with_status][]"] = $("#filterrific_with_status").val()
 
-        if data["filterrific[with_organization][]"].length
+        if data["filterrific[with_organization][]"] && data["filterrific[with_organization][]"].length
           data["filterrific[with_organization][]"] = $("#filterrific_with_organization").val()
 
         if data["filterrific[with_owner][]"] && data["filterrific[with_owner][]"].length
@@ -113,6 +119,8 @@ $(document).ready ->
         $.ajax
           method: 'get'
           url: "/dashboard/protocols/#{protocol_id}/view_details"
+          data:
+            service_request_id: $("input[name='service_request_id']").val()
 
       $(document).on 'click', '.edit-protocol-information-button', ->
         if $(this).data('permission')
@@ -120,16 +128,23 @@ $(document).ready ->
           window.location = "/dashboard/protocols/#{protocol_id}/edit"
 
       $(document).on 'click', '.view-full-calendar-button', ->
-        protocol_id = $(this).data('protocol-id')
+        protocol_id = $(this).data('protocolId')
+        statuses_hidden = $(this).data('statusesHidden')
         $.ajax
           method: 'get'
-          url: "/dashboard/service_calendars/view_full_calendar.js?portal=true&protocol_id=#{protocol_id}"
+          url: "/service_calendars/view_full_calendar.js"
+          data:
+            portal: true
+            protocol_id: protocol_id
+            statuses_hidden: statuses_hidden
 
       $(document).on 'click', '.view-service-request', ->
         id = $(this).data('sub-service-request-id')
+        show_view_ssr_back = $(this).data('show-view-ssr-back')
         $.ajax
           method: 'GET'
           url: "/dashboard/sub_service_requests/#{id}.js"
+          data: show_view_ssr_back: show_view_ssr_back
 
       $(document).on 'click', '.edit-service-request', ->
         if $(this).data('permission')
@@ -139,39 +154,67 @@ $(document).ready ->
         if $(this).data('permission')
           protocol_id         = $(this).data('protocol-id')
           window.location     = "/?protocol_id=#{protocol_id}&from_portal=true"
-      # Protocol Show End
 
-      # Protocol Edit Begin
-      $(document).on 'click', '#protocol_type_button', ->
+      $(document).on 'click', '.view-ssr-back-button', ->
         protocol_id = $(this).data('protocol-id')
-        data = type : $("#protocol_type").val()
-        if confirm "This will change the type of this Project/Study.  Are you sure?"
+        $.ajax
+          type: 'GET'
+          url: "/dashboard/protocols/#{protocol_id}/display_requests"
+          success: (data) ->
+            $('#modal_place').html(data.modal)
+            $('#modal_place').modal 'show'
+            $('.service-requests-table').bootstrapTable()
+            $('.service-requests-table').on 'all.bs.table', ->
+              $(this).find('.selectpicker').selectpicker()
+
+      $(document).on 'change', '.complete-details', ->
+        $selected_options = $('option:selected', this)
+
+        if $selected_options.length > 0
+          $selected_option    = $selected_options.first()
+          service_id          = $selected_option.data('service-id')
+          protocol_id         = $selected_option.data('protocol-id')
+          line_item_id        = $selected_option.data('line-item-id')
+          $this               = $(this)
+          
           $.ajax
-            type: 'PATCH'
-            url: "/dashboard/protocols/#{protocol_id}/update_protocol_type"
-            data: data
-      # Protocol Edit End
+            method: 'GET'
+            url: "/services/#{service_id}/additional_details/submissions/new.js"
+            data:
+              protocol_id: protocol_id
+              line_item_id: line_item_id
+            success: ->
+              $this.selectpicker('deselectAll')
+              $this.selectpicker('render')
 
-
+      $('.service-requests-table').on 'all.bs.table', ->
+        $(this).find('.selectpicker').selectpicker()
+      # Protocol Show End
 
       # Protocol Table Sorting
       $(document).on 'click', '.protocol-sort', ->
-        search_query      = $('#search_query').val()
-        show_archived     = $('#show_archived').val()
-        with_status       = $('#with_status').val()
-        with_organization = $('#with_organization').val()
-        admin_filter      = $('#admin_filter').val()
         sorted_by         = "#{$(this).data('sort-name')} #{$(this).data('sort-order')}"
         page              = $('#page').val() || 1
-        data = 
-          'page': page
-          'filterrific':
-            'search_query': search_query
-            'show_archived': show_archived
-            'with_status': with_status
-            'with_organization': with_organization
-            'admin_filter': admin_filter
-            'sorted_by': sorted_by
+
+        data = {} #Grab form values
+
+        # REVIEW this is not fetching values from multiselects
+        $.each $('form#filterrific-no-ajax-auto-submit').serializeArray(), (i, field) ->
+          data[field.name] = field.value
+
+        data["page"] = page
+        data["filterrific[sorted_by]"] = sorted_by
+
+        # manually enter those in
+        if data["filterrific[with_status][]"].length
+          data["filterrific[with_status][]"] = $("#filterrific_with_status").val()
+
+        if data["filterrific[with_organization][]"] && data["filterrific[with_organization][]"].length
+          data["filterrific[with_organization][]"] = $("#filterrific_with_organization").val()
+
+        if data["filterrific[with_owner][]"] && data["filterrific[with_owner][]"].length
+          data["filterrific[with_owner][]"] = $("#filterrific_with_owner").val()
+
         $.ajax
           type: 'get'
           url: "/dashboard/protocols.js"

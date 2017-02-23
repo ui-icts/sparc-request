@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -27,6 +27,7 @@ class Organization < ActiveRecord::Base
 
   belongs_to :parent, :class_name => 'Organization'
   has_many :submission_emails, :dependent => :destroy
+  has_many :associated_surveys, as: :surveyable
   has_many :pricing_setups, :dependent => :destroy
   has_one :subsidy_map, :dependent => :destroy
 
@@ -41,7 +42,7 @@ class Organization < ActiveRecord::Base
   has_many :identities, :through => :catalog_managers
   has_many :services, :dependent => :destroy
   has_many :sub_service_requests, :dependent => :destroy
-  has_many :protocols, through: :sub_service_requests 
+  has_many :protocols, through: :sub_service_requests
   has_many :available_statuses, :dependent => :destroy
   has_many :org_children, class_name: "Organization", foreign_key: :parent_id
 
@@ -65,7 +66,7 @@ class Organization < ActiveRecord::Base
   accepts_nested_attributes_for :submission_emails
   accepts_nested_attributes_for :available_statuses, :allow_destroy => true
 
-  # TODO: In rails 5, the .or operator will be added for ActiveRecord queries. We should try to 
+  # TODO: In rails 5, the .or operator will be added for ActiveRecord queries. We should try to
   #       condense this to a single query at that point
   scope :authorized_for_identity, -> (identity_id) {
     orgs = includes(:super_users, :service_providers).where("super_users.identity_id = ? or service_providers.identity_id = ?", identity_id, identity_id).references(:super_users, :service_providers).uniq(:organizations)
@@ -73,22 +74,6 @@ class Organization < ActiveRecord::Base
   }
 
   scope :in_cwf, -> { joins(:tags).where(tags: { name: 'clinical work fulfillment' }) }
-
-  scope :available_institutions, -> {
-    Organization.where(type: 'Institution', is_available: true)
-  }
-
-  scope :available_providers, -> {
-    Organization.where(type: 'Provider', is_available: true, parent: available_institutions)
-  }
-
-  scope :available_programs, -> {
-    Organization.where(type: 'Program', is_available: true, parent: available_providers)
-  }
-
-  scope :available_cores, -> {
-    Organization.where(type: 'Core', is_available: true, parent: available_programs)
-  }
 
   def label
     abbreviation || name
@@ -119,6 +104,11 @@ class Organization < ActiveRecord::Base
     else
       return self.parents.select {|x| x.process_ssrs}.first
     end
+  end
+  
+  #TODO SubServiceRequest.where(organization: self.all_child_organizations).each(:&update_org_tree)
+  def update_ssr_org_name
+    SubServiceRequest.where( organization: self.all_child_organizations<<self ).each(&:update_org_tree)
   end
 
   def service_providers_lookup
@@ -181,7 +171,6 @@ class Organization < ActiveRecord::Base
 
   # Returns an array of all children (and children of children) of this organization (deep search).
   # Optionally includes self
-  # TODO: doesn't actually include self, look into this
   def all_children (all_children=[], include_self=true, orgs)
     self.children(orgs).each do |child|
       all_children << child
@@ -194,7 +183,7 @@ class Organization < ActiveRecord::Base
   end
 
   def update_descendants_availability(is_available)
-    if is_available == "false"
+    if is_available == "0"
       children = Organization.where(id: all_child_organizations << self)
       children.update_all(is_available: false)
       Service.where(organization_id: children).update_all(is_available: false)

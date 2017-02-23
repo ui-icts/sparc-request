@@ -1,4 +1,4 @@
-# Copyright © 2011 MUSC Foundation for Research Development
+# Copyright © 2011-2016 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -28,14 +28,10 @@ class StudyTracker::SubServiceRequestsController < StudyTracker::BaseController
     # methods without having to call #show, in case we add unintended
     # side-effects to #show
 
-    session[:sub_service_request_id] = @sub_service_request.id
-    session[:service_request_id] = @sub_service_request.service_request_id
     session[:service_calendar_pages] = params[:pages] if params[:pages]
 
     @service_request = @sub_service_request.service_request
     @protocol = Protocol.find(@service_request.protocol_id)
-    @candidate_per_patient_per_visit = @sub_service_request.candidate_services.reject {|x| x.one_time_fee}
-    @candidate_one_time_fees = @sub_service_request.candidate_services.select {|x| x.one_time_fee}
 
     @line_items = LineItem.where(:sub_service_request_id => @sub_service_request.id)
 
