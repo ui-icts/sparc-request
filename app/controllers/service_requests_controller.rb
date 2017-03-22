@@ -310,8 +310,8 @@ class ServiceRequestsController < ApplicationController
 
   def get_help
     respond_to do |format|
+      format.any { render plain: "JS Only", layout: false }
       format.js
-      format.html { render plain: "JS Only" }
     end
   end
 
