@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# This is where the package files are installed to
+export SPARC_HOME="{{pkg.path}}"
+
+
+# This is where we will copy our application code to (under the dist folder)
+export SPARC_DATA="{{pkg.svc_data_path}}"
+
+echo "Removing previous version deployed at ${SPARC_DATA}"
+rm -rf ${SPARC_DATA}/*
+
+echo "Deploying new version from ${SPARC_HOME} to ${SPARC_DATA}"
+cp -a ${SPARC_HOME}/dist ${SPARC_DATA}/dist
+
+
+echo "Linking YAML files from {{pkg.svc_config_path}}"
+ln -sf {{pkg.svc_config_path}}/database.yml ${SPARC_DATA}/dist/config/database.yml
+ln -sf {{pkg.svc_config_path}}/application.yml ${SPARC_DATA}/dist/config/application.yml
+ln -sf {{pkg.svc_config_path}}/epic.yml ${SPARC_DATA}/dist/config/epic.yml
+ln -sf {{pkg.svc_config_path}}/ldap.yml ${SPARC_DATA}/dist/config/ldap.yml
+
+export GEM_HOME="${SPARC_DATA}/dist/vendor/bundle/ruby/2.1.0"
+export GEM_PATH="$(hab pkg path chrisortman/ruby)/lib/ruby/gems/2.1.0:$GEM_HOME"
+export LD_LIBRARY_PATH="$(hab pkg path core/gcc-libs)/lib"
+
+export PATH="$PATH:${SPARC_DATA}/dist/bin:$(hab pkg path core/node)/bin"
+export RAILS_ENV="production"
+
+#echo "Doing chown stuff on ${SPARC_DATA}"
+#chown -R hab:hab ${SPARC_DATA}/dist
+
+cd ${SPARC_DATA}/dist
+
+exec 2>&1
+
+if [[ ! -f ${SPARC_DATA}/.migrations_complete ]]; then
+  echo "Running 'rake db:create' in ${PWD}"
+  exec bin/rake db:create
+  echo "Running 'rake db:schema:load' in ${PWD}"
+  exec bin/rake db:schema:load
+  echo "Running 'rake migrate' in ${PWD}"
+  exec bin/rake db:migrate && touch $SPARC_DATA/.migrations_complete
+#  exec chpst -u hab bin/rake db:migrate && touch $SPARC_DATA/.migrations_complete
+fi
