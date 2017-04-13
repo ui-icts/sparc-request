@@ -30,7 +30,7 @@ pkg_version="0.1.0"
 # will work. Typically, the relative path for the URL is partially constructed
 # from the pkg_name and pkg_version values; however, this convention is not
 # required.
-pkg_source="https://github.com/ui-icts/sparc-request/archive/master.zip"
+pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_version}.tar.bz2"
 
 # Optional.
 # The resulting filename for the download, typically constructed from the
@@ -50,7 +50,7 @@ pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
 # at three levels of specificity: `origin/package`, `origin/package/version`, or
 # `origin/package/version/release`.
 pkg_deps=(
-  core/bundler
+  core/runit # Maybe not needed, thought i had to use it to get chpst
   core/cacerts
   core/glibc
   core/libffi
@@ -59,7 +59,7 @@ pkg_deps=(
   core/libyaml
   core/node
   core/mysql-client
-  core/ruby
+  chrisortman/ruby
   )
 
 # Optional.
@@ -70,6 +70,8 @@ pkg_build_deps=(
   core/rsync
   core/gcc
   core/make
+  core/curl
+  core/which
 )
 
 # Optional.
@@ -106,17 +108,15 @@ pkg_include_dirs=(include)
 # An associative array representing configuration data which should be gossiped to peers. The keys
 # in this array represent the name the value will be assigned and the values represent the toml path
 # to read the value.
-# pkg_exports=(
-#   [host]=srv.address
-#   [port]=srv.port
-#   [ssl-port]=srv.ssl.port
-# )
+pkg_exports=(
+  [port]=rails_port
+)
 
 # Optional.
 # An array of `pkg_exports` keys containing default values for which ports that this package
 # exposes. These values are used as sensible defaults for other tools. For example, when exporting
 # a package to a container format.
-pkg_exposes=(3000)
+pkg_exposes=(port)
 
 # Optional.
 # An associative array representing services which you depend on and the configuration keys that
@@ -124,15 +124,15 @@ pkg_exposes=(3000)
 # supervisor to load the service. The loaded service will wait to run until it's bind becomes
 # available. If the bind does not contain the expected keys, the service will not start
 # successfully.
-# pkg_binds=(
-#   [database]="port host"
+#pkg_binds=(
+  # [database]="port"
 # )
 
 # Optional.
 # Same as `pkg_binds` but these represent optional services to connect to.
-# pkg_binds_optional=(
-#   [storage]="port host"
-# )
+pkg_binds_optional=(
+  [database]="port"
+)
 
 # Optional.
 # An array of interpreters used in shebang lines for scripts. Specify the
@@ -145,7 +145,7 @@ pkg_exposes=(3000)
 
 # Optional.
 # The user to run the service as. The default is hab.
-pkg_svc_user="root"
+pkg_svc_user="hab"
 
 # Optional.
 # The group to run the service as. The default is hab.
@@ -194,9 +194,26 @@ do_begin() {
 # downloaded, if you are not downloading any source code at all, or if your are
 # cloning from git. If you do clone a repo from git, you must override
 # do_verify() to return 0.
-do_download() {
+xdo_download() {
   # do_default_download
   return 0
+}
+
+do_download() {
+  export GIT_SSL_CAINFO="$(pkg_path_for core/cacerts)/ssl/certs/cacert.pem"
+
+  # This is a way of getting the git code that I found in the chef plan
+  build_line "Fake download! Creating archive of latest repository commit"
+  cd $PLAN_CONTEXT/../..
+  git archive --prefix=${pkg_name}-${pkg_version}/ --output=$HAB_CACHE_SRC_PATH/${pkg_filename} HEAD
+
+  # This is another way that I got from I don't know where
+#  tar -cjvf $HAB_CACHE_SRC_PATH/${pkg_name}-${pkg_version}.tar.bz2 \
+#      --transform "s,^\./sparc-request,sparc-request-${pkg_version}," ./sparc-request \
+#      --exclude sparc-request/.git --exclude sparc-request/spec --exclude sparc-request/habitat
+
+  
+  pkg_shasum=$(trim $(sha256sum $HAB_CACHE_SRC_PATH/${pkg_filename} | cut -d " " -f 1))
 }
 
 # The default implementation tries to verify the checksum specified in the plan
@@ -206,8 +223,8 @@ do_download() {
 # not need to override this behavior unless your package does not download
 # any files.
 do_verify() {
-  # do_default_verify
-  return 0
+  do_default_verify
+  # return 0
 }
 
 # The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
@@ -223,8 +240,8 @@ do_clean() {
 # not supported, then a message will be printed to stderr with additional
 # information.
 do_unpack() {
-  # do_default_unpack
-  return 0
+  do_default_unpack
+  # return 0
 }
 
 # There is no default implementation of this callback. At this point in the
@@ -248,13 +265,12 @@ do_build() {
 
   # attach
 
-  rsync -av --exclude=.git --exclude=tmp --exclude=log --exclude=habitat $PLAN_CONTEXT/.. $HAB_CACHE_SRC_PATH/$pkg_dirname
+  # rsync -av --exclude=.git --exclude=tmp --exclude=log --exclude=habitat $PLAN_CONTEXT/.. $HAB_CACHE_SRC_PATH/$pkg_dirname
 
    # shellcheck disable=SC2153
   export CPPFLAGS="${CPPFLAGS} ${CFLAGS}"
 
   # shellcheck disable=SC2155
-  local _bundler_dir=$(pkg_path_for bundler)
   # shellcheck disable=SC2155
   local _libxml2_dir=$(pkg_path_for libxml2)
   # shellcheck disable=SC2155
@@ -267,8 +283,8 @@ do_build() {
   local _zlib_dir=$(pkg_path_for zlib)
 
   # shellcheck disable=SC2154
-  export GEM_HOME=${pkg_prefix}/vendor/bundle
-  export GEM_PATH=${_bundler_dir}:${GEM_HOME}
+  #export GEM_HOME=${pkg_prefix}/vendor/bundle
+  #export GEM_PATH=${GEM_HOME}
 
   # don't let bundler split up the nokogiri config string (it breaks
   # the build), so specify it as an env var instead
@@ -279,18 +295,23 @@ do_build() {
   # extension.
   # shellcheck disable=SC2086,SC2016
   bundle config build.nokogiri '${NOKOGIRI_CONFIG}'
-  bundle config build.pg --with-pg-config="${_pgconfig}"
 
   # We need to add tzinfo-data to the Gemfile since we're not in an
   # environment that has this from the OS
-  # if ! grep -q 'gem .*tzinfo-data.*' Gemfile; then
-    # echo 'gem "tzinfo-data"' >> Gemfile
-  # fi
+   if ! grep -q 'gem .*tzinfo-data.*' Gemfile; then
+     echo 'gem "tzinfo-data"' >> Gemfile
+   fi
 
+  # If you want rails console to work you need to
+  # provide an implementation of readline
+   if ! grep -q 'gem .*rb-readline.*' Gemfile; then
+     echo 'gem "rb-readline"' >> Gemfile
+   fi
   # Remove the specific ruby version, because our ruby is 2.3
   # sed -e 's/^ruby.*//' -i Gemfile
 
-  bundle install --without=test --jobs 2 --retry 5 --path vendor/bundle --binstubs
+
+  bundle install --without test development --jobs 2 --retry 5 --path vendor/bundle --binstubs
 }
 
 # The default implementation runs nothing during post-compile. An example of a
@@ -310,9 +331,30 @@ do_check() {
 # specific directories in your package, or installing pre-built binaries into
 # your package.
 do_install() {
-  cp -R . "${pkg_prefix}/static"
 
-  for binstub in ${pkg_prefix}/static/bin/*; do
+  # At this point my current directory is something
+  # like /hab/cache/src/sparc-request-0.1.0
+  # this the HAB CACHE SRC PATH or some such 
+  # and in this directory I have a copy of my
+  # rails app because this is where do_unpack would have
+  # extracted my archive to.
+  # The job of this task then is to get the files out of there
+  # and put them someplace _useful_
+  # Now the rails sample where I copied all this from
+  # copies the files to pkg_prefix/dist which I think can be 
+  # thought of in the same vein as capistrano's releases folder?
+  # so in order to not have new files overwriting existing files you
+  # need something similar which for habitat is the package path because
+  # that is all versioned out.
+  # EDIT: I changed the cp -r to cp -a cuz maybe that's better
+  # since I'm setting my user to hab up above anyway?
+  echo "Copying current files to ${pkg_prefix}"
+  cp -a . "${pkg_prefix}/dist"
+
+
+  # This seems to be some habitat stuff that you 
+  # just need to do?
+  for binstub in ${pkg_prefix}/dist/bin/*; do
     build_line "Setting shebang for ${binstub} to 'ruby'"
     [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ruby)/bin/ruby#" -i "$binstub"
   done

@@ -83,3 +83,5 @@ spec/examples.txt
 .tags
 .tags1
 /themes
+
+habitat/*/results
