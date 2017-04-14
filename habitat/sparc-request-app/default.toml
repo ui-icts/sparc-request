@@ -10,7 +10,7 @@ database_username = "root"
 # It's up to the end user to set a password for their database, we
 # don't want to assume a default that can lead to insecure database
 # servers running in the wild.
-database_password = "root"
+database_password = ""
 
 # Normally you should use named service binding to bind the "database"
 # name to the database service group, and this app will connect to the
