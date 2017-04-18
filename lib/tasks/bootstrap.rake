@@ -41,12 +41,14 @@ namespace :sparc do
     end
 
     if CatalogManager.count == 0 && admin
+      puts "Creating catalog managers"
       Institution.all.each do |inst|
 	CatalogManager.create(organization_id: inst.id, identity_id: admin.id)
       end
     end
 
     if database_exists?
+      puts "Running migrations"
       Rake::Task["db:migrate"].invoke
     end
   end
