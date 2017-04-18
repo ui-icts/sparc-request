@@ -113,6 +113,9 @@ group :test do
   gem 'webmock'
 end
 
+group :production do
+  gem "passenger"
+end
 group :profile do
   gem 'ruby-prof'
 end
