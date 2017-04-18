@@ -43,7 +43,7 @@ do_download() {
   export GIT_SSL_CAINFO="$(pkg_path_for core/cacerts)/ssl/certs/cacert.pem"
 
   # This is a way of getting the git code that I found in the chef plan
-  build_line "Fake download! Creating archive of latest repository commit"
+  build_line "Fake download! Creating archive of latest repository commit from $PLAN_CONTEXT"
   cd $PLAN_CONTEXT/../..
   git archive --prefix=${pkg_name}-${pkg_version}/ --output=$HAB_CACHE_SRC_PATH/${pkg_filename} HEAD
 
@@ -105,6 +105,12 @@ do_build() {
    fi
 
   bundle install --without test development --jobs 2 --retry 5 --path vendor/bundle --binstubs
+
+  # Some bundle files when they install have permissions that don't
+  # allow the all user to read them, but because we are running as
+  # root right now for building, but as 'hab' or someone else when the
+  # package installs we need to make sure we can read the files
+  chmod -R a+rx vendor/bundle
 }
 
 # The default implementation runs nothing during post-compile. An example of a
@@ -134,7 +140,7 @@ do_install() {
   # The job of this task then is to get the files out of there
   # and put them someplace _useful_
   # Now the rails sample where I copied all this from
-  # copies the files to pkg_prefix/dist which I think can be 
+  # copies the files to pkg_prefix/release which I think can be 
   # thought of in the same vein as capistrano's releases folder?
   # so in order to not have new files overwriting existing files you
   # need something similar which for habitat is the package path because
@@ -142,12 +148,13 @@ do_install() {
   # EDIT: I changed the cp -r to cp -a cuz maybe that's better
   # since I'm setting my user to hab up above anyway?
   echo "Copying current files to ${pkg_prefix}"
-  cp -a . "${pkg_prefix}/dist"
+  mkdir -p "${pkg_prefix}/static/release"
+  cp -a . "${pkg_prefix}/static/release"
 
 
   # This seems to be some habitat stuff that you 
   # just need to do?
-  for binstub in ${pkg_prefix}/dist/bin/*; do
+  for binstub in ${pkg_prefix}/static/release/bin/*; do
     build_line "Setting shebang for ${binstub} to 'ruby'"
     [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ruby)/bin/ruby#" -i "$binstub"
   done
