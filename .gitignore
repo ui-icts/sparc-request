@@ -84,4 +84,9 @@ spec/examples.txt
 .tags1
 /themes
 
+# Ignore habitat outputs
+results
 habitat/*/results
+
+# Pretty sure you don't want vagrant box in git
+.vagrant
