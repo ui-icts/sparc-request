@@ -765,7 +765,7 @@ colleges: {
 	'Not UI Personnel': 'Not UI Personnel'
 }
 
-institutions: { "University of Iowa": "University of Iowa" }
+institutions: { "UIOWA": "University of Iowa" }
 
 departments: { 
 'Accounting' : 'Accounting',
