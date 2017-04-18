@@ -1,45 +1,45 @@
 #!/bin/sh
 
+set -o nounset
+set -e
+
 # This is where the package files are installed to
-export SPARC_HOME="$(hab pkg path chrisortman/sparc-request)"
+export PKG_DIR="{{pkg.path}}"
 
+# This is where we will copy our application code to (under the release folder)
+export SERVICE_DIR="{{pkg.svc_static_path}}"
 
-# This is where we will copy our application code to (under the dist folder)
-export SPARC_DATA="{{pkg.svc_data_path}}"
+# Habitat only copies the hooks and config directories :(
+# So we have to manually copy ours
 
-echo "Removing previous version deployed at ${SPARC_DATA}"
-rm -rf ${SPARC_DATA}/*
+echo "Removing previous version deployed at ${SERVICE_DIR}"
+rm -rf ${SERVICE_DIR}/release
 
-echo "Deploying new version from ${SPARC_HOME} to ${SPARC_DATA}"
-cp -a ${SPARC_HOME}/dist ${SPARC_DATA}/dist
+echo "Deploying new version from ${PKG_DIR}/static/release to ${SERVICE_DIR}/release"
+cp -a ${PKG_DIR}/static/release ${SERVICE_DIR}/release
 
 
 echo "Linking YAML files from {{pkg.svc_config_path}}"
-ln -sf {{pkg.svc_config_path}}/database.yml ${SPARC_DATA}/dist/config/database.yml
-ln -sf {{pkg.svc_config_path}}/application.yml ${SPARC_DATA}/dist/config/application.yml
-ln -sf {{pkg.svc_config_path}}/epic.yml ${SPARC_DATA}/dist/config/epic.yml
-ln -sf {{pkg.svc_config_path}}/ldap.yml ${SPARC_DATA}/dist/config/ldap.yml
+ln -sf {{pkg.svc_config_path}}/database.yml ${SERVICE_DIR}/release/config/database.yml
+ln -sf {{pkg.svc_config_path}}/application.yml ${SERVICE_DIR}/release/config/application.yml
+ln -sf {{pkg.svc_config_path}}/epic.yml ${SERVICE_DIR}/release/config/epic.yml
+ln -sf {{pkg.svc_config_path}}/ldap.yml ${SERVICE_DIR}/release/config/ldap.yml
 
-export GEM_HOME="${SPARC_DATA}/dist/vendor/bundle/ruby/2.1.0"
+echo "Doing chown stuff on ${SERVICE_DIR}"
+chown -R hab:hab ${SERVICE_DIR}/release
+
+export GEM_HOME="${SERVICE_DIR}/release/vendor/bundle/ruby/2.1.0"
 export GEM_PATH="$(hab pkg path chrisortman/ruby)/lib/ruby/gems/2.1.0:$GEM_HOME"
 export LD_LIBRARY_PATH="$(hab pkg path core/gcc-libs)/lib"
 
-export PATH="$PATH:${SPARC_DATA}/dist/bin:$(hab pkg path core/node)/bin"
+export PATH="${SERVICE_DIR}/release/bin:$(hab pkg path core/node)/bin:$PATH"
 export RAILS_ENV="production"
 
-#echo "Doing chown stuff on ${SPARC_DATA}"
-#chown -R hab:hab ${SPARC_DATA}/dist
 
-cd ${SPARC_DATA}/dist
+cd ${SERVICE_DIR}/release
 
 exec 2>&1
 
-if [[ ! -f ${SPARC_DATA}/.migrations_complete ]]; then
-  echo "Running 'rake db:create' in ${PWD}"
-  exec bin/rake db:create
-  echo "Running 'rake db:schema:load' in ${PWD}"
-  exec bin/rake db:schema:load
-  echo "Running 'rake migrate' in ${PWD}"
-  exec bin/rake db:migrate && touch $SPARC_DATA/.migrations_complete
-#  exec chpst -u hab bin/rake db:migrate && touch $SPARC_DATA/.migrations_complete
-fi
+echo "Running bootstrap task to initialize database"
+exec bin/rake sparc:bootstrap
+

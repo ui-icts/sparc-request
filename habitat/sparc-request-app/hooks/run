@@ -1,13 +1,16 @@
 #!/bin/sh
-export SPARC_DATA="{{pkg.svc_data_path}}"
-export GEM_HOME="${SPARC_DATA}/dist/vendor/bundle/ruby/2.1.0"
+export SERVICE_DIR="{{pkg.svc_static_path}}"
+
+export GEM_HOME="${SERVICE_DIR}/release/vendor/bundle/ruby/2.1.0"
 export GEM_PATH="$(hab pkg path chrisortman/ruby)/lib/ruby/gems/2.1.0:$GEM_HOME"
 export LD_LIBRARY_PATH="$(hab pkg path core/gcc-libs)/lib"
-export PATH="$PATH:${SPARC_DATA}/dist/bin"
+
+export PATH="${SERVICE_DIR}/release/bin:$(hab pkg path core/node)/bin:$PATH"
 export RAILS_ENV="production"
 
-cd $SPARC_DATA/dist
+cd $SERVICE_DIR/release
 
 exec 2>&1
 exec bin/rails server -b {{cfg.rails_binding_ip}} -p {{cfg.rails_port}}
+
 #exec chpst -u hab ./bin/rails server -b {{cfg.rails_binding_ip}} -p {{cfg.rails_port}}
