@@ -3,7 +3,7 @@
 
 pkg_name=sparc-request
 pkg_origin=chrisortman
-pkg_version="0.1.0"
+pkg_version="0.2.0"
 pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_version}.tar.bz2"
 # Overwritten later because we compute it based on the repo
 pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
@@ -17,7 +17,14 @@ pkg_deps=(
   core/libyaml
   core/node
   core/mysql-client
+
+  # Used for passenger
+  core/curl
+  core/openssl
+  core/zlib
+
   chrisortman/ruby
+  chrisortman/passenger
   )
 pkg_build_deps=(
   core/coreutils
@@ -26,6 +33,8 @@ pkg_build_deps=(
   core/gcc
   core/make
   core/curl
+  core/openssl
+  core/zlib
   core/which
 )
 pkg_lib_dirs=(lib)
@@ -79,6 +88,7 @@ do_build() {
   local _libxml2_dir=$(pkg_path_for libxml2)
   local _libxslt_dir=$(pkg_path_for libxslt)
   local _zlib_dir=$(pkg_path_for zlib)
+  local _openssl_include_dir=$(pkg_path_for openssl)
 
   #export GEM_HOME=${pkg_prefix}/vendor/bundle
   #export GEM_PATH=${GEM_HOME}
@@ -111,6 +121,7 @@ do_build() {
   # root right now for building, but as 'hab' or someone else when the
   # package installs we need to make sure we can read the files
   chmod -R a+rx vendor/bundle
+
 }
 
 # The default implementation runs nothing during post-compile. An example of a

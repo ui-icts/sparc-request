@@ -5,12 +5,15 @@ export GEM_HOME="${SERVICE_DIR}/release/vendor/bundle/ruby/2.1.0"
 export GEM_PATH="$(hab pkg path chrisortman/ruby)/lib/ruby/gems/2.1.0:$GEM_HOME"
 export LD_LIBRARY_PATH="$(hab pkg path core/gcc-libs)/lib"
 
-export PATH="${SERVICE_DIR}/release/bin:$(hab pkg path core/node)/bin:$PATH"
+export PATH="${SERVICE_DIR}/release/bin:$(hab pkg path core/node)/bin:$(hab pkg path chrisortman/passenger)/bin:$PATH"
 export RAILS_ENV="production"
 
 cd $SERVICE_DIR/release
 
 exec 2>&1
-exec bin/rails server -b {{cfg.rails_binding_ip}} -p {{cfg.rails_port}}
+
+# I think if i dont' fully qualify this I will get bin/passenger and I don't want that. It's because of the order of my PATH up above... I could probably change that I guess
+
+exec $(hab pkg path chrisortman/passenger)/bin/passenger start --engine=builtin --environment production --address {{cfg.rails_binding_ip}} --port {{cfg.rails_port}}
 
 #exec chpst -u hab ./bin/rails server -b {{cfg.rails_binding_ip}} -p {{cfg.rails_port}}
