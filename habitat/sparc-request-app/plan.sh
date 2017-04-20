@@ -3,7 +3,7 @@
 
 pkg_name=sparc-request
 pkg_origin=chrisortman
-pkg_version="0.2.0"
+pkg_version="1.9.5"
 pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_version}.tar.bz2"
 # Overwritten later because we compute it based on the repo
 pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
@@ -39,7 +39,7 @@ pkg_build_deps=(
 )
 pkg_lib_dirs=(lib)
 pkg_include_dirs=(include)
-pkg_svc_user="hab"
+pkg_svc_user="capistrano"
 pkg_svc_group="$pkg_svc_user"
 
 # Callback Functions
