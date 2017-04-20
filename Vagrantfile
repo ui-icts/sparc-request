@@ -11,8 +11,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 9631, host: 9631
   config.vm.network :forwarded_port, guest: 3000, host: 3001
   config.vm.network :forwarded_port, guest: 80, host: 3080
-  config.vm.provision :shell, :path => "install.sh"
-  config.vm.provision "hab-install", type: :shell, :path => "hab-install.sh"
+  config.vm.provision "main-install",type: :shell, :path => "script/vagrant/install.sh"
+  config.vm.provision "mysql-install",type: :shell, :path => "script/vagrant/mysql-install.sh"
+  config.vm.provision "apache-install",type: :shell, :path => "script/vagrant/apache-install.sh"
+  config.vm.provision "hab-install", type: :shell, :path => "script/vagrant/hab-install.sh"
   config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777", "fmode=666"]
   config.vm.synced_folder "~/.hab", "/home/vagrant/.hab"
   config.vm.network "private_network", ip: "33.33.33.10", type: "dhcp", auto_config: false

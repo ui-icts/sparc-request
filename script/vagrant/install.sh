@@ -8,10 +8,4 @@ sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password passwor
 sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 sudo apt-get install -y vim curl python-software-properties git
 sudo apt-get update
-sudo apt-get -y install mysql-server
-sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
-mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES; SET GLOBAL max_connect_errors=10000;"
-sudo /etc/init.d/mysql restart
 
-
-sudo apt-get -y install apache2 apache2-utils
