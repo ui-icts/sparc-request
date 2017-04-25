@@ -123,7 +123,6 @@ do_build() {
   chmod -R a+rx vendor/bundle
 
   # Need to generate a database.yml if there isn't one
-  local clean_up_db=false
   if [[ ! -e config/database.yml ]]; then
     clean_up_db=true
     echo "Creating stub database.yml"
@@ -134,11 +133,24 @@ NULLDB
 
   fi
 
+  if [[ ! -e config/application.yml ]]; then
+    echo "Copying default application.yml for asset compilation"
+    cp config/application.yml.example config/application.yml
+    sed -e "s#development#production#" -i "config/application.yml"
+  fi
+
+  if [[ ! -e config/epic.yml ]]; then
+    echo "Copying default epic.yml for asset compilation"
+    cp config/epic.yml.example config/epic.yml
+  fi
+
+  if [[ ! -e config/ldap.yml ]]; then
+    echo "Copying default ldap.yml for asset compilation"
+    cp config/ldap.yml.example config/ldap.yml
+    sed -e "s#test#production#" -i "config/ldap.yml"
+  fi
   RAILS_ENV=production bin/rake assets:precompile
 
-  if [[ "$clean_up_db" = "true" ]]; then
-    rm config/database.yml
-  fi 
 
 }
 
