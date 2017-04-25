@@ -115,7 +115,9 @@ end
 
 group :production do
   gem "passenger"
+  gem "activerecord-nulldb-adapter"
 end
+
 group :profile do
   gem 'ruby-prof'
 end

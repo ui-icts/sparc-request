@@ -122,6 +122,24 @@ do_build() {
   # package installs we need to make sure we can read the files
   chmod -R a+rx vendor/bundle
 
+  # Need to generate a database.yml if there isn't one
+  local clean_up_db=false
+  if [[ ! -e config/database.yml ]]; then
+    clean_up_db=true
+    echo "Creating stub database.yml"
+    cat << NULLDB > config/database.yml
+production:
+  adapter: nulldb
+NULLDB
+
+  fi
+
+  RAILS_ENV=production bin/rake assets:precompile
+
+  if [[ "$clean_up_db" = "true" ]]; then
+    rm config/database.yml
+  fi 
+
 }
 
 # The default implementation runs nothing during post-compile. An example of a
