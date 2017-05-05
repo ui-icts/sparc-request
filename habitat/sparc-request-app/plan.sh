@@ -23,7 +23,7 @@ pkg_deps=(
   core/openssl
   core/zlib
 
-  chrisortman/ruby
+  chrisortman/ruby/2.1.5
   chrisortman/passenger
   )
 pkg_build_deps=(
