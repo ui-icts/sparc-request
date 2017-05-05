@@ -149,8 +149,13 @@ NULLDB
     cp config/ldap.yml.example config/ldap.yml
     sed -e "s#test#production#" -i "config/ldap.yml"
   fi
+
   RAILS_ENV=production bin/rake assets:precompile
 
+  # need to clean up these yaml files
+  rm config/application.yml
+  rm config/epic.yml
+  rm config/ldap.yml
 
 }
 
@@ -212,7 +217,7 @@ do_install() {
 # subdirectories might also need to be stripped, or whether you do not want the
 # binaries stripped at all.
 do_strip() {
-  do_default_strip
+  return 0
 }
 
 # There is no default implementation of this callback. This is called after the
