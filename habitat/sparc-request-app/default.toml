@@ -30,6 +30,7 @@ database_port = 3306
 
 host = "i-cart.icts.uiowa.edu"
 protocol = "https"
+fulfillment = "fulfillment.icts.uiowa.edu"
 
 default_mail_to = "heather-davis@uiowa.edu,chris-ortman@uiowa.edu,james-schappet@uiowa.edu"
 admin_mail_to = "iCartHelp@healthcare.uiowa.edu"
@@ -71,13 +72,10 @@ updatable_statuses = [ "first_draft", "draft", "get_a_cost_estimate", "awaiting_
 #   sparc_report= ['SPARCReport', 'https://i-cart.icts.uiowa.edu/reports']
 # }
 # API
-remote_service_notifier_protocol = "https"
-remote_service_notifier_host = "fulfillment.icts.uiowa.edu"
 remote_service_notifier_path = "/v1/notifications.json"
 remote_service_notifier_username = "sparc_api"
 remote_service_notifier_password = "***REMOVED***"
 current_api_version = "v1"
-clinical_work_fulfillment_url = "https://fulfillment.icts.uiowa.edu/"
 # end API
 # allow catalog_manager to turn on fulfillment one organization at a time
 fulfillment_contingent_on_catalog_manager = true
