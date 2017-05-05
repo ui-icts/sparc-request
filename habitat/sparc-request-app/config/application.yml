@@ -67,14 +67,14 @@ production:
 {{/each}}
 
   # API
-  remote_service_notifier_protocol: "{{remote_service_notifier_protocol}}"
-  remote_service_notifier_host: "{{remote_service_notifier_host}}"
+  remote_service_notifier_protocol: "{{protocol}}"
+  remote_service_notifier_host: "{{fulfillment}}"
   remote_service_notifier_path: "{{remote_service_notifier_path}}"
   remote_service_notifier_username: "{{remote_service_notifier_username}}"
   remote_service_notifier_password: "{{remote_service_notifier_password}}"
   host: "{{host}}"
   current_api_version: "{{current_api_version}}"
-  clinical_work_fulfillment_url: {{clinical_work_fulfillment_url}}
+  clinical_work_fulfillment_url: {{protocol}}://{{fulfillment}}
   # end API
   #
   # allow catalog_manager to turn on fulfillment one organization at a time
