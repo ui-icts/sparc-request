@@ -12,6 +12,7 @@ export SERVICE_DIR="{{pkg.svc_static_path}}"
 # Habitat only copies the hooks and config directories :(
 # So we have to manually copy ours
 
+
 echo "Removing previous version deployed at ${SERVICE_DIR}"
 rm -rf ${SERVICE_DIR}/release
 
@@ -29,10 +30,10 @@ echo "Doing chown stuff on ${SERVICE_DIR}"
 chown -R capistrano:capistrano ${SERVICE_DIR}/release
 
 export GEM_HOME="${SERVICE_DIR}/release/vendor/bundle/ruby/2.1.0"
-export GEM_PATH="$(hab pkg path chrisortman/ruby)/lib/ruby/gems/2.1.0:$GEM_HOME"
-export LD_LIBRARY_PATH="$(hab pkg path core/gcc-libs)/lib"
+export GEM_PATH="{{pkgPathFor "chrisortman/ruby"}}/lib/ruby/gems/2.1.0:$GEM_HOME"
+export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
 
-export PATH="${SERVICE_DIR}/release/bin:$(hab pkg path core/node)/bin:$PATH"
+export PATH="${SERVICE_DIR}/release/bin:{{pkgPathFor "core/node"}}/bin:$PATH"
 export RAILS_ENV="production"
 
 
