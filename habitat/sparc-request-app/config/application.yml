@@ -45,6 +45,10 @@ production:
     - {{status}}
 {{/each}}
 
+  finished_statuses:
+    - complete
+    - withdrawn
+
   navbar_links:
     sparc_request:
       - SPARCRequest

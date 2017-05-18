@@ -53,8 +53,6 @@ namespace :sparc do
     end
   end
 
-  
-
   def database_exists?
     ActiveRecord::Base.connection
   rescue ActiveRecord::NoDatabaseError
