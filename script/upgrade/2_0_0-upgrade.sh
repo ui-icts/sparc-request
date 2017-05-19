@@ -3,6 +3,8 @@
 set -o nounset
 set -e
 
+echo "Running 2.0.0 data migrations"
+
 bundle exec rake remove_duplicate_past_status
 bundle exec rake surveyor FILE=surveys/SCTR_customer_satisfaction_survey.rb
 bundle exec rake surveyor FILE=surveys/system_satisfaction_survey.rb
