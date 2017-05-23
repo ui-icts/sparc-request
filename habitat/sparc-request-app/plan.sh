@@ -24,7 +24,7 @@ pkg_deps=(
   core/zlib
 
   chrisortman/ruby/2.1.5
-  chrisortman/passenger/5.1.2/20170420165908
+  chrisortman/passenger/5.1.2+ruby2.1.5
   )
 pkg_build_deps=(
   core/coreutils
