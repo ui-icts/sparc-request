@@ -6,7 +6,7 @@ pkg_shasum="TODO"
 pkg_deps=(chrisortman/sparc-request)
 
 pkg_binds=(
-  [web]="rails-port"
+  [base]="rails-port"
 )
 
 do_begin() {
