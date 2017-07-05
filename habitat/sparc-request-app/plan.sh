@@ -42,6 +42,14 @@ pkg_include_dirs=(include)
 pkg_svc_user="hab"
 pkg_svc_group="$pkg_svc_user"
 
+pkg_binds_optional=(
+  [database]="port host"
+)
+pkg_exports=(
+  [rails-port]=rails_port
+)
+pkg_exposes=(rails-port)
+
 # Callback Functions
 #
 do_begin() {
@@ -201,6 +209,10 @@ do_install() {
   # This seems to be some habitat stuff that you 
   # just need to do?
   for binstub in ${pkg_prefix}/static/release/bin/*; do
+    build_line "Setting shebang for ${binstub} to 'ruby'"
+    [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ruby)/bin/ruby#" -i "$binstub"
+  done
+  for binstub in ${pkg_prefix}/static/release/script/*; do
     build_line "Setting shebang for ${binstub} to 'ruby'"
     [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ruby)/bin/ruby#" -i "$binstub"
   done
