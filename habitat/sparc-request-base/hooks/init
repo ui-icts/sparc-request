@@ -3,15 +3,7 @@
 set -o nounset
 set -e
 
-# This is where the package files are installed to
-export PKG_DIR="{{pkg.path}}"
-
-# This is where we will copy our application code to (under the release folder)
-export SERVICE_DIR="{{pkg.svc_static_path}}"
-
-# Habitat only copies the hooks and config directories :(
-# So we have to manually copy ours
-
+source {{pkg.svc_config_path}}/dotenv
 
 echo "Removing previous version deployed at ${SERVICE_DIR}"
 rm -rf ${SERVICE_DIR}/release
@@ -28,14 +20,6 @@ ln -sf {{pkg.svc_config_path}}/ldap.yml ${SERVICE_DIR}/release/config/ldap.yml
 
 echo "Doing chown stuff on ${SERVICE_DIR}"
 chown -R {{pkg.svc_user}}:{{pkg.svc_group}} ${SERVICE_DIR}/release
-
-export GEM_HOME="${SERVICE_DIR}/release/vendor/bundle/ruby/2.1.0"
-export GEM_PATH="{{pkgPathFor "chrisortman/ruby"}}/lib/ruby/gems/2.1.0:$GEM_HOME"
-export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
-
-export PATH="${SERVICE_DIR}/release/bin:{{pkgPathFor "core/node"}}/bin:$PATH"
-export RAILS_ENV="production"
-
 
 cd ${SERVICE_DIR}/release
 
