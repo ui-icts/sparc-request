@@ -27,7 +27,7 @@ ln -sf {{pkg.svc_config_path}}/epic.yml ${SERVICE_DIR}/release/config/epic.yml
 ln -sf {{pkg.svc_config_path}}/ldap.yml ${SERVICE_DIR}/release/config/ldap.yml
 
 echo "Doing chown stuff on ${SERVICE_DIR}"
-chown -R capistrano:capistrano ${SERVICE_DIR}/release
+chown -R {{pkg.svc_user}}:{{pkg.svc_group}} ${SERVICE_DIR}/release
 
 export GEM_HOME="${SERVICE_DIR}/release/vendor/bundle/ruby/2.1.0"
 export GEM_PATH="{{pkgPathFor "chrisortman/ruby"}}/lib/ruby/gems/2.1.0:$GEM_HOME"

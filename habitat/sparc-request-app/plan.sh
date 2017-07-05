@@ -39,7 +39,7 @@ pkg_build_deps=(
 )
 pkg_lib_dirs=(lib)
 pkg_include_dirs=(include)
-pkg_svc_user="capistrano"
+pkg_svc_user="hab"
 pkg_svc_group="$pkg_svc_user"
 
 # Callback Functions
