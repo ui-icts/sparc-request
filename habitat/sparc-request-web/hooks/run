@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source /hab/svc/sparc-request/config/dotenv
+. /hab/svc/sparc-request/config/dotenv
 
 cd $SERVICE_DIR/release
 
