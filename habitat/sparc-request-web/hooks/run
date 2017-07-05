@@ -1,0 +1,26 @@
+#!/bin/sh
+
+source /hab/svc/sparc-request/config/dotenv
+
+cd $SERVICE_DIR/release
+
+exec 2>&1
+
+# I think if i dont' fully qualify this I will get bin/passenger and I don't want that. It's because of the order of my PATH up above... I could probably change that I guess
+
+echo "WTF!!!! {{cfg}}"
+{{#each cfg as |foo bar|}}
+echo "-- {{foo}} -> {{bar}} -- "
+{{/each}}
+
+exec {{pkgPathFor "chrisortman/passenger"}}/bin/passenger start \
+  --engine=builtin \
+  --environment $RAILS_ENV \
+  --address {{cfg.rails_binding_ip}} \
+{{#if bind.base.first}}
+  {{#with bind.base.first as |base|}}
+  --port {{base.cfg.rails-port}}
+  {{/with}}
+{{else}}
+  --port 3000
+{{/if}}

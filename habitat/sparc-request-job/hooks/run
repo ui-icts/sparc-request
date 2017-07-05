@@ -1,0 +1,14 @@
+#!/bin/sh
+
+source /hab/svc/sparc-request/config/dotenv
+
+cd $SERVICE_DIR/release
+
+exec 2>&1
+
+# I think if i dont' fully qualify this I will get bin/passenger and I don't want that. It's because of the order of my PATH up above... I could probably change that I guess
+
+exec $SERVICE_DIR/release/script/delayed_job run
+
+
+#exec chpst -u hab ./bin/rails server -b {{cfg.rails_binding_ip}} -p {{cfg.rails_port}}
