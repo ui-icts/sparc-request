@@ -85,6 +85,9 @@ do_unpack() {
 }
 
 do_prepare() {
+
+  export BUNDLE_SILENCE_ROOT_WARNING=1
+
   build_line "Setting link for /usr/bin/env to 'coreutils'"
   [[ ! -f /usr/bin/env ]] && ln -s "$(pkg_path_for coreutils)/bin/env" /usr/bin/env
   return 0
@@ -122,8 +125,13 @@ do_build() {
      echo 'gem "rb-readline"' >> Gemfile
    fi
 
+   if [[ -e $HAB_CACHE_SRC_PATH/bundle_cache ]]; then
+     cp -R $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
+   fi
+
   bundle install --without test development --jobs 2 --retry 5 --path vendor/bundle --binstubs
 
+  cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
   # Some bundle files when they install have permissions that don't
   # allow the all user to read them, but because we are running as
   # root right now for building, but as 'hab' or someone else when the
