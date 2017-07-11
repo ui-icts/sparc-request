@@ -114,7 +114,7 @@ group :test do
 end
 
 group :production do
-  gem "passenger"
+  gem "puma"
 end
 
 group :assets do
