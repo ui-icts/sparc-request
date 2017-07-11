@@ -4,13 +4,14 @@
 
 cd $SERVICE_DIR/release
 
-exec 2>&1
-
-exec bin/puma start -e $RAILS_ENV \
 {{#if bind.base.first}}
   {{#with bind.base.first as |base|}}
-  -p {{base.cfg.rails-port}}
+PORT='{{base.cfg.rails-port}}'
   {{/with}}
 {{else}}
-  -p 9292
+PORT='9292'
 {{/if}}
+
+exec 2>&1
+
+exec bin/puma start -e $RAILS_ENV -p $PORT config.ru
