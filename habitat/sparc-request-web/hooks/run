@@ -18,4 +18,4 @@ PORT='9292'
 
 exec 2>&1
 
-exec bundle exec puma -e $RAILS_ENV -p $PORT
+exec bin/puma -e $RAILS_ENV -p $PORT
