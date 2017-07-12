@@ -10,3 +10,5 @@ export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
 
 export PATH="${SERVICE_DIR}/release/bin:{{pkgPathFor "core/node"}}/bin:$PATH"
 export RAILS_ENV="production"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"

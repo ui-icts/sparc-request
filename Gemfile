@@ -83,6 +83,7 @@ group :development, :test, :profile do
   gem 'timecop'
   gem 'progress_bar'
 end
+gem "puma"
 
 group :development, :test do
   gem 'pry'
@@ -111,10 +112,6 @@ group :test do
   gem 'shoulda-callback-matchers'
   gem 'site_prism'
   gem 'webmock'
-end
-
-group :production do
-  gem "puma"
 end
 
 group :assets do

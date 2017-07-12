@@ -2,6 +2,10 @@
 
 . /hab/svc/sparc-request/config/dotenv
 
+export RACK_ENV=$RAILS_ENV
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 cd $SERVICE_DIR/release
 
 {{#if bind.base.first}}
@@ -14,4 +18,4 @@ PORT='9292'
 
 exec 2>&1
 
-exec bin/puma start -e $RAILS_ENV -p $PORT config.ru
+exec bundle exec puma -e $RAILS_ENV -p $PORT
