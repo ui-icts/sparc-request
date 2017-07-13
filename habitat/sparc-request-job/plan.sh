@@ -3,7 +3,7 @@ pkg_origin=chrisortman
 pkg_version="2.0.0"
 pkg_source="http://some_source_url/releases/${pkg_name}-${pkg_version}.tar.gz"
 pkg_shasum="TODO"
-pkg_deps=(chrisortman/sparc-request)
+pkg_deps=(chrisortman/sparc-request/$pkg_version)
 
 pkg_binds=(
   [base]="rails-port"

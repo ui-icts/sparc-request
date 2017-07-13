@@ -9,9 +9,8 @@ exec 2>&1
 # I think if i dont' fully qualify this I will get bin/passenger and I don't want that. It's because of the order of my PATH up above... I could probably change that I guess
 
 exec $SERVICE_DIR/release/script/delayed_job run \
-  --environment $RAILS_ENV \
-  --pid-dir {{pkg.svc_var_path}}
-  --log-dir {{pkg.svc_log_path}}
+  --pid-dir {{pkg.svc_var_path}} \
+  --log-dir {{pkg.svc_path}}/logs
 
 
 #exec chpst -u hab ./bin/rails server -b {{cfg.rails_binding_ip}} -p {{cfg.rails_port}}
