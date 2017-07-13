@@ -8,7 +8,7 @@ pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_v
 # Overwritten later because we compute it based on the repo
 pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
 pkg_deps=(
-  chrisortman/sparc-request
+  chrisortman/sparc-request/$pkg_version
 )
 pkg_build_deps=(
 )
