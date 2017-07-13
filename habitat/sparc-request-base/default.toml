@@ -101,3 +101,7 @@ filter= "(|(|(|(cn=#{term}*)(sn=#{term}*))(givenName=#{term}*))(uiowaADNotificat
 study_root = "1.2.3.4"
 endpoint = "http://TODO"
 namespace = ""
+
+[shibboleth]
+
+request_type = "header"

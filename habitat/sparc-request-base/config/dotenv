@@ -12,3 +12,5 @@ export PATH="${SERVICE_DIR}/release/bin:{{pkgPathFor "core/node"}}/bin:$PATH"
 export RAILS_ENV="production"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
+
+export SHIBBOLETH_REQUEST_TYPE="{{cfg.shibboleth.request_type}}"
