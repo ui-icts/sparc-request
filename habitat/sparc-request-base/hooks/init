@@ -25,6 +25,12 @@ cd ${SERVICE_DIR}/release
 
 exec 2>&1
 
-echo "Running bootstrap task to initialize database"
-exec bin/rake sparc:bootstrap
+if [[ -e {{pkg.svc_data_path}}/migrate ]]; then
+  echo "Running bootstrap task to initialize database"
+  bin/rake sparc:bootstrap
+  echo "Running database data upgrades"
+  export HOME={{pkg.svc_data_path}}
+  script/upgrade/2_0_5-upgrade.sh
+#  rm {{pkg.svc_data_path}}/migrate
+fi
 

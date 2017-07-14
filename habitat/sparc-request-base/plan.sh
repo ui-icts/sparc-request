@@ -36,6 +36,7 @@ pkg_build_deps=(
   core/zlib
   core/which
 )
+pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
 pkg_include_dirs=(include)
 pkg_svc_user="hab"
@@ -228,6 +229,8 @@ do_install() {
     build_line "Removing the symlink we created for '/usr/bin/env'"
     rm /usr/bin/env
   fi
+
+  chmod +x ${pkg_prefix}/static/release/script/upgrade/*.sh
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their
