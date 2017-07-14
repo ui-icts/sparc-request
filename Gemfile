@@ -82,11 +82,10 @@ group :development, :test, :profile do
   gem 'equivalent-xml'
   gem 'faker'
   gem 'launchy'
-  gem 'puma', '~> 3.0'
   gem 'timecop'
   gem 'progress_bar'
 end
-gem "puma"
+gem 'puma', '~> 3.0'
 
 group :development, :test do
   gem 'pry'
