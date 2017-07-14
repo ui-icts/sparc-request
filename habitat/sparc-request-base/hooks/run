@@ -2,4 +2,5 @@
 
 exec 2>&1
 
+echo "Startin sleep phase for sparc-request"
 exec sleep infinity

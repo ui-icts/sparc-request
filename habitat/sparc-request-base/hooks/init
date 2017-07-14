@@ -27,5 +27,4 @@ exec 2>&1
 
 echo "Running bootstrap task to initialize database"
 exec bin/rake sparc:bootstrap
-exec script/upgrade/2_0_0-upgrade.sh
 

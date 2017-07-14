@@ -26,7 +26,7 @@ database_port = 3306
 
 ## SPARC specific settings
 #
-[sparc]
+[sparc.production]
 
 host = "i-cart.icts.uiowa.edu"
 protocol = "https"
@@ -62,24 +62,29 @@ google_password = "MUSCsparcrequest"
 send_authorized_user_emails = true
 system_satisfaction_survey = false
 no_reply_from = "no-reply@icts.uiowa.edu"
+
 # new for v1.4.0 ...
 editable_statuses = { 14= ["first_draft", "draft", "submitted", "nil", "get_a_quote", "awaiting_pi_approval"],  48= ["draft", "submitted"] }
 updatable_statuses = [ "first_draft", "draft", "get_a_cost_estimate", "awaiting_pi_approval"]
-# navbar_links: { sparc_request= ['SPARCRequest', 'https://i-cart.icts.uiowa.edu/'],
-#   sparc_dashboard= ['Dashboard', 'https://i-cart.icts.uiowa.edu/dashboard'],
-#   sparc_fulfillment= ['SPARCFulfillment', 'https://fulfillment.icts.uiowa.edu' ],
-#   sparc_catalog= ['SPARCCatalog', 'https://i-cart.icts.uiowa.edu/catalog_manager'],
-#   sparc_report= ['SPARCReport', 'https://i-cart.icts.uiowa.edu/reports']
-# }
-# API
+
 remote_service_notifier_path = "/v1/notifications.json"
 remote_service_notifier_username = "sparc_api"
 remote_service_notifier_password = "***REMOVED***"
 current_api_version = "v1"
 # end API
+
 # allow catalog_manager to turn on fulfillment one organization at a time
 fulfillment_contingent_on_catalog_manager = true
 send_emails_to_real_users = false
+
+# #######
+# Added 2.0.5
+#
+site_admins = ["chris-ortman@uiowa.edu"]
+epic_queue_access = ["chris-ortman@uiowa.edu"]
+redcap_token = ""
+use_redcap_api = false
+redcap_api = ""
 
 [ldap]
 
