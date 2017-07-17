@@ -551,6 +551,7 @@ DEPENDENCIES
   country_select
   curb (~> 0.9.3)
   database_cleaner
+  delayed_job
   delayed_job_active_record
   devise (~> 4.2)
   dynamic_form
