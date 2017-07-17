@@ -6,6 +6,6 @@ cd $SERVICE_DIR/release
 
 exec 2>&1
 
-exec $SERVICE_DIR/release/script/delayed_job run \
+exec $SERVICE_DIR/release/bin/delayed_job run \
   --pid-dir {{pkg.svc_var_path}} \
   --log-dir {{pkg.svc_path}}/logs
