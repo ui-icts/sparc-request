@@ -31,6 +31,6 @@ if [[ -e {{pkg.svc_data_path}}/migrate ]]; then
   echo "Running database data upgrades"
   export HOME={{pkg.svc_data_path}}
   script/upgrade/2_0_5-upgrade.sh
-#  rm {{pkg.svc_data_path}}/migrate
+  rm {{pkg.svc_data_path}}/migrate
 fi
 
