@@ -69,7 +69,7 @@ updatable_statuses = [ "first_draft", "draft", "get_a_cost_estimate", "awaiting_
 
 remote_service_notifier_path = "/v1/notifications.json"
 remote_service_notifier_username = "sparc_api"
-remote_service_notifier_password = "***REMOVED***"
+remote_service_notifier_password = ""
 current_api_version = "v1"
 # end API
 
