@@ -28,10 +28,6 @@ database_port = 3306
 #
 [sparc.production]
 
-host = ""
-protocol = "https"
-fulfillment = ""
-
 default_mail_to = "sparcrequest@gmail.com"
 admin_mail_to = "sparcrequest@gmail.com"
 contact_us_mail_to = "sparcrequest@gmail.com"
