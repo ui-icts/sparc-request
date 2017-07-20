@@ -21,3 +21,4 @@ env:
   - HAB_ORIGIN=chrisortman
   - HAB_ORIGIN_KEYS=chrisortman
   - HAV_NONINTERACTIVE=true
+  - secure: lbp1Qy5+ko2WQVqn/ckD5UppZNrFHqMXCjLnp+PKeyqeDjrUf/1IThoylUNj+uidPmkiF7RT1DbvFF3yh8qgZt7/9Q29W9SPr0+OEKHSC7eXyyMNpN9rCLOfdTTznsHm/yciLVFru8uFxYheciKu1oogbByJoY62XEX9hBN4Uuk=
