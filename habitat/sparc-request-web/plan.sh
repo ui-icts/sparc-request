@@ -23,6 +23,9 @@ pkg_binds=(
 # Callback Functions
 #
 do_begin() {
+  echo "Nothing to do really"
+  echo "But want to know what's in packages"
+  ls /hab/pkgs/*/*/*/*
   return 0
 }
 
@@ -49,6 +52,7 @@ do_prepare() {
 }
 
 do_build() {
+
   return 0
 }
 do_check() {
