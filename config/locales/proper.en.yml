@@ -41,8 +41,8 @@ en:
       listserv_subject: "SPARC Request Listserv"
       sparc_blog: "Blog"
       sparc_blog_url: "https://sparcrequestblog.com/"
-      sctr: "SCTR"
-      sctr_url: "http://sctr.musc.edu"
+      sctr: "ICTS"
+      sctr_url: "https://icts.uiowa.edu"
       about: "About"
       about_url: "http://academicdepartments.musc.edu/sctr/sparc_request"
 
@@ -262,7 +262,7 @@ en:
         question_5: "How is SPARC Request calculating my indirect costs?"
         answer_5: "The original requester for your study/project defined both the funding source of the study/project and the indirect cost rate. SPARC Request uses this data to calculate your total overall indirect costs."
         question_6: "I\'m stuck! Who can I contact for assistance with SPARC Request?"
-        answer_6: "The SUCCESS Center is happy to assist you! Please contact us at success@musc.edu or (843) 792-3357."
+        answer_6: "Please contact ICTS at iCartHelp@healthcare.uiowa.edu."
       feedback:
         header: "Feedback"
         email: "Email:"
