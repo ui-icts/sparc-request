@@ -3,3 +3,10 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-Agent: *
 # Disallow: /
+User-agent: *
+Crawl-delay: 15
+Disallow: /service_requests/
+
+
+User-agent: Baiduspider
+Disallow: /
