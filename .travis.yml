@@ -9,9 +9,9 @@ install:
 - curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh
   | sudo bash
 script:
-- hab pkg build habitat/sparc-request-base -r /hab/studio/sparc > build_logs/sparc_request_base.log
-- hab pkg build habitat/sparc-request-web -r /hab/studio/sparc > build_logs/sparc_request_web.log
-- hab pkg build habitat/sparc-request-job -r /hab/studio/sparc > build_logs/sparc_request_job.log
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base > build_logs/sparc_request_base.log
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-web  > build_logs/sparc_request_web.log
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-job  > build_logs/sparc_request_job.log
 after_success:
 - travis_wait hab pkg upload results/*.hart
 after_failure:
