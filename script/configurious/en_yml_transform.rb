@@ -63,6 +63,7 @@ update 'en' do
 
   update 'mailer' do
     replace 'received', part: 'SPARC', with: 'I-CART'
+    change 'issue_contact', to: "Please contact us at iCartHelp@healthcare.uiowa.edu for assistance with this process or with any questions you may have."
   end
 
   update 'signup' do
