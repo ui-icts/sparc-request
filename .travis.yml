@@ -2,7 +2,7 @@ before_install:
 - mkdir -p /home/travis/.hab/cache/keys
 - mkdir build_logs
 - cp chrisortman-20160618040827.pub /home/travis/.hab/cache/keys
-- openssl aes-256-cbc -K $encrypted_3eb1048b073e_key -iv $encrypted_3eb1048b073e_iv
+- openssl aes-256-cbc -K $encrypted_2c143b8c5811_key -iv $encrypted_2c143b8c5811_iv
   -in chrisortman-20160618040827.sig.key.enc -out ~/.hab/cache/keys/chrisortman-20160618040827.sig.key
   -d
 install:
@@ -15,7 +15,6 @@ script:
 - travis_wait hab pkg upload results/*.hart
 env:
   global:
-  - secure: 6+cNDGiDBNDrXYjCPqooKmAJjha8JCKhl7iOdOzJteVLboT2LEhoQWhURrPUzVI9vn6O4M6gsL2dacgxaBWvxSO3sh+pQ3nivVNDjZb2JNCDqilaSkbdT7p8NJzhWFHjBcBrYB8hydQwjR20lcotV3ocpf9gHsyyZSSgrauvlHmUVhdXNUFaJNMziVDJ3NsNZbzqLWLufwiuCDi52VINrj29SFq12lvAsEHuhXdThTCrDkmSP+og2mY4Sh+1hFvW4o90+K2KC3powZSm9VGSwMAZTjniof48Ed3GBuSP6IooiTK2/Y/6CY2gwMHpEmOYqJ7wRoTtwKC6MrkIpNOBu5gZpdZSnPhDv/KaKh4Q20yE+LuBEUwnw312ZKhrWHh2F/rMVHZqgCEFD4LtTOSmk6mOZyvY0GhjNVDIxlYT8dKPD2vWaIVzFp1y328WIvgEhXds82yVwkVE4oo0J6oV5Xkgi5Wy3Lw1uoPysFE/55q3jQ490AOs6LjFbj31q/G7IWzvm95YyGRBpw0OgvZSKrXRA/FZbWeuKhg0N2ckwl67by67OpJk32LgAllr40W5aYSX4bz3urw+eiscC80jmMr6zkavM4xIW2vKsFEGW2rpOyF6VmQbyVwxJjQ4WtIS2lvxxf6apLMlXhQc9yGRt7rVwhvNRjJo3F1iVsItVNI=
   - HAB_ORIGIN=chrisortman
   - HAB_ORIGIN_KEYS=chrisortman
   - HAV_NONINTERACTIVE=true
