@@ -13,8 +13,6 @@ echo "remove invalid identities"
 bin/rake data:remove_invalid_identities
 echo "Replace arm name special characters"
 bin/rake data:replace_arm_name_special_characters
-echo "Professional organizations update"
-bin/rake professional_organizations_update
 echo "Add service request to dashboard protocols"
 bin/rake add_service_request_to_dashboard_protocols
 echo "Fix missing ssr ids"
