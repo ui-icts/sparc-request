@@ -131,14 +131,15 @@ def delete_empty_srs(protocol)
   end
   
   # If we still have multiple service request we have a problem
-  def record_odd_balls
-    protocols = Protocol.joins(:service_requests).group('protocols.id').having('count(protocol_id) >= 2').to_a
+end
 
-    if protocols.count != 0
-      puts 'Oops, found some oddballs.'
-      protocols.each do |protocol|
-        puts "Protocol ID: #{protocol.id}"
-      end
+def record_odd_balls
+  protocols = Protocol.joins(:service_requests).group('protocols.id').having('count(protocol_id) >= 2').to_a
+
+  if protocols.count != 0
+    puts 'Oops, found some oddballs.'
+    protocols.each do |protocol|
+      puts "Protocol ID: #{protocol.id}"
     end
   end
 end
