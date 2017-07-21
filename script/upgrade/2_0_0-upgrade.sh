@@ -5,13 +5,18 @@ set -e
 
 echo "Running 2.0.0 data migrations"
 
-bundle exec rake remove_duplicate_past_status
-bundle exec rake surveyor FILE=surveys/SCTR_customer_satisfaction_survey.rb
-bundle exec rake surveyor FILE=surveys/system_satisfaction_survey.rb
-bundle exec rake fix_otf_service_associations
-bundle exec rake data:remove_invalid_identities
-bundle exec rake data:replace_arm_name_special_characters
-bundle exec rake professional_organizations_update
-bundle exec rake add_service_request_to_dashboard_protocols
-bundle exec rake data:fix_missing_ssr_ids
+echo "Remove duplicate past status"
+bin/rake remove_duplicate_past_status
+echo "fix OTF service associtaions"
+bin/rake fix_otf_service_associations
+echo "remove invalid identities"
+bin/rake data:remove_invalid_identities
+echo "Replace arm name special characters"
+bin/rake data:replace_arm_name_special_characters
+echo "Professional organizations update"
+bin/rake professional_organizations_update
+echo "Add service request to dashboard protocols"
+bin/rake add_service_request_to_dashboard_protocols
+echo "Fix missing ssr ids"
+bin/rake data:fix_missing_ssr_ids
 
