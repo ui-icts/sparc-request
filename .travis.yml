@@ -1,16 +1,24 @@
-sudo: false
-language: ruby
-cache: bundler
 before_install:
-  - export TZ=America/New_York
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - cp config/database.yml.example config/database.yml
-  - cp config/application.yml.example config/application.yml
-  - cp config/epic.yml.example config/epic.yml
-  - cp config/ldap.yml.example config/ldap.yml
-  - mysql -e 'create database test_sparc_request;'
+- mkdir -p /home/travis/.hab/cache/keys
+- mkdir build_logs
+- cp chrisortman-20160618040827.pub /home/travis/.hab/cache/keys
+- openssl aes-256-cbc -K $encrypted_2c143b8c5811_key -iv $encrypted_2c143b8c5811_iv
+  -in chrisortman-20160618040827.sig.key.enc -out ~/.hab/cache/keys/chrisortman-20160618040827.sig.key
+  -d
+install:
+- curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh
+  | sudo bash
 script:
-  - RAILS_ENV=test bundle exec rake db:migrate 
-  - bundle exec rspec 
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base > build_logs/sparc_request_base.log
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-web  > build_logs/sparc_request_web.log
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-job  > build_logs/sparc_request_job.log
+after_success:
+- travis_wait hab pkg upload results/*.hart
+after_failure:
+- cat build_logs/sparc_request_base.log build_logs/sparc_request_web.log build_logs/sparc_request_job.log
+env:
+  global:
+  - HAB_ORIGIN=chrisortman
+  - HAB_ORIGIN_KEYS=chrisortman
+  - HAV_NONINTERACTIVE=true
+  - secure: lbp1Qy5+ko2WQVqn/ckD5UppZNrFHqMXCjLnp+PKeyqeDjrUf/1IThoylUNj+uidPmkiF7RT1DbvFF3yh8qgZt7/9Q29W9SPr0+OEKHSC7eXyyMNpN9rCLOfdTTznsHm/yciLVFru8uFxYheciKu1oogbByJoY62XEX9hBN4Uuk=
