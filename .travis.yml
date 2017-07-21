@@ -12,7 +12,6 @@ script:
 - hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base > build_logs/sparc_request_base.log
 - hab studio -r /hab/studio/sparc build -R habitat/sparc-request-web  > build_logs/sparc_request_web.log
 - hab studio -r /hab/studio/sparc build -R habitat/sparc-request-job  > build_logs/sparc_request_job.log
-after_success:
 - travis_wait hab pkg upload results/*.hart
 after_failure:
 - cat build_logs/sparc_request_base.log build_logs/sparc_request_web.log build_logs/sparc_request_job.log
