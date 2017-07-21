@@ -17,8 +17,9 @@ echo "remove invalid identities"
 bundle exec rake data:remove_invalid_identities
 echo "Replace ARM name special characters"
 bundle exec rake data:replace_arm_name_special_characters
-echo "Professional organizations update"
-bundle exec rake professional_organizations_update
+#Dont run this one, it's MUSC specific
+#echo "Professional organizations update"
+#bundle exec rake professional_organizations_update
 echo "Add service request to dashboard protocols"
 bundle exec rake add_service_request_to_dashboard_protocols
 echo "Fix missing ssr_ids"
