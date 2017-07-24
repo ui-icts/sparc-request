@@ -10,3 +10,9 @@ curl -O -J -L https://api.bintray.com/content/habitat/stable/linux/x86_64/hab-%2
 tar -xzf hab-0.*.*.tar.gz
 sudo mv hab-**/hab /usr/local/bin
 sudo chmod a+x /usr/local/bin/hab
+
+
+# Mimic some of the way boxes are organized for chef
+
+## This is where I store my user.toml files by default
+mkdir -p /etc/configs
