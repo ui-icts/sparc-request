@@ -23,6 +23,7 @@ database_host = "33.33.33.1"
 # default, right? but it's configurable. Just in case.
 database_port = 3306
 
+ssl_cert_file = ""
 
 ## SPARC specific settings
 #

@@ -14,3 +14,7 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
 export SHIBBOLETH_REQUEST_TYPE="{{cfg.shibboleth.request_type}}"
+
+if [[ -n "{{cfg.ssl_cert_file}}"]]; then
+  export SSL_CERT_FILE="{{cfg.ssl_cert_file}}"
+fi
