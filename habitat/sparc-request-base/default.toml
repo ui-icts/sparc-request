@@ -69,6 +69,7 @@ remote_service_notifier_path = "/v1/notifications.json"
 remote_service_notifier_username = "sparc_api"
 remote_service_notifier_password = ""
 current_api_version = "v1"
+host = "localhost:3000"
 # end API
 
 # allow catalog_manager to turn on fulfillment one organization at a time
