@@ -23,8 +23,9 @@ chown -R {{pkg.svc_user}}:{{pkg.svc_group}} ${SERVICE_DIR}/release
 
 # Need these permissions to make apache happy
 # and let it serve our static stuff
-f=${SERVICE_DIR}/release/public
-while [[ $f != "/" ]]; do chmod +rx $f; f=$(dirname $f); done;
+chmod +rx ${SERVICE_DIR}/release/public
+chmod +rx ${SERVICE_DIR}/release
+chmod +rx ${SERVICE_DIR}
 
 cd ${SERVICE_DIR}/release
 
