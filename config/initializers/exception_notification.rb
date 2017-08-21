@@ -19,7 +19,7 @@ ExceptionNotification.configure do |config|
   config.add_notifier :email, {
     :email_prefix         => "[RSMT #{ENV['HOSTNAME']} Exception",
     :sender_address       => %{"Notifier" <no-reply@uiowa.edu>},
-    :exception_recipients => %w{chris-rotman@uiowa.edu james-schappet@uiowa.edu}
+    :exception_recipients => %w{chris-ortman@uiowa.edu james-schappet@uiowa.edu}
   }
 
   # Campfire notifier sends notifications to your Campfire room. Requires 'tinder' gem.
