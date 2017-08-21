@@ -733,6 +733,7 @@ proxy_rights:
 study_types:
   clinical_trials: Clinical Trials
   basic_science: Basic Science
+  t0: 'T0: Basic Scientific Discovery'
   t1: 'T1: Translation to Humans'
   t2: 'T2: Translation to Patients'
   t3: 'T3: Translation to Practice'

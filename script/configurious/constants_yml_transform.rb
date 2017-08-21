@@ -283,7 +283,8 @@ replace 'subject_genders', with: SUBJECT_GENDERS
 replace 'affiliations', with: AFFILIATIONS
 
 update 'study_types' do
-  add 't1','T1: Translation to Humans'
+  add 't0', 'T0: Basic Scientific Discovery'
+  add 't1', 'T1: Translation to Humans'
   add 't2', 'T2: Translation to Patients'
   add 't3', 'T3: Translation to Practice'
   add 't4', 'T4: Translation to Populations'
