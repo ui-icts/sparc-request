@@ -31,6 +31,7 @@ chown -R {{pkg.svc_user}}:{{pkg.svc_group}} {{pkg.svc_data_path}}/system
 chmod +rx ${SERVICE_DIR}/release/public
 chmod +rx ${SERVICE_DIR}/release
 chmod +rx ${SERVICE_DIR}
+chmod +rx {{pkg.svc_data_path}}
 
 cd ${SERVICE_DIR}/release
 
