@@ -13,7 +13,7 @@ cp -a ${PKG_DIR}/static/release ${SERVICE_DIR}/release
 
 echo "Creating upload directory"
 mkdir -p {{pkg.svc_data_path}}/system
-chmod ug+rwx,o-rwx {{pkg.svc_data_path}}/system
+chmod 775 {{pkg.svc_data_path}}/system
 
 echo "Linking YAML files from {{pkg.svc_config_path}}"
 ln -sf {{pkg.svc_config_path}}/database.yml ${SERVICE_DIR}/release/config/database.yml
