@@ -11,15 +11,20 @@ rm -rf ${SERVICE_DIR}/release
 echo "Deploying new version from ${PKG_DIR}/static/release to ${SERVICE_DIR}/release"
 cp -a ${PKG_DIR}/static/release ${SERVICE_DIR}/release
 
+echo "Creating upload directory"
+mkdir -p {{pkg.svc_data_path}}/system
+chmod ug+rwx,o-rwx {{pkg.svc_data_path}}/system
 
 echo "Linking YAML files from {{pkg.svc_config_path}}"
 ln -sf {{pkg.svc_config_path}}/database.yml ${SERVICE_DIR}/release/config/database.yml
 ln -sf {{pkg.svc_config_path}}/application.yml ${SERVICE_DIR}/release/config/application.yml
 ln -sf {{pkg.svc_config_path}}/epic.yml ${SERVICE_DIR}/release/config/epic.yml
 ln -sf {{pkg.svc_config_path}}/ldap.yml ${SERVICE_DIR}/release/config/ldap.yml
+ln -sf {{pkg.svc_data_path}}/system ${SERVICE_DIR}/release/public/system
 
 echo "Doing chown stuff on ${SERVICE_DIR}"
 chown -R {{pkg.svc_user}}:{{pkg.svc_group}} ${SERVICE_DIR}/release
+chown -R {{pkg.svc_user}}:{{pkg.svc_group}} {{pkg.svc_data_path}}/system
 
 # Need these permissions to make apache happy
 # and let it serve our static stuff
