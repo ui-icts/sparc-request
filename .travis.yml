@@ -1,3 +1,11 @@
+dist: precise
+
+addons:
+  apt:
+    packages:
+      - libqtwebkit-dev
+      - libqtwebkit4
+
 before_install:
 - mkdir -p /home/travis/.hab/cache/keys
 - mkdir build_logs
