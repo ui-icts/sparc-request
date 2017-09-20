@@ -42,7 +42,7 @@ if [[ -e {{pkg.svc_data_path}}/migrate ]]; then
   bin/rake sparc:bootstrap
   echo "Running database data upgrades"
   export HOME={{pkg.svc_data_path}}
-  script/upgrade/2_1_0-upgrade.sh
+  script/upgrade/3_0_0a-upgrade.sh
   rm {{pkg.svc_data_path}}/migrate
 fi
 

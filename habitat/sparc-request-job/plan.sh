@@ -1,6 +1,6 @@
 pkg_name=sparc-request-job
 pkg_origin=chrisortman
-pkg_version="2.1.0"
+pkg_version="3.0.0a"
 pkg_source="http://some_source_url/releases/${pkg_name}-${pkg_version}.tar.gz"
 pkg_shasum="TODO"
 pkg_deps=(chrisortman/sparc-request/$pkg_version)
