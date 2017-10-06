@@ -23,7 +23,7 @@ pkg_deps=(
   core/openssl
   core/zlib
 
-  chrisortman/ruby/2.4.1
+  chrisortman/ruby/2.4.2
   )
 pkg_build_deps=(
   core/coreutils
