@@ -19,15 +19,26 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 class AuditRecovery < ApplicationRecord
+  DATETIME_REGEXP = /([A-Z][a-z]{2}, [0-9]{2} [A-Z][a-z]{2} [0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2} \w+ -[0-9]{2}:[0-9]{2})/
+  DATE_REGEXP = /([A-Z][a-z]{2}, [0-9]{2} [A-Z][a-z]{2} [0-9]{4}(?! [0-9]))/
+
   self.table_name = 'audits'
   establish_connection("audit_#{Rails.env}") if USE_SEPARATE_AUDIT_DATABASE
   serialize :audited_changes
 
   def audited_changes
     if self[:audited_changes]&.is_a?(String)
-      eval(self[:audited_changes])
+      safe = replace_datetimes(self[:audited_changes])
+      eval(safe)
     else
       self[:audited_changes]
     end
+  end
+
+  private
+  def replace_datetimes(hash_string)
+    hash_string.
+      gsub(DATETIME_REGEXP, 'Time.zone.parse("\1")').
+      gsub(DATE_REGEXP, 'Date.parse("\1")')
   end
 end
