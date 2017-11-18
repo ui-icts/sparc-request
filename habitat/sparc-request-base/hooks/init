@@ -12,9 +12,6 @@ mkdir -pv {{pkg.svc_var_path}}/tmp/pids
 mkdir -pv {{pkg.svc_data_path}}/system
 chmod 775 {{pkg.svc_data_path}}/system
 
-echo "Doing chown stuff on upload directory"
-chown -R {{pkg.svc_user}}:{{pkg.svc_group}} {{pkg.svc_data_path}}/system
-
 # Need these permissions to make apache happy
 # and let it serve our static stuff
 # chmod +rx ${SERVICE_DIR}/release/public
