@@ -8,33 +8,24 @@ pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_v
 # Overwritten later because we compute it based on the repo
 pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
 pkg_deps=(
-  core/runit # Maybe not needed, thought i had to use it to get chpst
-  core/cacerts
-  core/glibc
-  core/libffi
   core/libxml2
   core/libxslt
   core/libyaml
-  core/node
   core/mysql-client
-
-  # Used for passenger
+  core/node
   core/curl
-  core/openssl
-  core/zlib
 
-  chrisortman/ruby/2.4.1
+  core/ruby/2.4.2
+  core/bundler
+  chrisortman/eye
   )
 pkg_build_deps=(
   core/coreutils
   core/git
-  core/rsync
   core/gcc
   core/make
-  core/curl
-  core/openssl
-  core/zlib
   core/which
+  core/cacerts
 )
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -90,6 +81,10 @@ do_prepare() {
 
   build_line "Setting link for /usr/bin/env to 'coreutils'"
   [[ ! -f /usr/bin/env ]] && ln -s "$(pkg_path_for coreutils)/bin/env" /usr/bin/env
+
+  # Need to make sure we can find bundler when we run rails / rake commands later
+  export GEM_PATH="$(pkg_path_for "core/bundler"):$GEM_PATH"
+
   return 0
 }
 
@@ -100,9 +95,6 @@ do_build() {
   local _libxslt_dir=$(pkg_path_for libxslt)
   local _zlib_dir=$(pkg_path_for zlib)
   local _openssl_include_dir=$(pkg_path_for openssl)
-
-  #export GEM_HOME=${pkg_prefix}/vendor/bundle
-  #export GEM_PATH=${GEM_HOME}
 
   # don't let bundler split up the nokogiri config string (it breaks
   # the build), so specify it as an env var instead
@@ -125,11 +117,19 @@ do_build() {
      echo 'gem "rb-readline"' >> Gemfile
    fi
 
-   # if [[ -e $HAB_CACHE_SRC_PATH/bundle_cache ]]; then
-   #   cp -R $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
-   # fi
 
-  bundle install --without test development --jobs 2 --retry 5 --path vendor/bundle --binstubs
+   ####### ZOOM ######
+   # If you want to speed up your habitat package build
+   # while you're dev'ing do this after your first run
+   # in the studio
+   # cp -a /hab/cache/src/sparc-request-$pkg_version/vendor/bundle /hab/cache/src/bundle_cache
+   # but you'll probably have to put the pkg version in there
+   if [[ -e $HAB_CACHE_SRC_PATH/bundle_cache ]]; then
+     echo "Restoring cached bundle install"
+     cp -a $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
+   fi
+
+   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --binstubs --no-clean
 
   # cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
   # Some bundle files when they install have permissions that don't
@@ -231,6 +231,28 @@ do_install() {
   fi
 
   chmod +x ${pkg_prefix}/static/release/script/upgrade/*.sh
+
+  create_symlinks
+}
+
+create_symlinks() {
+
+  rm -rfv ${pkg_prefix}/static/release/log
+  rm -rfv ${pkg_prefix}/static/release/tmp
+  rm -rfv ${pkg_prefix}/static/release/public/system
+  rm -rfv ${pkg_prefix}/static/release/config/database.yml
+  rm -rfv ${pkg_prefix}/static/release/config/application.yml
+  rm -rfv ${pkg_prefix}/static/release/config/epic.yml
+  rm -rfv ${pkg_prefix}/static/release/config/ldap.yml
+
+  ln -sfv ${pkg_svc_var_path}/log ${pkg_prefix}/static/release/log
+  ln -sfv ${pkg_svc_var_path}/tmp ${pkg_prefix}/static/release/tmp
+  ln -sfv ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
+
+  ln -sfv ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
+  ln -sfv ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
+  ln -sfv ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
+  ln -sfv ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their
