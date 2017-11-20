@@ -14,6 +14,7 @@ pkg_deps=(
   core/mysql-client
   core/node
   core/curl
+  core/rsync
 
   core/ruby/2.4.2
   core/bundler
