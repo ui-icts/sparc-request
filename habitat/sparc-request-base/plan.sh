@@ -150,12 +150,6 @@ NULLDB
 
   fi
 
-  if [[ ! -e config/application.yml ]]; then
-    echo "Copying default application.yml for asset compilation"
-    cp config/application.yml.example config/application.yml
-    sed -e "s#development#production#" -i "config/application.yml"
-  fi
-
   if [[ ! -e config/epic.yml ]]; then
     echo "Copying default epic.yml for asset compilation"
     cp config/epic.yml.example config/epic.yml
