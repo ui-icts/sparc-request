@@ -85,6 +85,10 @@ redcap_token = ""
 use_redcap_api = false
 redcap_api = ""
 
+use_cas = false
+use_cas_only = false
+lazy_load_ldap = true
+
 [ldap]
 
 host = ""
