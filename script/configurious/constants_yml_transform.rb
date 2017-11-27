@@ -8,10 +8,6 @@ SUBJECT_ETHNICITIES = { 'american_indian_alaska_native' => 'American Indian/Alas
 SUBJECT_GENDERS = { 'male': 'Male',
                   'female': 'Female',
                   'other': 'Other' }
-AFFILIATIONS = { 'ccom': 'Carver College of Medicine (CCOM)',
-                'icts': 'Institute for Clinical and Translation Science (ICTS)',
-                'hccc': 'Holden Comprehensive Cancer Center (HCCC)',
-                'iihg': 'Iowa Institute of Human Genetics (IIHG)' }
 COLLEGES = { "Administration": "administration",
             "College of Dental Medicine": "college_of_dental_medicine",
             "College of Graduate Studies": "college_of_graduate_studies",
@@ -280,21 +276,6 @@ DEPARTMENTS = {
 }
 replace 'subject_ethnicities', with: SUBJECT_ETHNICITIES
 replace 'subject_genders', with: SUBJECT_GENDERS
-replace 'affiliations', with: AFFILIATIONS
-
-update 'study_types' do
-  add 't0', 'T0: Basic Scientific Discovery'
-  add 't1', 'T1: Translation to Humans'
-  add 't2', 'T2: Translation to Patients'
-  add 't3', 'T3: Translation to Practice'
-  add 't4', 'T4: Translation to Populations'
-  remove 'translational_science'
-end
-
-update 'user_roles' do
-  change_key 'Primary PI', to: 'Primary Investigator'
-  remove 'PD/PI'
-end
 
 replace 'institutions', with: { "UIOWA": "University of Iowa" }
 
