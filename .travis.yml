@@ -18,16 +18,14 @@ install:
   | sudo bash
 script:
 - hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base > build_logs/sparc_request_base.log
-- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-web  > build_logs/sparc_request_web.log
-- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-job  > build_logs/sparc_request_job.log
 - travis_wait hab pkg upload results/*.hart
 after_success:
-- cat build_logs/sparc_request_base.log build_logs/sparc_request_web.log build_logs/sparc_request_job.log
+- cat build_logs/sparc_request_base.log
 after_failure:
-- cat build_logs/sparc_request_base.log build_logs/sparc_request_web.log build_logs/sparc_request_job.log
+- cat build_logs/sparc_request_base.log
 env:
   global:
   - HAB_ORIGIN=chrisortman
   - HAB_ORIGIN_KEYS=chrisortman
-  - HAV_NONINTERACTIVE=true
+  - HAB_NONINTERACTIVE=true
   - secure: lbp1Qy5+ko2WQVqn/ckD5UppZNrFHqMXCjLnp+PKeyqeDjrUf/1IThoylUNj+uidPmkiF7RT1DbvFF3yh8qgZt7/9Q29W9SPr0+OEKHSC7eXyyMNpN9rCLOfdTTznsHm/yciLVFru8uFxYheciKu1oogbByJoY62XEX9hBN4Uuk=
