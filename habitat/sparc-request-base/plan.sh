@@ -164,7 +164,6 @@ NULLDB
   RAILS_ENV=production bin/rake assets:precompile
 
   # need to clean up these yaml files
-  rm config/application.yml
   rm config/epic.yml
   rm config/ldap.yml
 
