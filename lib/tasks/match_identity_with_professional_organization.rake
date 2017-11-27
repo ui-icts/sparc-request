@@ -45,7 +45,7 @@ task :match_identity_with_professional_organization => :environment do
   # finally matched at the institution level
   @departments_that_need_review = []
   identity_departments.each do |department|
-    prof_org = ProfessionalOrganization.where("LOWER(professional_organizations.name) LIKE LOWER('%#{department}%')").where(org_type: 'department')
+    prof_org = ProfessionalOrganization.where("LOWER(professional_organizations.name) LIKE ?","%#{department.downcase}%").where(org_type: 'department')
     if !prof_org.empty?
       if prof_org.count == 1
         one_department_match[department] = prof_org.first.id
