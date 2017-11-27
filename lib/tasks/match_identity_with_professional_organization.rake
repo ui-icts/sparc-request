@@ -101,7 +101,7 @@ task :match_identity_with_professional_organization => :environment do
     unassigned_identities = Identity.all.where(professional_organization_id: nil)
     identities_with_key = unassigned_identities.where(department: key)
     identities_with_key.each do |identity_with_key|
-      identity_with_key.assign_attributes({ professional_organization_id: value, audit_comment: "BY SCRIPT" }, without_protection: true)
+      identity_with_key.assign_attributes({ professional_organization_id: value, audit_comment: "BY SCRIPT" })
       identity_with_key.save
     end
   end
@@ -118,13 +118,13 @@ task :match_identity_with_professional_organization => :environment do
 
     identities_with_key.each do |identity_with_key|
       if identity_with_key.college == 'college_of_graduate_studies'
-        identity_with_key.assign_attributes({ professional_organization_id: value.first['graduate'], audit_comment: "BY SCRIPT" }, without_protection: true)
+        identity_with_key.assign_attributes({ professional_organization_id: value.first['graduate'], audit_comment: "BY SCRIPT" })
         identity_with_key.save
       elsif identity_with_key.college == 'college_of_medicine'
-        identity_with_key.assign_attributes({ professional_organization_id: value.first['medicine'], audit_comment: "BY SCRIPT" }, without_protection: true)
+        identity_with_key.assign_attributes({ professional_organization_id: value.first['medicine'], audit_comment: "BY SCRIPT" })
         identity_with_key.save
       elsif identity_with_key.college == 'college_of_pharmacy'
-        identity_with_key.assign_attributes({ professional_organization_id: value.first['pharmacy'], audit_comment: "BY SCRIPT" }, without_protection: true)
+        identity_with_key.assign_attributes({ professional_organization_id: value.first['pharmacy'], audit_comment: "BY SCRIPT" })
         identity_with_key.save
       else
         # These identities need to be added to the unmatched report
@@ -159,7 +159,7 @@ task :match_identity_with_professional_organization => :environment do
     unassigned_identities = Identity.all.where(professional_organization_id: nil)
     identities_with_key = unassigned_identities.where(college: key) - @identities_that_need_discussion
     identities_with_key.each do |identity_with_key|
-      identity_with_key.assign_attributes({ professional_organization_id: value, audit_comment: "BY SCRIPT" }, without_protection: true)
+      identity_with_key.assign_attributes({ professional_organization_id: value, audit_comment: "BY SCRIPT" })
       identity_with_key.save
     end
   end
@@ -176,7 +176,7 @@ task :match_identity_with_professional_organization => :environment do
   # The only institution that matched with Professional Organization Institutions was 'medical_university_of_south_carolina'
   # Update Identities and their professional_organization_ids according to 'medical_university_of_south_carolina'
   identities_with_key.each do |identity_with_key|
-    identity_with_key.assign_attributes({ professional_organization_id: 3, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_with_key.assign_attributes({ professional_organization_id: 3, audit_comment: "BY SCRIPT" })
     identity_with_key.save
   end
   puts "END OF INSTITUTION"
@@ -187,37 +187,37 @@ task :match_identity_with_professional_organization => :environment do
 
   #### WENJUN MANUAL MATCHING ###
   if identity_8045 = Identity.find_by(id: 8045)
-    identity_8045.assign_attributes({ professional_organization_id: 4, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_8045.assign_attributes({ professional_organization_id: 4, audit_comment: "BY SCRIPT" })
     identity_8045.save
   end
 
   if identity_44254 = Identity.find_by(id: 44254)
-    identity_44254.assign_attributes({ professional_organization_id: 4, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_44254.assign_attributes({ professional_organization_id: 4, audit_comment: "BY SCRIPT" })
     identity_44254.save
   end
 
   if identity_46501 = Identity.find_by(id: 46501)
-  identity_46501.assign_attributes({ professional_organization_id: 16, audit_comment: "BY SCRIPT" }, without_protection: true)
+  identity_46501.assign_attributes({ professional_organization_id: 16, audit_comment: "BY SCRIPT" })
   identity_46501.save
   end
 
   if identity_21330 = Identity.find_by(id: 21330)
-    identity_21330.assign_attributes({ professional_organization_id: 18, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_21330.assign_attributes({ professional_organization_id: 18, audit_comment: "BY SCRIPT" })
     identity_21330.save
   end
 
   if identity_4958 = Identity.find_by(id: 4958)
-    identity_4958.assign_attributes({ professional_organization_id: 23, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_4958.assign_attributes({ professional_organization_id: 23, audit_comment: "BY SCRIPT" })
     identity_4958.save
   end
 
   if identity_23505 = Identity.find_by(id: 23505)
-    identity_23505.assign_attributes({ professional_organization_id: 23, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_23505.assign_attributes({ professional_organization_id: 23, audit_comment: "BY SCRIPT" })
     identity_23505.save
   end
 
   if identity_7787 = Identity.find_by(id: 7787)
-    identity_7787.assign_attributes({ professional_organization_id: 26, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity_7787.assign_attributes({ professional_organization_id: 26, audit_comment: "BY SCRIPT" })
     identity_7787.save
   end
   ### END WENJUN MANUAL MATCHING ###
@@ -230,7 +230,7 @@ task :match_identity_with_professional_organization => :environment do
 
   unmatched_identities.each do |unmatched_identity|
     identity = Identity.find(unmatched_identity.id)
-    identity.assign_attributes({ institution: nil, college: nil, department: nil, audit_comment: "BY SCRIPT" }, without_protection: true)
+    identity.assign_attributes({ institution: nil, college: nil, department: nil, audit_comment: "BY SCRIPT" })
     identity.save
   end
 
