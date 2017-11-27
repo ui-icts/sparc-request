@@ -1,8 +1,5 @@
 id,key,value,concept_code,parent_id,sort_order,category,default,reserved
-,cancer_center,Cancer Center,,,,affiliation_type,,
-,lipidomics_cobre,Lipidomics COBRE,,,,affiliation_type,,
-,oral_health_cobre,Center for Oral Health Research,,,,affiliation_type,,
-,cardiovascular_cobre,Cardiovascular COBRE,,,,affiliation_type,,
-,cchp,CCHP,,,,affiliation_type,,
-,inbre,INBRE,,,,affiliation_type,,
-,reach,REACH,,,,affiliation_type,,
+"",ccom,Carver College of Medicine (CCOM),"","","",affiliation_type,"",""
+"",icts,Institute for Clinical and Translation Science (ICTS),"","","",affiliation_type,"",""
+"",hccc,Holden Comprehensive Cancer Center (HCCC),"","","",affiliation_type,"",""
+"",iihg,Iowa Institute of Human Genetics (IIHG),"","","",affiliation_type,"",""

@@ -1,4 +1,8 @@
 id,key,value,concept_code,parent_id,sort_order,category,default,reserved
-,clinical_trials,Clinical Trials,,,1,study_type,,
-,basic_science,Basic Science,,,2,study_type,,
-,translational_science,Translational Science,,,3,study_type,,
+"",clinical_trials,Clinical Trials,"","",1,study_type,"",""
+"",basic_science,Basic Science,"","",2,study_type,"",""
+"",t0,T0: Basic Scientific Discovery,"","",3,study_type,"",""
+"",t1,T1: Translation to Humans,"","",4,study_type,"",""
+"",t2,T2: Translation to Patients,"","",5,study_type,"",""
+"",t3,T3: Translation to Practice,"","",6,study_type,"",""
+"",t4,T4: Translation to Populations,"","",7,study_type,"",""
