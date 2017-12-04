@@ -42,13 +42,13 @@ colleges:
   Other: other
   Not MUSC Personnel: not_musc_personnel
 default_statuses:
-- draft
-- submitted
-- get_a_cost_estimate
-- in_process
-- complete
-- awaiting_pi_approval
-- on_hold
+  - draft
+  - submitted
+  - get_a_cost_estimate
+  - in_process
+  - complete
+  - awaiting_pi_approval
+  - on_hold
 departments:
   Accounting: Accounting
   Administration Support Service: Administration Support Service
@@ -324,6 +324,9 @@ epic_rights_info: Once the study is "completed" in Epic, it cannot be moved back
   "Active or Inactive" Completing the study will inhibit new participants to be enrolled
   and associated with the study. Please select only one member of your study team
   that will be authorized to change a study status to Active/Complete.
+funding_statuses:
+  - pending_funding: Pending Funding
+  - funded: Funded
 institutions:
   UIOWA: University of Iowa
 study_type_answers:
