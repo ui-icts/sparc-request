@@ -325,8 +325,8 @@ epic_rights_info: Once the study is "completed" in Epic, it cannot be moved back
   and associated with the study. Please select only one member of your study team
   that will be authorized to change a study status to Active/Complete.
 funding_statuses:
-  - pending_funding: Pending Funding
-  - funded: Funded
+  Pending Funding: pending_funding
+  Funded: funded
 institutions:
   UIOWA: University of Iowa
 study_type_answers:
