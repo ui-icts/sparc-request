@@ -17,12 +17,14 @@ mkdir -pv {{pkg.svc_data_path}}/system
 # chmod +rx ${SERVICE_DIR}/release
 # chmod +rx ${SERVICE_DIR}
 
-# Serve file uploads
+echo "Permissions for apache to serve file uploads"
 chmod 775 {{pkg.svc_data_path}}/system
 chmod +rx {{pkg.svc_data_path}}
 
+echo "Copying static assets to apache path"
 {{pkgPathFor "core/rsync"}}/bin/rsync -avhr -delete $RAILS_ROOT/public {{pkg.svc_static_path}}/release/
 
+echo "Permissions for apache to serve assets"
 chmod +rx {{pkg.svc_static_path}}/release/public
 chmod +rx {{pkg.svc_static_path}}/release
 chmod +rx {{pkg.svc_static_path}}
