@@ -10,7 +10,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network :forwarded_port, guest: 3306, host: 3306
   config.vm.network :forwarded_port, guest: 9631, host: 9631
   config.vm.network :forwarded_port, guest: 3000, host: 3001
+  config.vm.network :forwarded_port, guest: 4000, host: 4001
   config.vm.network :forwarded_port, guest: 80, host: 3080
+  config.vm.network :forwarded_port, guest: 82, host: 3082
   config.vm.provision "main-install",type: :shell, :path => "script/vagrant/install.sh"
   config.vm.provision "mysql-install",type: :shell, :path => "script/vagrant/mysql-install.sh"
   config.vm.provision "apache-install",type: :shell, :path => "script/vagrant/apache-install.sh"

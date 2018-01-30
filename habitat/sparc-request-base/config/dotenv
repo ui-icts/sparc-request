@@ -7,8 +7,6 @@ export GEM_PATH="$GEM_HOME:{{pkgPathFor "core/ruby"}}/lib/ruby/gems/2.4.0:{{pkgP
 export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
 export PATH="$RAILS_ROOT/bin:{{pkgPathFor "core/node"}}/bin:{{pkgPathFor "chrisortman/eye"}}/bin:$PATH"
 
-#
-# This is where we will copy our application code to (under the release folder)
 export RAILS_ENV="production"
 export RACK_ENV=$RAILS_ENV
 export LANG="en_US.UTF-8"
