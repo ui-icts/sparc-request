@@ -34,16 +34,22 @@ Delayed Job output is logged to `/hab/svc/sparc-request/var/log/dj-N.log`
 - Cause migrations & database tasks to run the next time the package is started: `mkdir -p /hab/svc/sparc-request/data/migrate && touch /hab/svc/sparc-request/data/migrate`
 - Follow the web process log: `less -R +F /hab/svc/sparc-request/var/log/puma.log`
 - Follow the delayed_job log: `less -R +F /hab/svc/sparc-request/var/log/dj-1.log`
+- To customize configuration `mkdir -p /hab/user/sparc-request/config && cp $(hab pkg path chrisortman/sparc-request)/default.toml /hab/user/sparc-request/config/user.toml` . Now you make your changes in `user.toml` and they override `default.toml` **requires habitat version > 0.52** 
 
-_eye commands must be run as hab user `su - hab`. Source the environment first `. /hab/svc/sparc-request/config/dotenv`_
+In order to run `eye` or `rails` commands you need to source the environment.
+
+`. /hab/svc/sparc-request/config/dotenv`
 
 - Get info of running services: `leye info`
--
+- Rails console: `cd $RAILS_ROOT && bin/rails c`
+
+
 ### Development
 
 *eye is not part of the bundle, `gem install eye` to use it*
 
 - Test eye config: `eye load habitat/sparc-request-base/config/sparc.eye -f`
+
 ## Changes
 
 ### 2017-11-17
