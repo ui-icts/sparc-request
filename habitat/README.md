@@ -14,6 +14,8 @@ Habitat starts the [eye](https://github.com/kostya/eye) process monitor which st
 The rails application code will be installed to the `/hab/pkgs/....` directory with symlinks for `log`, `tmp`, 
 and `public/system` (file uploads) created pointing to `/hab/svc/sparc-request`
 
+| app path | real path |
+| ---------|-----------|
 | log | /hab/svc/sparc-request/var/log |
 | tmp | /hab/svc/sparc-request/var/tmp |
 | public/system | /hab/svc/sparc-request/data |
