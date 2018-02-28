@@ -5,6 +5,10 @@ set -e
 
 . {{pkg.svc_config_path}}/dotenv
 
+echo "Creating runtime directories"
+mkdir -pv $HOME
+mkdir -pv $EYE_HOME
+
 echo "Creating symlinked directories"
 mkdir -pv {{pkg.svc_var_path}}/log
 mkdir -pv {{pkg.svc_var_path}}/tmp
@@ -36,7 +40,6 @@ if [[ -e {{pkg.svc_data_path}}/migrate ]]; then
 
   bin/rake sparc:bootstrap
   echo "Running database data upgrades"
-  export HOME={{pkg.svc_data_path}}
   script/upgrade/{{strReplace pkg.version "." "_"}}-upgrade.sh
   rm {{pkg.svc_data_path}}/migrate
 fi

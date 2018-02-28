@@ -1,5 +1,5 @@
 # coffee-rails in particular cares about this
-export HOME={{pkg.svc_var_path}}
+export HOME={{pkg.svc_var_path}}/home
 
 # This is where the package files are installed to
 export RAILS_ROOT="{{pkg.path}}/static/release"
