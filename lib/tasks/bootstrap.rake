@@ -51,6 +51,11 @@ namespace :sparc do
       puts "Running migrations"
       Rake::Task["db:migrate"].invoke
     end
+
+    if Setting.count == 0
+      puts "Populating settings table"
+      DefaultSettingsPopulator.new().populate
+    end
   end
 
   def database_exists?
