@@ -11,10 +11,10 @@ UPDATE sparc_rails.settings SET `key` = 'host', value = 'localhost:3000' WHERE i
 UPDATE sparc_rails.settings SET `key` = 'navbar_links', value = '{"sparc_catalog"=>["SPARCCatalog", "http://localhost:3000/catalog_manager"], "sparc_dashboard"=>["Dashboard", "http://localhost:3000/dashboard"], "sparc_fulfillment"=>["SPARCFulfillment", "http://localhost:4000/reports"], "sparc_request"=>["SPARCRequest", "http://localhost:3000/"]}' WHERE id = 25;
 UPDATE sparc_rails.settings SET `key` = 'new_user_cc', value = 'admin@example.com' WHERE id = 26;
 UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_host', value = 'localhost:4000' WHERE id = 32;
-UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_password', value = '3b13b30e88d171a744a62c4ff96e7' WHERE id = 33;
+UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_password', value = 'betterthanruby' WHERE id = 33;
 UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_path', value = '/v1/notifications.json' WHERE id = 34;
 UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_protocol', value = 'http' WHERE id = 35;
-UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_username', value = 'sparc_api' WHERE id = 36;
+UPDATE sparc_rails.settings SET `key` = 'remote_service_notifier_username', value = 'javais' WHERE id = 36;
 UPDATE sparc_rails.settings SET `key` = 'root_url', value = 'http://localhost:3000' WHERE id = 41;
 UPDATE sparc_rails.settings SET `key` = 'send_emails_to_real_users', value = 'false' WHERE id = 43;
 UPDATE sparc_rails.settings SET `key` = 'site_admins', value = '["admin@example.com"]' WHERE id = 44;
