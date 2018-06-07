@@ -137,16 +137,26 @@ module Dashboard
 
       num_pages.times do |page|
         beginning_visit = (page * per_page) + 1
-        ending_visit = (page * per_page + per_page)
-        ending_visit = ending_visit > visit_count ? visit_count : ending_visit
+
+        break if beginning_visit > arm.visit_groups.size
+        ending_visit = [
+          (page * per_page + per_page),
+          visit_count,
+          arm.visit_groups.size
+        ].min
 
         option = ["Visits #{beginning_visit} - #{ending_visit} of #{visit_count}", page + 1, class: 'title', page: page + 1]
         arr << option
 
         # (beginning_visit..ending_visit).each do |y|
         if arm.visit_groups.present?
+          begin
           arm.visit_groups[(beginning_visit-1)...ending_visit].each do |vg|
             arr << ["&nbsp;&nbsp; - #{vg.name}/Day #{vg.day}".html_safe, "#{vg.id}", page: page + 1] if arm.visit_groups.present?
+          end
+          rescue NoMethodError => e
+            byebug
+            raise "Invalid ending index of #{ending_visit}"''
           end
         end
       end

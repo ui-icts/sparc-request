@@ -19,7 +19,6 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.~
 
 require 'rails_helper'
-
 RSpec.describe Dashboard::ServiceCalendars do
   describe '.display_organization_hierarchy(line_items_visit)' do
     context "LIV belongs to A which belongs to B which belongs to C, where A, B, and C are not process-ssrs Organizations" do
@@ -245,6 +244,22 @@ RSpec.describe Dashboard::ServiceCalendars do
           expect(livs.keys).to eq([ssr])
           expect(livs[ssr]).to contain_exactly(liv_pppv1, liv_pppv2)
         end
+      end
+    end
+  end
+
+  describe '.visits_select_options' do
+    context 'visit groups do not fit evenly on a page and the count of visit groups does not match the actual number of visit groups' do
+      it 'should not throw an error' do
+        arm = create(:arm_without_validations, visit_count: 11)
+        6.times do
+          arm.visit_groups.create(attributes_for(:visit_group))
+        end
+
+        
+        expect {
+          Dashboard::ServiceCalendars.visits_select_options(arm)
+        }.to_not raise_error
       end
     end
   end
