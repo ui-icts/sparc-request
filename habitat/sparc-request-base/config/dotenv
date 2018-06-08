@@ -30,4 +30,4 @@ fi
 export org_logo=org_logo_197x57.png
 export institution_logo=institution_logo_136x86.gif
 export institution=University of Iowa
-export SPARC_VERSION=v3.0.0
+export SPARC_VERSION=v{{pkg.version}}
