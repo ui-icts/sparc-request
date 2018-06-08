@@ -4,3 +4,7 @@
 #I need this though so that I can drop a site_name
 #in here from CHEF so that our test system will have 
 #a banner
+
+{{#if cfg.site_banner ~}}
+site_name={{cfg.site_banner}}
+{{/if}}

@@ -25,6 +25,11 @@ database_port = 3306
 
 ssl_cert_file = ""
 
+# Displays a banner at the top of the site
+# Useful for test environments so that users do not
+# mistake it for production
+site_banner = ""
+
 ## SPARC specific settings
 #
 [sparc.production]
