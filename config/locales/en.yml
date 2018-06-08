@@ -10,6 +10,7 @@ en:
     continue: Continue
     delete: Delete
     edit: Edit
+    filter: Filter
     print: Print
     remove: Remove
     reply: Reply
@@ -23,26 +24,22 @@ en:
   activerecord:
     errors:
       models:
-        item:
+        form:
           attributes:
-            content:
-              blank: Content can't be blank
-        questionnaire:
-          attributes:
-            name:
-              blank: Name can't be blank
-        item_option:
-          attributes:
-            content:
-              blank: Content can't be blank
-        question_response:
-          attributes:
-            content:
-              blank: has to be answered
+            active:
+              taken: A different version of this Form is already active
         project_role:
           attributes:
             identity_id:
               blank: "^Primary PI can't be blank"
+        question_response:
+          attributes:
+            content:
+              blank: required
+        system_survey:
+          attributes:
+            active:
+              taken: A different version of this Survey is already active
       messages:
         spoofed_media_type: has format errors. Please re-save the file in a different
           format and try again.
@@ -67,7 +64,9 @@ en:
       question:
         content: Question
       question_response:
-        content: Required Question
+        content: Question
+      survey:
+        active: ''
       visit:
         research_billing_qty: Research Billing Quantity
         insurance_billing_qty: Insurance Billing Quantity
@@ -320,6 +319,13 @@ en:
       link_display: 'Email: success@musc.edu'
       phone_href: tel:843-792-8300
       phone_display: 'Call: 843-792-8300'
+  forms:
+    table_fields:
+      srid: SRID
+      association: Association
+      title: Form Title
+      completed: Completed
+      options: Options
   identities:
     approved: Account Approved
     disapproved: Account Disapproved
@@ -408,8 +414,8 @@ en:
         push_to_epic: 'Publish Study in Epic:'
         study_type_questions: 'Study Type Questions:'
         note: 'Note: '
-      optional_information:
-        header: Optional Information
+      financial_information:
+        header: Financial Information
         subtext: Used for reporting purposes and saved for your future use
         udak_project_number: 'Financial Account (UDAK #):'
         rate: 'Indirect Cost Rate:'
@@ -546,7 +552,7 @@ en:
       title: Are you sure?
       text: You cannot undo this action
   errors:
-    user_note: Fields with an Asterisk ( * ) are required
+    user_note: Fields marked with an asterisk ( * ) are required
     arms:
       name_unique: must be unique to the Protocol
       bad_characters: 'can not contain any of the following characters: [ ] * / \
@@ -1059,6 +1065,7 @@ en:
     send: Send
     by: By
     sent_protocols: Sent Protocols
+    type: Type
   footer:
     mail_to: ''
     mail_link: ''
