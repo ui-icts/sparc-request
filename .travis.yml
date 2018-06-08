@@ -6,8 +6,7 @@ before_install:
   -in chrisortman-20160618040827.sig.key.enc -out ~/.hab/cache/keys/chrisortman-20160618040827.sig.key
   -d
 install:
-- curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh
-  | sudo bash
+- curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
 script:
 - hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base > build_logs/sparc_request_base.log
 - travis_wait hab pkg upload results/*.hart
@@ -20,4 +19,3 @@ env:
   - HAB_ORIGIN=chrisortman
   - HAB_ORIGIN_KEYS=chrisortman
   - HAB_NONINTERACTIVE=true
-  - secure: lbp1Qy5+ko2WQVqn/ckD5UppZNrFHqMXCjLnp+PKeyqeDjrUf/1IThoylUNj+uidPmkiF7RT1DbvFF3yh8qgZt7/9Q29W9SPr0+OEKHSC7eXyyMNpN9rCLOfdTTznsHm/yciLVFru8uFxYheciKu1oogbByJoY62XEX9hBN4Uuk=
