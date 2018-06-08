@@ -247,6 +247,7 @@ create_symlinks() {
   ln -sfv ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
   ln -sfv ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
   ln -sfv ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
+  ln -sfv ${pkg_svc_config_path}/appenv ${pkg_prefix}/static/release/.env
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their
