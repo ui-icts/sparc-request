@@ -2,9 +2,40 @@ RAILS_ROOT = ENV["RAILS_ROOT"] || File.expand_path(File.dirname(__FILE__) + "/..
 RAILS_ENV = ENV["RAILS_ENV"] || "development"
 RAILS_PORT = ENV["RAILS_PORT"] || "3000"
 
+
+puma_log = "log/puma.log"
+
+USE_SYSLOG = ENV['RAILS_LOG_TO_SYSLOG'].present?
+
+if USE_SYSLOG
+  require 'syslog/logger'
+end
+
+def puma_log
+  if USE_SYSLOG
+    #Syslog::Logger.new('sparc-request')
+    ":syslog"
+  else
+    "log/puma.log"
+  end
+end
+
+def dj_log(num)
+  if USE_SYSLOG
+    #Syslog::Logger.new('sparc-request-jobs')
+    ":syslog"
+  else
+    "log/dj-#{num}.log"
+  end
+end
+
 WORKERS_COUNT=1
+Eye.config do
+  logger syslog
+end
 
 Eye.application 'sparc' do
+
   env ENV.to_h
   working_dir RAILS_ROOT
 #  env 'APP_ENV' => 'production' # global env for each processes
@@ -14,7 +45,7 @@ Eye.application 'sparc' do
 
     process :puma do
       daemonize true
-      stdall "log/puma.log"
+      stdall puma_log
       pid_file "tmp/pids/puma.pid" # pid_path will be expanded with the working_dir
       start_command "bin/puma -p #{RAILS_PORT} -e #{RAILS_ENV}"
       stop_signals [:TERM, 5.seconds, :KILL]
@@ -36,7 +67,7 @@ Eye.application 'sparc' do
         start_command 'bin/delayed_job run'
         daemonize true
         stop_signals [:INT, 30.seconds, :TERM, 10.seconds, :KILL]
-        stdall "log/dj-#{i}.log"
+        stdall dj_log(i)
         # ensure the CPU is below 30% at least 3 out of the last 5 times checked
         check :cpu, every: 30, below: 80, times: 3
       end

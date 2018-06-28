@@ -66,6 +66,12 @@ SparcRails::Application.configure do
   # config.log_tags = [ :subdomain, :uuid ]
 
   config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
+  if ENV['RAILS_LOG_TO_SYSLOG'].present?
+    require 'syslog/logger'
+    logger = ActiveSupport::Logger.new(Syslog::Logger.new 'sparc-request')
+    logger.formatter = ::Logger::Formatter.new
+    config.logger = logger
+  end
 
   # Use a different cache store in production
   # config.cache_store = :mem_cache_store
