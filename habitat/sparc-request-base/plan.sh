@@ -11,8 +11,9 @@ pkg_deps=(
   core/libxml2
   core/libxslt
   core/libyaml
-  core/mysql-client
+  core/gcc-libs
   core/node
+  core/mysql-client
   core/curl
   core/rsync
 
