@@ -2,9 +2,6 @@ RAILS_ROOT = ENV["RAILS_ROOT"] || File.expand_path(File.dirname(__FILE__) + "/..
 RAILS_ENV = ENV["RAILS_ENV"] || "development"
 RAILS_PORT = ENV["RAILS_PORT"] || "3000"
 
-
-puma_log = "log/puma.log"
-
 USE_SYSLOG = ENV['RAILS_LOG_TO_SYSLOG'].present?
 
 if USE_SYSLOG

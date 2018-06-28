@@ -17,7 +17,6 @@ pkg_deps=(
   core/rsync
 
   core/ruby/2.4.2
-  core/bundler
   chrisortman/eye
   )
 pkg_build_deps=(
