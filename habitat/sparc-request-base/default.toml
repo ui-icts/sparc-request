@@ -30,6 +30,8 @@ ssl_cert_file = ""
 # mistake it for production
 site_banner = ""
 
+use_syslog = false
+
 ## SPARC specific settings
 #
 [sparc.production]

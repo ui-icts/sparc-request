@@ -25,6 +25,9 @@ then
   export SSL_CERT_FILE="{{cfg.ssl_cert_file}}"
 fi
 
+{{#if cfg.use_syslog ~}}
+export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
+{{/if}}
 
 ## SPARC VALUES
 export org_logo=org_logo_197x57.png
