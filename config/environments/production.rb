@@ -68,7 +68,7 @@ SparcRails::Application.configure do
   config.logger = ActiveSupport::TaggedLogging.new(Logger.new(STDOUT))
   if ENV['RAILS_LOG_TO_SYSLOG'].present?
     require 'syslog/logger'
-    logger = ActiveSupport::Logger.new(Syslog::Logger.new 'sparc-request')
+    logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'sparc-request')
     logger.formatter = ::Logger::Formatter.new
     config.logger = logger
   end
