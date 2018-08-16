@@ -19,6 +19,8 @@ pkg_deps=(
 
   core/ruby/2.4.2
   chrisortman/eye
+
+  core/busybox-static
   )
 pkg_build_deps=(
   core/coreutils

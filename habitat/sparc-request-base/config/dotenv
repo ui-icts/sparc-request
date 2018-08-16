@@ -8,7 +8,7 @@ export TZ="America/Chicago"
 export GEM_HOME="$RAILS_ROOT/vendor/bundle/ruby/2.4.0"
 export GEM_PATH="$GEM_HOME:{{pkgPathFor "core/ruby"}}/lib/ruby/gems/2.4.0:{{pkgPathFor "core/bundler"}}"
 export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
-export PATH="$RAILS_ROOT/bin:{{pkgPathFor "core/node"}}/bin:{{pkgPathFor "chrisortman/eye"}}/bin:$PATH"
+export PATH="$RAILS_ROOT/bin:{{pkgPathFor "core/node"}}/bin:{{pkgPathFor "chrisortman/eye"}}/bin:{{pkgPathFor "core/busybox-static"}}/bin:$PATH"
 
 export RAILS_ENV="production"
 export RACK_ENV=$RAILS_ENV
