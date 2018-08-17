@@ -100,6 +100,10 @@ SparcRails::Application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.sendmail_settings = {
+    :location => ENV['SENDMAIL_PATH'] || "/usr/sbin/sendmail"
+  }
+
   config.action_mailer.default_url_options = { host: "sparc.musc.edu" }
   config.after_initialize do
     # Need to do this after initialization so that obis_setup has run and our config is loaded
