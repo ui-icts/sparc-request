@@ -1,0 +1,4 @@
+- if @protocol.type == "Study"
+ = render partial: 'protocols/view_details/study_fields', locals: {protocol: @protocol}
+- elsif @protocol.type == "Project"
+ = render partial: 'protocols/view_details/project_fields', locals: {protocol: @protocol}
