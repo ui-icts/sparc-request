@@ -37,7 +37,7 @@ module SPARCCWF
 
         begin
           username == Setting.find_by_key("remote_service_notifier_username").value &&
-            password == Setting.find_by_key("remote_service_notifier_password").value
+          password == Setting.find_by_key("remote_service_notifier_password").value
         rescue
           false
         end
@@ -80,6 +80,7 @@ module SPARCCWF
           end
 
           get do
+            byebug
             find_objects(published_resource_to_s, params)
             if @objects
               present @objects, with: presenter(published_resource_to_s, params[:depth])

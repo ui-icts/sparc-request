@@ -64,10 +64,12 @@ module HelpersV1
   end
 
   def current_user
+    byebug
     @current_user ||= User.authorize!(env)
   end
 
   def authenticate!
+    byebug
     error!('401 Unauthorized', 401) unless current_user
   end
 end
