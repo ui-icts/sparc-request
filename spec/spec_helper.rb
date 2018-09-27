@@ -26,6 +26,7 @@ require 'paperclip/matchers'
 require 'email_spec'
 require 'rspec/rails'
 require 'faker'
+require 'selenium/webdriver'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -127,10 +128,21 @@ RSpec.configure do |config|
 
 end
 
-Capybara.register_driver :webkit do |app|
-  driver = Capybara::Webkit::Driver.new(app, { set_skip_image_loading: true })
-  driver
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
+
+Capybara.register_driver :headless_chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w(headless disable-gpu) }
+  )
+
+  Capybara::Selenium::Driver.new app,
+    browser: :chrome,
+    desired_capabilities: capabilities
+end
+
+Capybara.javascript_driver = :headless_chrome
 
 SitePrism.configure do |config|
   config.use_implicit_waits = true
