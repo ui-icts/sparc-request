@@ -41,7 +41,9 @@ RSpec.describe 'User manages fulfillment rights', js: true do
     click_link 'Fulfillment Rights'
     wait_for_javascript_to_finish
 
-    find('.remove-fulfillment-rights').click
+    accept_confirm do
+      find('.remove-fulfillment-rights').click
+    end
     wait_for_javascript_to_finish
   end
 

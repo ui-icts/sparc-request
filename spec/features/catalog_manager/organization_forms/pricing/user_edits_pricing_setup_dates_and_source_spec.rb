@@ -19,7 +19,7 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 require 'rails_helper'
-
+require 'byebug'
 RSpec.describe 'User edits Organization Pricing', js: true do
   let_there_be_lane
   fake_login_for_each_test
@@ -92,7 +92,8 @@ RSpec.describe 'User edits Organization Pricing', js: true do
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
-        expect(find_by_id('pricing_setup_display_date')).to be_disabled
+        byebug
+        expect(find_by_id('pricing_setup_display_date', wait: 15)).to be_disabled
         expect(find_by_id('pricing_setup_effective_date')).to be_disabled
         expect(first('.modal-body div.toggle.btn')).to be_disabled
       end
