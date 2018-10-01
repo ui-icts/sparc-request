@@ -92,10 +92,9 @@ RSpec.describe 'User edits Organization Pricing', js: true do
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
-        byebug
-        expect(find_by_id('pricing_setup_display_date', wait: 15)).to be_disabled
-        expect(find_by_id('pricing_setup_effective_date')).to be_disabled
-        expect(first('.modal-body div.toggle.btn')).to be_disabled
+        expect(find_by_id('pricing_setup_display_date', visible: :any)).to be_disabled
+        expect(find_by_id('pricing_setup_effective_date', visible: :any)).to be_disabled
+        expect(first('.modal-body div.toggle.btn input', visible: :any)).to be_disabled
       end
 
     end
