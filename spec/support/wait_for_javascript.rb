@@ -21,9 +21,12 @@
 module WaitForJavascript
 
   def wait_for_javascript_to_finish(seconds=15)
-    Timeout.timeout(Capybara.default_max_wait_time) do
-      until finished_all_ajax_requests? && finished_all_animations?
-        sleep 3
+    max_wait = Capybara.default_max_wait_time
+    time_limit, interval = (Time.now + max_wait), 0.5
+    Timeout.timeout(max_wait) do
+      loop do
+        break if finished_all_ajax_requests? && finished_all_animations?
+        sleep interval
       end
     end
   end

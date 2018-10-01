@@ -128,19 +128,21 @@ RSpec.configure do |config|
 
 end
 
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
+# Capybara.register_driver :chrome do |app|
+#   Capybara::Selenium::Driver.new(app, browser: :chrome)
+# end
 
-Capybara.register_driver :headless_chrome do |app|
+Capybara.register_driver :chrome do |app|
+  args = %w[disable-gpu]
+  args << "headless" unless ENV['CHROME_HEADLESS'] == "false"
   options = Selenium::WebDriver::Chrome::Options.new(
-    args: %w[headless disable-gpu]
+    args: args
   )
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
-Capybara.javascript_driver = :headless_chrome
+Capybara.javascript_driver = :chrome
 
 SitePrism.configure do |config|
   config.use_implicit_waits = true
