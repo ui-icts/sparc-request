@@ -67,8 +67,10 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_federal_rate', with: "250.00"
-        click_button 'Save'
+        accept_alert do
+          fill_in 'pricing_map_federal_rate', with: "250.00"
+          click_button 'Save'
+        end
         wait_for_javascript_to_finish
 
         @service.reload
