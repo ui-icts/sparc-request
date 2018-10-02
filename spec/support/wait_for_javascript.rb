@@ -39,15 +39,15 @@ module WaitForJavascript
     page.evaluate_script('$(":animated").length') == 0
   end
 
-  def dom_ready?
+  def dom_ready?(wait=Capybara.default_max_wait_time)
     uuid = SecureRandom.uuid
-    page.find("body")
+    page.document.find("body", wait: wait)
     page.evaluate_script <<~EOS
       setTimeout(function() {
         jQuery('body').append("<div id='#{uuid}'></div>");
       }, 1);
     EOS
-    page.find_by_id(uuid, :visible => :any, :wait => Capybara.default_max_wait_time)
+    page.document.find_by_id(uuid, :visible => :any, :wait => wait)
   end
 end
 
