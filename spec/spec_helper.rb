@@ -133,7 +133,7 @@ end
 # end
 
 Capybara.register_driver :chrome do |app|
-  args = %w[disable-gpu]
+  args = %w[disable-gpu no-sandbox]
   args << "headless" unless ENV['CHROME_HEADLESS'] == "false"
   options = Selenium::WebDriver::Chrome::Options.new(
     args: args
