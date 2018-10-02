@@ -45,8 +45,8 @@ RSpec.describe 'User manages status options', js: true do
 
     it 'should change Use Default Status option to false' do
       find('#use_default_statuses div.toggle.btn').click
-      wait_for_javascript_to_finish
-
+      #CO-TODO: Is there a better way than a 15 second wait?
+      wait_for_javascript_to_finish(15)
       @provider.reload
       expect(@provider.use_default_statuses).to eq(false)
     end
