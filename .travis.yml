@@ -22,7 +22,7 @@ before_script:
 jobs:
   include:
     - script:
-      - bundle exec rspec spec/features/happy_spec.rb
+      - bundle exec rspec spec/features
     # - script:
     #   - bundle exec rspec spec/api
     #   - bundle exec rspec spec/extensions
