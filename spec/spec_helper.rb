@@ -131,10 +131,6 @@ RSpec.configure do |config|
   end
 end
 
-# Capybara.register_driver :chrome do |app|
-#   Capybara::Selenium::Driver.new(app, browser: :chrome)
-# end
-
 Capybara.register_driver :chrome do |app|
   args = %w[disable-gpu no-sandbox]
   args << "headless" unless ENV['CHROME_HEADLESS'] == "false"
