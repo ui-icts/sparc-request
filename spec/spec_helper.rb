@@ -126,6 +126,9 @@ RSpec.configure do |config|
 
   config.backtrace_exclusion_patterns << /gems/
 
+  config.after :all do
+    Timecop.return
+  end
 end
 
 # Capybara.register_driver :chrome do |app|
