@@ -134,10 +134,11 @@ RSpec.describe 'User edits Service General Info', js: true do
         wait_for_javascript_to_finish
         ##
 
-        first('#general-info div.toggle.btn').click
-        wait_for_javascript_to_finish
-
-        expect(first('#general-info div.toggle.btn')).to be_disabled
+        within(:css, "#general-info div.form-group", :text => /^Non-clinical \(Non-Per Patient\/Visit\) Services Yes No$/ ) do
+          find('div.toggle.btn').click
+          wait_for_javascript_to_finish
+          expect(find('div.toggle.btn input', :visible => :any)).to be_disabled
+        end
       end
 
       it 'should disable Clinical/Non-clinical services if the service has line items' do
