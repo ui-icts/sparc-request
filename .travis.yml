@@ -1,14 +1,18 @@
-sudo: required
+sudo: false
 language: ruby
 cache: bundler
 dist: trusty
 
 addons:
   chrome: stable
+  apt:
+    packages:
+      - chromium-chromedriver
 
 before_install:
   - export TZ=America/New_York
 before_script:
+  - ln --symbolic /usr/lib/chromium-browser/chromedriver "${HOME}/bin/chromedriver"
   - cp config/database.yml.example config/database.yml
   - cp config/epic.yml.example config/epic.yml
   - cp config/ldap.yml.example config/ldap.yml
@@ -18,14 +22,14 @@ before_script:
 jobs:
   include:
     - script:
-      - bundle exec rspec spec/features
-    - script:
-      - bundle exec rspec spec/api
-      - bundle exec rspec spec/extensions
-      - bundle exec rspec spec/jobs
-      - bundle exec rspec spec/helpers
-      - bundle exec rspec spec/mailers
-      - bundle exec rspec spec/lib
-      - bundle exec rspec spec/models
-      - bundle exec rspec spec/views
-      - bundle exec rspec spec/controllers
+      - bundle exec rspec spec/features/happy_spec.rb
+    # - script:
+    #   - bundle exec rspec spec/api
+    #   - bundle exec rspec spec/extensions
+    #   - bundle exec rspec spec/jobs
+    #   - bundle exec rspec spec/helpers
+    #   - bundle exec rspec spec/mailers
+    #   - bundle exec rspec spec/lib
+    #   - bundle exec rspec spec/models
+    #   - bundle exec rspec spec/views
+    #   - bundle exec rspec spec/controllers
