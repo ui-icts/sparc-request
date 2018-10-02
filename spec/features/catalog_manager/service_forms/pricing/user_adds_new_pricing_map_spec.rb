@@ -54,10 +54,10 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         find("#new_pricing_map_link").click
         wait_for_javascript_to_finish
 
-        find('#pricing_map_display_date').click
+        find('#pricing_map_display_date', :visible => :any).click
         find('td.today').click
 
-        find('#pricing_map_effective_date').click
+        find('#pricing_map_effective_date', :visible => :any).click
         find('td.today').click
 
         fill_in 'pricing_map_full_rate', with: "150.00"
