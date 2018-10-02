@@ -73,7 +73,7 @@ RSpec.describe 'User manages Super Users', js: true do
 
     it 'should create a Super User for the identity' do
       find('#super_user').click
-      wait_for_javascript_to_finish
+      wait_for_javascript_to_finish(5)
 
       expect(SuperUser.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(1)
     end
