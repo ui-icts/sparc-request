@@ -98,7 +98,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_units_per_qty_max', with: "1"
+        fill_in 'pricing_map_units_per_qty_max', with: "1", visible: :any
         click_button 'Save'
         wait_for_javascript_to_finish
 
@@ -110,11 +110,11 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
-        expect(find_by_id('pricing_map_otf_unit_type')).to be_disabled
-        expect(find_by_id('pricing_map_quantity_type')).to be_disabled
-        expect(find_by_id('pricing_map_quantity_minimum')).to be_disabled
-        expect(find_by_id('pricing_map_unit_factor')).to be_disabled
-        expect(find_by_id('pricing_map_units_per_qty_max')).to be_disabled
+        expect(find_by_id('pricing_map_otf_unit_type', visible: :any)).to be_disabled
+        expect(find_by_id('pricing_map_quantity_type', visible: :any)).to be_disabled
+        expect(find_by_id('pricing_map_quantity_minimum', visible: :any)).to be_disabled
+        expect(find_by_id('pricing_map_unit_factor', visible: :any)).to be_disabled
+        expect(find_by_id('pricing_map_units_per_qty_max', visible: :any)).to be_disabled
       end
 
     end
