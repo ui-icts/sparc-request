@@ -51,10 +51,10 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         click_link 'Pricing'
         wait_for_javascript_to_finish
 
-        find("#new_pricing_map_link").click
+        click_button "#new_pricing_map_link"
         wait_for_javascript_to_finish
 
-        find('#pricing_map_display_date', :visible => :any).click
+        find('#pricing_map_display_date', :visible => :any, wait: 10).click
         find('td.today').click
 
         find('#pricing_map_effective_date', :visible => :any).click
@@ -67,13 +67,17 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         fill_in 'pricing_map_federal_rate', with: "250.00"
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_corporate_rate', with: "350.00"
+        accept_alert do
+          fill_in 'pricing_map_corporate_rate', with: "350.00"
+        end
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_other_rate', with: "450.00"
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_member_rate', with: "550.00"
+        accept_alert do
+          fill_in 'pricing_map_member_rate', with: "550.00"
+        end
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_unit_type', with: "each"
@@ -96,14 +100,13 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         click_link 'Pricing'
         wait_for_javascript_to_finish
 
-
-        find("#new_pricing_map_link").click
+        click_button "Add Pricing Map"
         wait_for_javascript_to_finish
 
-        find('#pricing_map_display_date').click
+        find('#pricing_map_display_date', :visible => :any, wait: 10).click
         find('td.today').click
 
-        find('#pricing_map_effective_date').click
+        find('#pricing_map_effective_date', :visible => :any).click
         find('td.today').click
 
         fill_in 'pricing_map_full_rate', with: "150.00"
@@ -113,13 +116,17 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         fill_in 'pricing_map_federal_rate', with: "250.00"
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_corporate_rate', with: "350.00"
+        accept_alert do
+          fill_in 'pricing_map_corporate_rate', with: "350.00"
+        end
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_other_rate', with: "450.00"
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_member_rate', with: "550.00"
+        accept_alert do
+          fill_in 'pricing_map_member_rate', with: "550.00"
+        end
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_otf_unit_type', with: "days"
@@ -141,7 +148,7 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         click_link 'Pricing'
         wait_for_javascript_to_finish
 
-        expect(first('#pricing_maps_container div.btn.btn-info')).to be_disabled
+        expect(find('#pricing_maps_container button.btn.btn-info')).to be_disabled
         expect(page).to have_content('There must be a pricing setup defined in order to add a pricing map.')
       end
 
