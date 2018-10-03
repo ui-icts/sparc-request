@@ -41,7 +41,9 @@ RSpec.describe 'User manages associated surveys', js: true do
     click_link 'Associated Surveys'
     wait_for_javascript_to_finish
 
-    find('.remove-associated-survey').click
+    accept_confirm do
+      find('.remove-associated-survey').click
+    end
 
     wait_for_javascript_to_finish
 
