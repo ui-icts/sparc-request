@@ -64,25 +64,36 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the federal rate' do
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
 
+        wait_for_javascript_to_finish
+        #CO-TODO: I Wonder if sometimes this is getting clicked
+        #but the javascript hasn't yet been hooked up and so when
+        #it does get clicked nothing happens
+        find('.edit_pricing_map_link').click
+
+        wait_for_javascript_to_finish
         accept_alert do
-          fill_in 'pricing_map_federal_rate', with: "250.00"
+          fill_in 'pricing_map_federal_rate', with: "250.00", visible: :any, wait: 10
           click_button 'Save'
         end
-        wait_for_javascript_to_finish
-
+        # I think the alert blocks the first save?
+        click_button 'Save'
+        wait_for_javascript_to_finish(10)
         @service.reload
         #Federal rate is saved in cents in the database#
         expect(@service.pricing_maps.first.federal_rate.to_i).to eq(250 * 100)
       end
 
       it 'should edit the corporate rate' do
+        wait_for_javascript_to_finish
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_corporate_rate', with: "350.00"
+        accept_alert do
+          fill_in 'pricing_map_corporate_rate', with: "350.00"
+          click_button 'Save'
+        end
+
         click_button 'Save'
         wait_for_javascript_to_finish
 
@@ -92,10 +103,14 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit other rate' do
+        wait_for_javascript_to_finish
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_other_rate', with: "450.00"
+        accept_alert do
+          fill_in 'pricing_map_other_rate', with: "450.00"
+          click_button 'Save'
+        end
         click_button 'Save'
         wait_for_javascript_to_finish
 
@@ -105,10 +120,14 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the member rate' do
+        wait_for_javascript_to_finish
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
-        fill_in 'pricing_map_member_rate', with: "550.00"
+        accept_alert do
+          fill_in 'pricing_map_member_rate', with: "550.00", visible: :any, wait: 10
+          click_button 'Save'
+        end
         click_button 'Save'
         wait_for_javascript_to_finish
 
@@ -118,6 +137,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should change calculated federal, corporate, other and member rates if the service rate is changed' do
+        wait_for_javascript_to_finish
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
@@ -129,6 +149,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should disable all the rates if the catalog manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
+        wait_for_javascript_to_finish
         find('.edit_pricing_map_link').click
         wait_for_javascript_to_finish
 
