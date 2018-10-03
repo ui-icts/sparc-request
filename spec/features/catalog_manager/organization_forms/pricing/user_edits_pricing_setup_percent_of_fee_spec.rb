@@ -45,6 +45,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the federal percent' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -57,6 +58,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the corporate percent' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -69,6 +71,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit other percent' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -81,6 +84,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the member percent' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -93,6 +97,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit corporate, other and member rates in the form if the Apply Federal % to All button is clicked' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -106,6 +111,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should save corporate, other and member rates in the datebase if the Apply Federal % to All button is clicked' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -122,6 +128,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should throw error if federal rate is more than corporate, other and member rates' do
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -136,6 +143,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should disable federal, corporate, other and member rates if the catalog_manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
@@ -147,6 +155,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should disable Apply Federal % to All button if the catalog_manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
+        wait_for_javascript_to_finish
         find(".edit_pricing_setup_link").click
         wait_for_javascript_to_finish
 
