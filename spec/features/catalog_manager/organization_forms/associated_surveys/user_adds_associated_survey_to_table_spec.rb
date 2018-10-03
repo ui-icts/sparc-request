@@ -58,6 +58,7 @@ RSpec.describe 'User manages associated surveys', js: true do
     end
 
     it 'should throw an error if the same associated survey is added again' do
+      wait_for_javascript_to_finish
       bootstrap_select('.new_associated_survey', "Version #{@survey.version}")
       find("button.add-associated-survey").click
       wait_for_javascript_to_finish

@@ -41,17 +41,16 @@ RSpec.describe 'User manages associated surveys', js: true do
     click_link 'Associated Surveys'
     wait_for_javascript_to_finish
 
-    accept_confirm do
-      find('.remove-associated-survey').click
-    end
+    find('.remove-associated-survey').click
 
     wait_for_javascript_to_finish
 
   end
 
   it 'should delete the associated survey for the organization' do
+    # Order important to force wait until requests in before have been processed
+    expect(page).to have_no_selector("survey-row-#{@associated_survey.id}")
     expect(AssociatedSurvey.where(associable_id: @provider.id).count).to eq(0)
-    expect(page).to_not have_selector("survey-row-#{@associated_survey.id}")
   end
 
 end
