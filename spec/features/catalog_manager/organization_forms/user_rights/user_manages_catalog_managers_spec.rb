@@ -49,6 +49,7 @@ RSpec.describe 'User manages Catalog Managers', js: true do
         end
 
         it 'should delete the Catalog Manager for the identity' do
+          wait_for_javascript_to_finish
           find('#catalog_manager').click
           wait_for_javascript_to_finish
 
@@ -56,6 +57,7 @@ RSpec.describe 'User manages Catalog Managers', js: true do
         end
 
         it 'should remove edit historic data access' do
+          wait_for_javascript_to_finish
           find("#cm-edit-historic-data-#{@identity.id}").click
           wait_for_javascript_to_finish
 
@@ -79,6 +81,7 @@ RSpec.describe 'User manages Catalog Managers', js: true do
         end
 
         it 'should delete the Catalog Manager for the identity' do
+          wait_for_javascript_to_finish
           find('#catalog_manager').click
           wait_for_javascript_to_finish
 
@@ -86,6 +89,7 @@ RSpec.describe 'User manages Catalog Managers', js: true do
         end
 
         it 'should add edit historic data access' do
+          wait_for_javascript_to_finish
           find("#cm-edit-historic-data-#{@identity.id}").click
           wait_for_javascript_to_finish
 
@@ -110,6 +114,7 @@ RSpec.describe 'User manages Catalog Managers', js: true do
       end
 
       it 'should create a Catalog Manager for the identity' do
+        wait_for_javascript_to_finish
         find('#catalog_manager').click
         wait_for_javascript_to_finish
 
