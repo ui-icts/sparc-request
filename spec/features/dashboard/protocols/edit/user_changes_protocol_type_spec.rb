@@ -112,6 +112,7 @@ RSpec.describe 'User changes protocol type', js: true do
     end
 
     context 'use epic = false' do
+      stub_config("use_epic", false)
       context "changes the protocol type" do
         before :each do
           bootstrap_select '#protocol_type', 'Study'
@@ -124,14 +125,12 @@ RSpec.describe 'User changes protocol type', js: true do
         end
 
         it 'should not display "Publish Study in Epic"' do
-          expect(page).not_to have_css('label.col-lg-4', text: 'Publish Study in Epic:')
+          expect(page).to have_no_css('label.col-lg-4', text: 'Publish Study in Epic:')
         end
 
         context 'does not fill out study type questions and saves' do
           it 'should save successfully' do
-            wait_for_javascript_to_finish
             click_button 'Save'
-            wait_for_javascript_to_finish
             expect(page).to have_content("Study Updated!")
           end
         end
