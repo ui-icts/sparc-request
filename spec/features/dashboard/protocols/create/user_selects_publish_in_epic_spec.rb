@@ -100,13 +100,14 @@ RSpec.describe 'User creates study', js: true do
   end
 
   context 'Not Using Epic' do
+    stub_config("use_epic", false)
     before :each do
       visit_create_study_form
       wait_for_javascript_to_finish
     end
 
     it 'defaults to the "No" answer for the epic question' do
-      expect(page).not_to have_selector('#study_selected_for_epic_true_button')
+      expect(page).to have_no_selector('#study_selected_for_epic_true_button')
       expect(page).to have_content(STUDY_TYPE_QUESTIONS_VERSION_3[5])
     end
 
@@ -118,14 +119,14 @@ RSpec.describe 'User creates study', js: true do
     it 'does not show notes when the form is completed' do
       bootstrap_select '#study_type_answer_certificate_of_conf_no_epic_answer', 'Yes'
       wait_for_javascript_to_finish
-      expect(page).not_to have_selector('#study_type_note')
+      expect(page).to have_no_selector('#study_type_note')
       bootstrap_select '#study_type_answer_certificate_of_conf_no_epic_answer', 'No'
       bootstrap_select '#study_type_answer_higher_level_of_privacy_no_epic_answer', 'Yes'
       wait_for_javascript_to_finish
-      expect(page).not_to have_selector('#study_type_note')
+      expect(page).to have_no_selector('#study_type_note')
       bootstrap_select '#study_type_answer_higher_level_of_privacy_no_epic_answer', 'No'
       wait_for_javascript_to_finish
-      expect(page).not_to have_selector('#study_type_note')
+      expect(page).to have_no_selector('#study_type_note')
     end
   end
 end
