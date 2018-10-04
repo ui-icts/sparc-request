@@ -340,6 +340,16 @@ module CapybaraSupport
 
     raise "Clicking #{locator} button did not seem to do what you hoped"
   end
+  def debug_me_maybe!
+    puts "Hey! I just rendered"
+    puts "And this is crazy"
+    puts "But you've got issues"
+    puts "Debug me maybe!"
+    answer = $stdin.gets
+    if answer =~ /yes/
+      binding.pry
+    end
+  end
 end
 
 RSpec.configure do |config|
