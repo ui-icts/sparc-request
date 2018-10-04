@@ -66,10 +66,15 @@ def retry_until(seconds=10, exception=StandardError)
 
     begin
       result = yield
-      return result
+      if result
+        return result
+      else
+        puts "Retrying..."
+        sleep 0.5
+      end
     rescue exception => e
       last_exception = e
-      sleep 0.05
+      sleep 0.5
       Thread.pass
     end
   end

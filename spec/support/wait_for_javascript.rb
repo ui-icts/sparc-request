@@ -32,11 +32,11 @@ module WaitForJavascript
   end
 
   def finished_all_ajax_requests?
-    page.evaluate_script('jQuery.active') == 0
+    page.evaluate_script('jQuery.active').to_i == 0
   end
 
   def finished_all_animations?
-    page.evaluate_script('$(":animated").length') == 0
+    page.evaluate_script('$(":animated").length').to_i == 0
   end
 
   def dom_ready?(wait=Capybara.default_max_wait_time)

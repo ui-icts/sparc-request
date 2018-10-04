@@ -318,6 +318,28 @@ module CapybaraSupport
       visit_email email
     end
   end
+
+  def click_button_with_js_handler(locator, tries=5, sleep_interval=0.5)
+    btn = find(:button, locator)
+    tries.times do |num|
+      btn.click
+      # Did something happen? Who knows, hopefully
+      puts "Checking..."
+      result = yield num if block_given?
+      puts "RESULT: #{result}"
+      if result
+        # thing = $stdin.gets
+        # if thing =~ /poo/
+        #   binding.pry
+        # end
+        return result
+      else
+        sleep sleep_interval
+      end
+    end
+
+    raise "Clicking #{locator} button did not seem to do what you hoped"
+  end
 end
 
 RSpec.configure do |config|

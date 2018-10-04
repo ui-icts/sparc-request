@@ -51,7 +51,10 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         click_link 'Pricing'
         wait_for_javascript_to_finish
 
-        click_button "#new_pricing_map_link"
+        retry_until(30) do
+          click_button "Add Pricing Map"
+          page.has_css?("#pricing_map_display_date", visible: true)
+        end
         wait_for_javascript_to_finish
 
         find('#pricing_map_display_date', :visible => :any, wait: 10).click
@@ -100,7 +103,13 @@ RSpec.describe 'User adds Service Pricing Map', js: true do
         click_link 'Pricing'
         wait_for_javascript_to_finish
 
-        click_button "Add Pricing Map"
+        retry_until(30) do
+          click_button "Add Pricing Map"
+          page.has_css?("#pricing_map_display_date", visible: true)
+        end
+        # click_button_with_js_handler "Add Pricing Map" do
+        #   page.has_css?("#pricing_map_display_date")
+        # end
         wait_for_javascript_to_finish
 
         find('#pricing_map_display_date', :visible => :any, wait: 10).click
