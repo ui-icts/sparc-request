@@ -51,7 +51,11 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the quantity type' do
-        find('.edit_pricing_map_link').click
+        retry_until do
+          find('.edit_pricing_map_link').click
+          page.has_field?('pricing_map_unit_type', wait: 1)
+        end
+
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_unit_type', with: "each"
@@ -62,7 +66,10 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the unit factor' do
-        find('.edit_pricing_map_link').click
+        retry_until do
+          find('.edit_pricing_map_link').click
+          page.has_field?( 'pricing_map_unit_factor', wait: 1)
+        end
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_unit_factor', with: "1.00"
@@ -73,8 +80,11 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the quantity minimum' do
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
+
+        retry_until do
+          find('.edit_pricing_map_link').click
+          page.has_field?('pricing_map_unit_minimum', wait: 1)
+        end
 
         fill_in 'pricing_map_unit_minimum', with: "1"
         click_button 'Save'
@@ -85,7 +95,10 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should disable quantity type, unit factor and quantity minimum if the catalog manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
-        find('.edit_pricing_map_link').click
+        retry_until do
+          find('.edit_pricing_map_link').click
+          page.has_css?('#pricing_map_unit_type', visible: :any, wait: 1)
+        end
         wait_for_javascript_to_finish
 
         expect(find_by_id('pricing_map_unit_type')).to be_disabled
