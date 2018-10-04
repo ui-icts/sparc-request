@@ -77,8 +77,10 @@ RSpec.describe 'User sets each Service Calendar field', js: true do
 
       context 'check row' do
         before :each do
-          @visit_row = find('.service-calendar-row', match: :first)
-          @visit_row.click
+          accept_alert do
+            @visit_row = find('.service-calendar-row', match: :first)
+            @visit_row.click
+          end
           wait_for_javascript_to_finish
         end
 
@@ -93,8 +95,10 @@ RSpec.describe 'User sets each Service Calendar field', js: true do
 
        context 'check column' do
         before :each do
-          @visit_col = find('.service-calendar-column', match: :first)
-          @visit_col.click
+          accept_alert do
+            @visit_col = find('.service-calendar-column', match: :first)
+            @visit_col.click
+          end
           wait_for_javascript_to_finish
         end
 
