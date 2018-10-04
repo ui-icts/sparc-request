@@ -34,6 +34,21 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
     create(:pricing_map, service_id: @service.id, display_date: Date.today, effective_date: Date.today)
   end
 
+  def click_the_edit_link_and_wait_for_the_modal
+    retry_until(30) do
+      begin
+        find('.edit_pricing_map_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Map")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Map" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Service' do
     context 'and the user edits the non clinical service section' do
       before :each do
@@ -51,7 +66,8 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the unit type' do
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
+
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_otf_unit_type', with: "days"
@@ -62,8 +78,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the quantity type' do
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
+        click_the_edit_link_and_wait_for_the_modal
 
         fill_in 'pricing_map_quantity_type', with: "hours"
         click_button 'Save'
@@ -73,8 +88,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the quantity minimum' do
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
+        click_the_edit_link_and_wait_for_the_modal
 
         fill_in 'pricing_map_quantity_minimum', with: "1"
         click_button 'Save'
@@ -84,8 +98,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the unit factor' do
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
+        click_the_edit_link_and_wait_for_the_modal
 
         fill_in 'pricing_map_unit_factor', with: "1.00"
         click_button 'Save'
@@ -95,8 +108,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the unit minimum' do
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
+        click_the_edit_link_and_wait_for_the_modal
 
         fill_in 'pricing_map_units_per_qty_max', with: "1", visible: :any
         click_button 'Save'
@@ -107,9 +119,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should disable all the fields in the Non Clinical Service section if the catalog manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
-        find('.edit_pricing_map_link').click
-        wait_for_javascript_to_finish
-
+        click_the_edit_link_and_wait_for_the_modal
         expect(find_by_id('pricing_map_otf_unit_type', visible: :any)).to be_disabled
         expect(find_by_id('pricing_map_quantity_type', visible: :any)).to be_disabled
         expect(find_by_id('pricing_map_quantity_minimum', visible: :any)).to be_disabled
