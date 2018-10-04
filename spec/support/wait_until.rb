@@ -41,7 +41,9 @@ def wait_until(seconds=Capybara.default_max_wait_time, &block)
 
   puts "Waiting for #{seconds} seconds until #{end_time}"
   loop do
-    raise WaitUntilTimedOut, "Timed out" if Time.now > end_time
+    if Time.now > end_time
+      raise WaitUntilTimedOut, "Timed out" 
+    end
     puts "Checking..."
     result = yield
     if result

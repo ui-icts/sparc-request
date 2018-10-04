@@ -341,10 +341,14 @@ module CapybaraSupport
     raise "Clicking #{locator} button did not seem to do what you hoped"
   end
   def debug_me_maybe!
-    puts "Hey! I just rendered"
-    puts "And this is crazy"
-    puts "But you've got issues"
-    puts "Debug me maybe!"
+    puts "|//////////////////////|"
+    puts "|                      |"
+    puts "| Hey! I just rendered |"
+    puts "| And this is crazy    |"
+    puts "| But you've got issues|"
+    puts "| Debug me maybe!      |"
+    puts "|                      |"
+    puts "|//////////////////////|"
     answer = $stdin.gets
     if answer =~ /yes/
       binding.pry
