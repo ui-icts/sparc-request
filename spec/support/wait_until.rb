@@ -35,24 +35,30 @@ end
 # where a Capybara matcher does not work or is inconvenient; this method
 # is supplied for those cases.
 #
-def wait_until(seconds=10, &block)
+def wait_until(seconds=Capybara.default_max_wait_time, &block)
   start_time = Time.now
   end_time = start_time + seconds
 
+  puts "Waiting for #{seconds} seconds until #{end_time}"
   loop do
     raise WaitUntilTimedOut, "Timed out" if Time.now > end_time
+    puts "Checking..."
     result = yield
-    return result if result
-    sleep 0.05
-    Thread.pass
+    if result
+      return result
+    else
+      sleep 0.5
+      Thread.pass
+    end
   end
 end
 
 # Like wait_until but keeps going until the block returns without
 # raising an exception.
-def retry_until(seconds=Capybara.default_max_wait_time, exception=StandardError)
+def retry_until(seconds: Capybara.default_max_wait_time, exception: StandardError)
   start_time = Time.now
   end_time = start_time + seconds
+  puts "Retrying for #{seconds} seconds until #{end_time}"
   last_exception = nil
 
   loop do
@@ -65,6 +71,7 @@ def retry_until(seconds=Capybara.default_max_wait_time, exception=StandardError)
     end
 
     begin
+      puts "Checking..."
       result = yield
       if result
         return result
@@ -73,6 +80,7 @@ def retry_until(seconds=Capybara.default_max_wait_time, exception=StandardError)
         sleep 0.5
       end
     rescue exception => e
+      puts "Retrying Exception..."
       last_exception = e
       sleep 0.5
       Thread.pass

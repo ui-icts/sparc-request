@@ -48,17 +48,22 @@ RSpec.describe 'User edits a related service', js: true do
 
   context 'required field' do
     it 'should change the required field' do
-      first('.required').click
       wait_for_javascript_to_finish
 
-      expect(@relation.reload.optional).to eq(true)
+      retry_until(exception: RSpec::Expectations::ExpectationNotMetError) do
+        uncheck class: 'required'
+        expect(@relation.reload.optional).to eq(true)
+      end
     end
   end
 
   context 'linked_quantity field' do
     it 'should change the linked_quantity field' do
-      first('.linked_quantity').click
-      wait_for_javascript_to_finish
+
+      check class: 'linked_quantity'
+      wait_until do
+        page.has_content?("Quantity Total:")
+      end
 
       expect(@relation.reload.linked_quantity).to eq(true)
     end
@@ -66,8 +71,10 @@ RSpec.describe 'User edits a related service', js: true do
 
   context 'quantity_total field' do
     it 'should change the quantity_total field' do
-      first('.linked_quantity').click
-      wait_for_javascript_to_finish
+      retry_until do
+        check class: 'linked_quantity'
+        page.has_content?("Quantity Total:", wait: 2)
+      end
 
       fill_in "linked_quantity_total_#{@relation.id}", with: 100
       first('label').click
