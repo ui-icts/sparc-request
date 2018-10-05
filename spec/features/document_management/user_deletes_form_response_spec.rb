@@ -47,8 +47,9 @@ RSpec.describe 'User deletes a form response', js: true do
     first('.delete-response').click
     wait_for_javascript_to_finish
 
-    find('.sweet-alert.visible button.confirm').trigger('click')
+    click_the_sweet_alert_delete_button
     wait_for_javascript_to_finish
+    wait_until(30) { page.has_no_content?("Form Submissions", wait: 3) }
 
     expect(Response.count).to eq(0)
   end

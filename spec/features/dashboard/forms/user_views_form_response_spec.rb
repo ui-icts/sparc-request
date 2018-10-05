@@ -44,7 +44,8 @@ RSpec.describe 'User views a form response', js: true do
     visit dashboard_protocol_path(@protocol)
     wait_for_javascript_to_finish
 
-    first('.view-response').click
+    click_link class: 'view-response'
+
     wait_for_javascript_to_finish
 
     expect(page).to have_selector('.modal input[value="Respondability"]', visible: true)

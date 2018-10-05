@@ -25,25 +25,6 @@ RSpec.describe 'User deletes a form response', js: true do
 
   fake_login_for_each_test
 
-  def click_the_sweet_alert_delete_button
-    wait_until do
-      page.has_button?('Delete', class: 'confirm', wait: 1)
-    end
-
-    #I think what happens is the event handler isnt wired up
-    #until after the alert is show and sometimes the 
-    #Delete button gets clicked before our handler is
-    #bound. Hopefully 1 second is enough time
-    sleep 1
-
-    # page.execute_script <<~EOS
-    #   $('.sweet-alert.visible button.confirm').click()
-    # EOS
-
-    # find('.sweet-alert.visible button.confirm').trigger('click')
-    click_button "Delete", class: 'confirm'
-
-  end
   before :each do
     institution = create(:institution, name: "Institution")
     provider    = create(:provider, name: "Provider", parent: institution)

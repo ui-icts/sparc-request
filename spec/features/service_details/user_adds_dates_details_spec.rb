@@ -42,8 +42,15 @@ RSpec.describe 'User sets timeline dates', js: true do
       visit service_details_service_request_path(@sr)
       wait_for_javascript_to_finish
 
-      fill_in 'study_start_date', with: '01/02/2016'
-      fill_in 'study_end_date', with: '03/04/2016'
+      # Need to retry these because otherwise
+      # they might get filled in before all the javascript has a chance
+      # to get hooked up
+      retry_until do
+        fill_in 'study_start_date', with: '01/02/2016'
+        fill_in 'study_end_date', with: '03/04/2016'
+
+        page.has_field?("study_start_date",with: "01/02/2016", wait: 1) && page.has_field?("study_end_date",with: "03/04/2016",wait: 1)
+      end
 
       click_link 'Save and Continue →'
       wait_for_javascript_to_finish

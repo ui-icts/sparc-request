@@ -44,7 +44,8 @@ RSpec.describe 'User views a form response', js: true do
     visit document_management_service_request_path(@sr)
     wait_for_javascript_to_finish
 
-    first('.view-response').click
+    click_link class: 'view-response'
+
     wait_for_javascript_to_finish
 
     expect(page).to have_selector('.modal input[value="Respondability"]', visible: true)
