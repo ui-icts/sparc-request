@@ -45,8 +45,6 @@ RSpec.describe 'User views form response', js: true do
     visit review_service_request_path(@sr)
     wait_for_javascript_to_finish
 
-    debug_me_maybe!
-
     click_link class: 'view-response'
 
     wait_for_javascript_to_finish
