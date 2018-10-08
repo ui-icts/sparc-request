@@ -48,7 +48,11 @@ RSpec.describe 'User manages Super Users', js: true do
     end
 
     it 'should delete the Super User for the identity' do
-      find('#super_user').click
+
+      retry_until do
+        uncheck id: 'super_user'
+        page.has_content?("Super User removed successfully.")
+      end
       wait_for_javascript_to_finish
 
       expect(SuperUser.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
@@ -58,6 +62,7 @@ RSpec.describe 'User manages Super Users', js: true do
   context 'and the identity is not already a Super User' do
     before :each do
       allow_any_instance_of(Organization).to receive(:all_user_rights).and_return( [@identity] )
+      SuperUser.where(identity_id: @identity.id, organization_id: @provider.id).delete_all
 
       visit catalog_manager_catalog_index_path
       wait_for_javascript_to_finish
@@ -72,7 +77,11 @@ RSpec.describe 'User manages Super Users', js: true do
     end
 
     it 'should create a Super User for the identity' do
-      find('#super_user').click
+      retry_until do
+        check id: 'super_user'
+        page.has_content?("Super User created successfully.")
+      end
+
       wait_for_javascript_to_finish(5)
 
       expect(SuperUser.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(1)

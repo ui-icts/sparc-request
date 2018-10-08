@@ -46,11 +46,30 @@ RSpec.describe 'User manages Catalog Managers', js: true do
 
           click_link 'User Rights'
           wait_for_javascript_to_finish
+
+          unless page.has_field?(id: 'catalog_manager', checked: true)
+            retry_until do
+              check id: "catalog_manager"
+              page.has_content?("Catalog Manager created successfully.")
+            end
+
+          end
+
+          unless page.has_field?(id: "cm-edit-historic-data-#{@identity.id}", checked: true)
+            retry_until do
+              check id: "cm-edit-historic-data-#{@identity.id}"
+              page.has_content?("Catalog Manager successfully updated.")
+            end
+
+          end
         end
 
         it 'should delete the Catalog Manager for the identity' do
           wait_for_javascript_to_finish
-          find('#catalog_manager').click
+          retry_until do
+            uncheck id: "catalog_manager"
+            page.has_content?("Catalog Manager removed successfully.")
+          end
           wait_for_javascript_to_finish
 
           expect(CatalogManager.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
@@ -58,7 +77,11 @@ RSpec.describe 'User manages Catalog Managers', js: true do
 
         it 'should remove edit historic data access' do
           wait_for_javascript_to_finish
-          find("#cm-edit-historic-data-#{@identity.id}").click
+          retry_until do
+            uncheck id: "cm-edit-historic-data-#{@identity.id}"
+            page.has_content?("Catalog Manager successfully updated.")
+          end
+
           wait_for_javascript_to_finish
 
           expect(CatalogManager.where(identity_id: @identity.id, organization_id: @provider.id).first.edit_historic_data).to eq(false)
@@ -78,11 +101,30 @@ RSpec.describe 'User manages Catalog Managers', js: true do
 
           click_link 'User Rights'
           wait_for_javascript_to_finish
+
+          unless page.has_field?(id: 'catalog_manager', checked: true)
+            retry_until do
+              check id: "catalog_manager"
+              page.has_content?("Catalog Manager created successfully.")
+            end
+
+          end
+
+          unless page.has_field?(id: "cm-edit-historic-data-#{@identity.id}", checked: false)
+            retry_until do
+              uncheck id: "cm-edit-historic-data-#{@identity.id}"
+              page.has_content?("Catalog Manager successfully updated.")
+            end
+
+          end
         end
 
         it 'should delete the Catalog Manager for the identity' do
           wait_for_javascript_to_finish
-          find('#catalog_manager').click
+          retry_until do
+            uncheck id: "catalog_manager"
+            page.has_content?("Catalog Manager removed successfully.")
+          end
           wait_for_javascript_to_finish
 
           expect(CatalogManager.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
@@ -90,7 +132,10 @@ RSpec.describe 'User manages Catalog Managers', js: true do
 
         it 'should add edit historic data access' do
           wait_for_javascript_to_finish
-          find("#cm-edit-historic-data-#{@identity.id}").click
+          retry_until do
+            check id: "cm-edit-historic-data-#{@identity.id}"
+            page.has_content?("Catalog Manager successfully updated.")
+          end
           wait_for_javascript_to_finish
 
           expect(CatalogManager.where(identity_id: @identity.id, organization_id: @provider.id).first.edit_historic_data).to eq(true)
@@ -111,16 +156,28 @@ RSpec.describe 'User manages Catalog Managers', js: true do
 
         click_link 'User Rights'
         wait_for_javascript_to_finish
+        unless page.has_field?(id: 'catalog_manager', checked: false)
+          retry_until do
+            uncheck id: "catalog_manager"
+            page.has_content?("Catalog Manager removed successfully.")
+          end
+
+        end
+
       end
 
       it 'should create a Catalog Manager for the identity' do
         wait_for_javascript_to_finish
-        find('#catalog_manager').click
+        retry_until do
+          check id: "catalog_manager"
+          page.has_content?("Catalog Manager created successfully.")
+        end
         wait_for_javascript_to_finish
 
+        expect(page).to have_field(class: 'cm-edit-historic-data', checked: false, count: 1)
+        expect(page).to have_field(class: 'cm-edit-historic-data', disabled: false, count: 1)
+
         expect(CatalogManager.where(identity_id: @identity.id, organization_id: @provider.id, edit_historic_data: nil).count).to eq(1)
-          expect(page).to have_selector('.cm-edit-historic-data:not(:checked)')
-          expect(page).to have_selector('.cm-edit-historic-data:not(:disabled)')
       end
     end
   end

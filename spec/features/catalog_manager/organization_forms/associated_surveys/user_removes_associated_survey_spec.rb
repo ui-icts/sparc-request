@@ -41,11 +41,13 @@ RSpec.describe 'User manages associated surveys', js: true do
     click_link 'Associated Surveys'
     wait_for_javascript_to_finish
 
-    accept_confirm do
-      find('.remove-associated-survey').click
+    retry_until(seconds: 30) do
+      accept_confirm(wait: 5) do
+        click_button class: 'remove-associated-survey',visible: :any, wait: 2
+      end
+      page.has_content?("Survey deleted successfully")
     end
 
-    wait_for_javascript_to_finish
 
   end
 

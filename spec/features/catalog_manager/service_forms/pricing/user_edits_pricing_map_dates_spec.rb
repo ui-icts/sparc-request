@@ -34,6 +34,21 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
     create(:pricing_map, service_id: @service.id, display_date: Date.today - 1, effective_date: Date.today - 1)
   end
 
+  def click_the_edit_link_and_wait_for_the_modal
+    retry_until(seconds: 30) do
+      begin
+        find('.edit_pricing_map_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Map")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Map" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Service' do
     context 'and the user edits the pricing map dates' do
       before :each do
@@ -51,7 +66,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit display date and effective date' do
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         find('#pricing_map_display_date').click
@@ -69,7 +84,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should throw error if the effective date is after display date' do
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         find('#pricing_map_display_date').click
@@ -83,7 +98,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should disable display date and effective date if the catalog manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         find('#pricing_map_display_date').click

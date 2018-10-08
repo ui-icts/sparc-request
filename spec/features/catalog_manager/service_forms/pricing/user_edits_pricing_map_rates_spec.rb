@@ -34,6 +34,21 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
     create(:pricing_map, service_id: @service.id, display_date: Date.today, effective_date: Date.today)
   end
 
+  def click_the_edit_link_and_wait_for_the_modal
+    retry_until(seconds: 30) do
+      begin
+        find('.edit_pricing_map_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Map")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Map" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Service' do
     context 'and the user edits the pricing map rates' do
       before :each do
@@ -51,7 +66,8 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       end
 
       it 'should edit the service rate' do
-        find('.edit_pricing_map_link').click
+
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_full_rate', with: "150.00"
@@ -66,10 +82,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       it 'should edit the federal rate' do
 
         wait_for_javascript_to_finish
-        #CO-TODO: I Wonder if sometimes this is getting clicked
-        #but the javascript hasn't yet been hooked up and so when
-        #it does get clicked nothing happens
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
 
         wait_for_javascript_to_finish
         accept_alert do
@@ -86,7 +99,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should edit the corporate rate' do
         wait_for_javascript_to_finish
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         accept_alert do
@@ -104,7 +117,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should edit other rate' do
         wait_for_javascript_to_finish
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         accept_alert do
@@ -121,7 +134,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should edit the member rate' do
         wait_for_javascript_to_finish
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         accept_alert do
@@ -138,7 +151,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
 
       it 'should change calculated federal, corporate, other and member rates if the service rate is changed' do
         wait_for_javascript_to_finish
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_map_full_rate', with: "600.00"
@@ -150,7 +163,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
       it 'should disable all the rates if the catalog manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
         wait_for_javascript_to_finish
-        find('.edit_pricing_map_link').click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         expect(find_by_id('pricing_map_full_rate')).to be_disabled

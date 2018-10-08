@@ -31,6 +31,21 @@ RSpec.describe 'User edits Organization Pricing', js: true do
     create(:pricing_setup, organization: @provider, display_date: Date.today - 1, effective_date: Date.today - 1, federal: 100, corporate: 100, other: 100, member: 100)
   end
 
+  def click_the_edit_link_and_wait_for_the_modal
+    retry_until(seconds: 30) do
+      begin
+        find('.edit_pricing_setup_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Setup")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Setup" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Provider' do
     context 'and the user edits the pricing setup percent of fee' do
       before :each do
@@ -46,7 +61,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should edit the federal percent' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_federal', with: "50.00"
@@ -59,7 +74,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should edit the corporate percent' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_corporate', with: "150.00"
@@ -72,7 +87,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should edit other percent' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_other', with: "150.00"
@@ -85,7 +100,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should edit the member percent' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_member', with: "150.00"
@@ -98,7 +113,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should edit corporate, other and member rates in the form if the Apply Federal % to All button is clicked' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_federal', with: "50.00"
@@ -112,7 +127,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should save corporate, other and member rates in the datebase if the Apply Federal % to All button is clicked' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_federal', with: "50.00"
@@ -129,7 +144,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should throw error if federal rate is more than corporate, other and member rates' do
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         fill_in 'pricing_setup_federal', with: "150.00"
@@ -144,7 +159,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       it 'should disable federal, corporate, other and member rates if the catalog_manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         expect(find_by_id('pricing_setup_federal')).to be_disabled
@@ -156,7 +171,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       it 'should disable Apply Federal % to All button if the catalog_manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
         wait_for_javascript_to_finish
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         expect(page).to_not have_selector('#apply_federal_percent')

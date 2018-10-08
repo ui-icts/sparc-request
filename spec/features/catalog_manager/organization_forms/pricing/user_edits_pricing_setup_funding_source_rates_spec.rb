@@ -32,6 +32,21 @@ RSpec.describe 'User edits Organization Pricing', js: true do
            industry_rate_type: 'full', investigator_rate_type: 'full', internal_rate_type: 'full', foundation_rate_type: 'full', unfunded_rate_type: 'full')
   end
 
+  def click_the_edit_link_and_wait_for_the_modal
+    retry_until(seconds: 30) do
+      begin
+        find('.edit_pricing_setup_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Setup")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Setup" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Provider' do
     context 'and the user edits the pricing setup funding source rates' do
       before :each do
@@ -46,7 +61,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the college funding source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_college_rate_type', 'Federal Rate')
@@ -58,7 +73,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the federal funding source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_federal_rate_type', 'Federal Rate')
@@ -70,7 +85,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the industry funding source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_industry_rate_type', 'Federal Rate')
@@ -82,7 +97,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the investigator funding source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_investigator_rate_type', 'Federal Rate')
@@ -94,7 +109,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the internal funding source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_internal_rate_type', 'Federal Rate')
@@ -106,7 +121,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the foundation funding source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_foundation_rate_type', 'Federal Rate')
@@ -118,7 +133,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the unfunded source rate type' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         bootstrap_select('#pricing_setup_unfunded_rate_type', 'Federal Rate')
@@ -131,7 +146,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should disable all the funding rate types if the catalog_manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         expect(page.find("select#pricing_setup_college_rate_type + .bootstrap-select")).to have_selector('button.dropdown-toggle.disabled')

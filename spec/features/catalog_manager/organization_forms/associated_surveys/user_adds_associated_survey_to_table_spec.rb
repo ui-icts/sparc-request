@@ -43,6 +43,10 @@ RSpec.describe 'User manages associated surveys', js: true do
 
   context ' and the organization does not have associated surveys' do
     it 'should add the associated survey for the organization' do
+      wait_until do
+        page.has_css?('.new_associated_survey')
+      end
+      
       bootstrap_select('.new_associated_survey', "Version #{@survey.version}")
       find("button.add-associated-survey").click
       wait_for_javascript_to_finish
@@ -59,7 +63,12 @@ RSpec.describe 'User manages associated surveys', js: true do
 
     it 'should throw an error if the same associated survey is added again' do
       wait_for_javascript_to_finish
+      wait_until do
+        page.has_css?('.new_associated_survey')
+      end
+
       bootstrap_select('.new_associated_survey', "Version #{@survey.version}")
+      page.has_css?("button.add-associated-survey")
       find("button.add-associated-survey").click
       wait_for_javascript_to_finish
 

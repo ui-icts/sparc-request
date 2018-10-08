@@ -42,23 +42,36 @@ RSpec.describe 'User manages status options', js: true do
 
         click_link 'Status Options'
         wait_for_javascript_to_finish
-        first('.available-status-checkbox').click
-        wait_for_javascript_to_finish
-        first('.editable-status-checkbox').click
-        wait_for_javascript_to_finish
+        within :css, "#status-row-ctrc_approved" do
+          unless page.has_field?(class: 'available-status-checkbox', checked: true, count: 1)
+            check class: 'available-status-checkbox'
+            wait_until { page.document.has_content?("Status updated successfully.") }
+          end
+
+          unless page.has_field?(class: 'editable-status-checkbox', checked: false, count: 1)
+            uncheck class: 'editable-status-checkbox'
+            wait_until { page.document.has_content?("Status updated successfully.") }
+          end
+        end
       end
 
       it 'should add the editable status' do
-        first('.editable-status-checkbox').click
-        wait_for_javascript_to_finish
+        within :css, "#status-row-ctrc_approved" do
+          check class: 'editable-status-checkbox'
+        end
+        wait_until { page.has_content?("Status updated successfully.") }
 
+        within :css, '#status-row-ctrc_approved' do
+          expect(page).to have_field(class: 'editable-status-checkbox', disabled: false, count: 1)
+        end
         expect(EditableStatus.where(organization_id: @provider.id).first.selected).to eq(true)
-        expect(first('.editable-status-checkbox')).to_not be_disabled
       end
 
       it 'should remove the editable status' do
+        within :css, '#status-row-ctrc_approved' do
+          expect(page).to have_field(class: 'editable-status-checkbox', disabled: false, count: 1)
+        end
         expect(EditableStatus.where(organization_id: @provider.id).first.selected).to eq(false)
-        expect(first('.editable-status-checkbox')).to_not be_disabled
       end
 
     end
@@ -77,11 +90,11 @@ RSpec.describe 'User manages status options', js: true do
       end
 
       it 'should not select the editable status' do
-        first('.editable-status-checkbox').click
-        wait_for_javascript_to_finish
+        within :css, "#status-row-ctrc_approved" do
+          expect(page).to have_field(class: 'editable-status-checkbox', disabled: true, count: 1)
+        end
 
         expect(EditableStatus.where(organization_id: @provider.id).first.selected).to eq(false)
-        expect(first('.editable-status-checkbox')).to be_disabled
       end
     end
 
@@ -99,10 +112,10 @@ RSpec.describe 'User manages status options', js: true do
       end
 
       it 'should not select the disabled editable status' do
-        first('.editable-status-checkbox:disabled').click
-        wait_for_javascript_to_finish
+        within :css, "#status-row-ctrc_approved" do
+          expect(page).to have_field(class: 'editable-status-checkbox', disabled: true, count: 1)
+        end
 
-        expect(first('.editable-status-checkbox:disabled')).to be_disabled
       end
     end
 
@@ -118,15 +131,18 @@ RSpec.describe 'User manages status options', js: true do
 
         click_link 'Status Options'
         wait_for_javascript_to_finish
-        first('.available-status-checkbox').click
-        wait_for_javascript_to_finish
+        within :css, '#status-row-ctrc_approved' do
+          check class: 'available-status-checkbox', count: 1
+          wait_until { page.document.has_content?("Status updated successfully.") }
+        end
+
       end
 
       it 'should not select the editable status' do
-        first('.editable-status-checkbox').click
-        wait_for_javascript_to_finish
+        within :css, '#status-row-ctrc_approved' do
+          expect(page).to have_field(class: 'editable-status-checkbox', disabled: true, count: 1)
+        end
 
-        expect(first('.editable-status-checkbox')).to be_disabled
       end
     end
 

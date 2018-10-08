@@ -35,7 +35,7 @@ RSpec.describe 'User edits Service Pricing Map', js: true do
   end
 
   def click_the_edit_link_and_wait_for_the_modal
-    retry_until(30) do
+    retry_until(seconds: 30) do
       begin
         find('.edit_pricing_map_link').click
       rescue Selenium::WebDriver::Error::UnknownError => e

@@ -42,44 +42,60 @@ RSpec.describe 'User manages status options', js: true do
 
         click_link 'Status Options'
         wait_for_javascript_to_finish
+        within :css, '#status-row-ctrc_approved' do
+          if page.has_checked_field?(class: 'available-status-checkbox', count: 1)
+            uncheck class: 'available-status-checkbox'
+            wait_until { page.document.has_content?("Status updated successfully.") }
+          end
+        end
       end
 
       it 'should add the available status' do
-        first('.available-status-checkbox').click
-        wait_for_javascript_to_finish
+
+        within :css, '#status-row-ctrc_approved' do
+          check class: 'available-status-checkbox'
+          wait_until { page.document.has_content?("Status updated successfully.") }
+        end
+
+
+        within :css, '#status-row-ctrc_approved' do
+          expect(page).to have_field(class: 'available-status-checkbox', disabled: false, count: 1)
+        end
         expect(AvailableStatus.where(organization_id: @provider.id).first.selected).to eq(true)
-        expect(first('.available-status-checkbox')).to_not be_disabled
       end
 
-      it 'should not select the disabled available status' do
-        first('.available-status-checkbox:disabled').click
-        wait_for_javascript_to_finish
-
-        expect(first('.available-status-checkbox:disabled')).to be_disabled
-      end
     end
 
     context 'with available status selected' do
       before :each do
-      visit catalog_manager_catalog_index_path
-      wait_for_javascript_to_finish
-      find("#institution-#{@institution.id}").click
-      wait_for_javascript_to_finish
-      click_link @provider.name
-      wait_for_javascript_to_finish
+        visit catalog_manager_catalog_index_path
+        wait_for_javascript_to_finish
+        find("#institution-#{@institution.id}").click
+        wait_for_javascript_to_finish
+        click_link @provider.name
+        wait_for_javascript_to_finish
 
-      click_link 'Status Options'
-      wait_for_javascript_to_finish
-      first('.available-status-checkbox').click
-      wait_for_javascript_to_finish
+        click_link 'Status Options'
+        wait_for_javascript_to_finish
+        within :css, '#status-row-ctrc_approved' do
+          unless page.has_field?(class: 'available-status-checkbox', checked: true, count: 1)
+            check class: 'available-status-checkbox'
+            wait_until { page.document.has_content?("Status updated successfully.") }
+          end
+        end
       end
 
       it 'should remove the available status' do
-        first('.available-status-checkbox').click
-        wait_for_javascript_to_finish
+        within :css, '#status-row-ctrc_approved' do
+          uncheck class: 'available-status-checkbox'
+          wait_until { page.document.has_content?("Status updated successfully.") }
+        end
+
+        within :css, '#status-row-ctrc_approved' do
+          expect(page).to have_field(class: 'available-status-checkbox', disabled: false, count: 1)
+        end
 
         expect(AvailableStatus.where(organization_id: @provider.id).first.selected).to eq(false)
-        expect(first('.available-status-checkbox')).to_not be_disabled
       end
 
     end

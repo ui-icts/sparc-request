@@ -28,45 +28,53 @@ RSpec.describe 'User manages status options', js: true do
     @institution        = create(:institution)
     @provider           = create(:provider, parent_id: @institution.id, process_ssrs: true)
     create(:catalog_manager, organization_id: @institution.id, identity_id: Identity.where(ldap_uid: 'jug2').first.id)
+    visit catalog_manager_catalog_index_path
+    wait_for_javascript_to_finish
+    find("#institution-#{@institution.id}").click
+    wait_for_javascript_to_finish
+    click_link @provider.name
+    wait_for_javascript_to_finish
+
+    click_link 'Status Options'
+    wait_for_javascript_to_finish
   end
 
-  context 'and Use Default Statuses option is true' do
-    before :each do
-      visit catalog_manager_catalog_index_path
-      wait_for_javascript_to_finish
-      find("#institution-#{@institution.id}").click
-      wait_for_javascript_to_finish
-      click_link @provider.name
-      wait_for_javascript_to_finish
+  def toggle_default_status(yes_or_no)
+    should_be_checked = yes_or_no.downcase == "yes"
+    within :css, 'div.row#use_default_statuses' do
 
-      click_link 'Status Options'
-      wait_for_javascript_to_finish
+      if page.has_field?('use_default_statuses', checked: should_be_checked, visible: false)
+        #already correct
+      else
+        retry_until do
+          find('div.toggle.btn').click
+          wait_until {
+            page.document.has_content?("Organization updated successfully.") && page.has_field?('use_default_statuses', checked: should_be_checked, visible: false)
+          }
+        end
+      end
+    end
+  end
+
+  context 'and changes from Yes to No' do
+    before :each do
+      toggle_default_status 'Yes'
+      toggle_default_status 'No'
     end
 
     it 'should change Use Default Status option to false' do
-      find('#use_default_statuses div.toggle.btn').click
-      #CO-TODO: Is there a better way than a 15 second wait?
-      wait_for_javascript_to_finish(15)
+
+      toggle_default_status 'No'
+
       @provider.reload
       expect(@provider.use_default_statuses).to eq(false)
     end
   end
 
-  context 'and Use Default Statuses option is false' do
+  context 'and changes from No to Yes' do
     before :each do
-      @provider.update_attributes(use_default_statuses: false)
-
-      visit catalog_manager_catalog_index_path
-      wait_for_javascript_to_finish
-      find("#institution-#{@institution.id}").click
-      wait_for_javascript_to_finish
-      click_link @provider.name
-      wait_for_javascript_to_finish
-
-      click_link 'Status Options'
-      wait_for_javascript_to_finish
-      find('#use_default_statuses div.toggle.btn').click
-      wait_for_javascript_to_finish
+      toggle_default_status 'No'
+      toggle_default_status 'Yes'
     end
 
     it 'should change Use Default Status option to true' do
@@ -75,8 +83,8 @@ RSpec.describe 'User manages status options', js: true do
     end
 
     it 'should disable all available and editable statuses' do
-      expect(page).to_not have_selector('.available-status-checkbox:not(:disabled)')
-      expect(page).to_not have_selector('.editable-status-checkbox:not(:disabled)')
+      expect(page).to have_no_field(class: 'available-status-checkbox', disabled: false, minimum: 1)
+      expect(page).to have_no_field(class: 'editable-status-checkbox', disabled: false, minimum: 1)
     end
 
   end

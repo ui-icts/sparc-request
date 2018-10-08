@@ -31,6 +31,21 @@ RSpec.describe 'User edits Organization Pricing', js: true do
     create(:pricing_setup, organization: @provider, display_date: Date.today - 1, effective_date: Date.today - 1)
   end
 
+  def click_the_edit_link_and_wait_for_the_modal
+    retry_until(seconds: 30) do
+      begin
+        find('.edit_pricing_setup_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Setup")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Setup" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Provider' do
     context 'and the user edits the pricing setup dates and source' do
       before :each do
@@ -45,7 +60,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the display date and effective date' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         find('#pricing_setup_display_date').click
@@ -63,7 +78,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should throw error if the effective date is after display date' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         find('#pricing_setup_display_date').click
@@ -76,7 +91,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
       end
 
       it 'should edit the source of price' do
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         first('.modal-body div.toggle.btn').click
