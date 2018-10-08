@@ -57,7 +57,7 @@ end
 
 # Like wait_until but keeps going until the block returns without
 # raising an exception.
-def retry_until(seconds: Capybara.default_max_wait_time, exception: StandardError)
+def retry_until(seconds: [Capybara.default_max_wait_time,10].max, exception: StandardError)
   start_time = Time.now
   end_time = start_time + seconds
   puts "Retrying for #{seconds} seconds until #{end_time}"
