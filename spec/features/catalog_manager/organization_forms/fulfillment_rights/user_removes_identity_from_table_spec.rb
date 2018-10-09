@@ -41,18 +41,18 @@ RSpec.describe 'User manages fulfillment rights', js: true do
     click_link 'Fulfillment Rights'
     wait_for_javascript_to_finish
 
-    accept_confirm do
-      find('.remove-fulfillment-rights').click
+    retry_until(seconds: 30) do
+      accept_confirm do
+        find('.remove-fulfillment-rights').click
+      end
+      page.has_text?("Fulfillment rights removed successfully.")
     end
     wait_for_javascript_to_finish
   end
 
   it 'should delete the fulfillment rights for the identity' do
-    expect(ClinicalProvider.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
-  end
-
-  it 'should remove the identity from the table' do
     expect(page).to_not have_selector("fulfillment-rights-row-#{@identity.id}")
+    expect(ClinicalProvider.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
   end
 
 end

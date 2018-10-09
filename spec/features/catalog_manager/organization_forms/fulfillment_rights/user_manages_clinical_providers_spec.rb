@@ -48,7 +48,13 @@ RSpec.describe 'User manages Clinical Providers', js: true do
     end
 
     it 'should delete the Super User for the identity' do
-      find('#clinical_provider').click
+
+      retry_until do
+        within :css, '#fulfillment_rights_container' do
+          uncheck id: 'clinical_provider', checked: true, visible: :any
+        end
+        page.has_content?("Clinical Provider removed successfully.")
+      end
       wait_for_javascript_to_finish
       expect(ClinicalProvider.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
     end
@@ -58,6 +64,7 @@ RSpec.describe 'User manages Clinical Providers', js: true do
     before :each do
       allow_any_instance_of(Organization).to receive(:all_fulfillment_rights).and_return( [@identity] )
 
+      ClinicalProvider.where(identity_id: @identity.id, organization_id: @provider.id).delete_all
       visit catalog_manager_catalog_index_path
       wait_for_javascript_to_finish
 
@@ -71,7 +78,13 @@ RSpec.describe 'User manages Clinical Providers', js: true do
     end
 
     it 'should create a Clinical Provider for the identity' do
-      find('#clinical_provider').click
+      retry_until(seconds: 30) do
+        within :css, '#fulfillment_rights_container' do
+          check id: 'clinical_provider', checked: false, visible: :any
+        end
+        page.has_content?("Clinical Provider created successfully.")
+      end
+
       wait_for_javascript_to_finish
       expect(ClinicalProvider.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(1)
     end

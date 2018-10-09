@@ -104,7 +104,7 @@ RSpec.describe 'User edits Organization Pricing', js: true do
 
       it 'should disable display date, effective date and source of price if the catalog manager cannot edit historic data' do
         @catalog_manager.update_attributes(edit_historic_data: false)
-        find(".edit_pricing_setup_link").click
+        click_the_edit_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         expect(find_by_id('pricing_setup_display_date', visible: :any)).to be_disabled

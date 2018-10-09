@@ -43,7 +43,10 @@ RSpec.describe 'User edits organization subsidy map', js: true do
         wait_for_javascript_to_finish
         click_link 'Pricing'
         wait_for_javascript_to_finish
-        find("#increase_decrease_button").click
+        retry_until do
+          find("#increase_decrease_button").click
+          page.has_css?("h4.modal-title", text: "Increase or Decrease Rates", wait: 3)
+        end
         wait_for_javascript_to_finish
       end
 
@@ -61,7 +64,7 @@ RSpec.describe 'User edits organization subsidy map', js: true do
 
         click_button 'Adjust Rates'
         wait_for_javascript_to_finish
-
+        wait_until { page.has_text?(/Successfully updated/) }
         @service.reload
 
         expect(@service.pricing_maps.size).to eq(old_pm_count + 1)

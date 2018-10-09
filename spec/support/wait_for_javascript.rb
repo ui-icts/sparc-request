@@ -20,7 +20,7 @@
 
 module WaitForJavascript
 
-  def wait_for_javascript_to_finish(max_wait=Capybara.default_max_wait_time)
+  def wait_for_javascript_to_finish(max_wait=[Capybara.default_max_wait_time, 30].max)
     time_limit, interval = (Time.now + max_wait), 0.5
     loop do
       break if finished_all_ajax_requests? && finished_all_animations? && dom_ready?

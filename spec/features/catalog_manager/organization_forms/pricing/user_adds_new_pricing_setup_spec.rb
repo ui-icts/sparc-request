@@ -30,6 +30,21 @@ RSpec.describe 'User adds Organization Pricing Setup', js: true do
     @catalog_manager = create(:catalog_manager, organization_id: @institution.id, identity_id: Identity.where(ldap_uid: 'jug2').first.id)
   end
 
+  def click_the_new_link_and_wait_for_the_modal
+    retry_until(seconds: 30) do
+      begin
+        find('#new_pricing_setup_link').click
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        # Cant get the timing exactly right ... if it works out that
+        # you click the link but the modal isn't displayed within 2 seconds
+        # we try to click the link again but by the time we do it is covered
+        # by the modal
+        raise unless page.has_css?('h4.modal-title', text: "Pricing Setup")
+      end
+      page.has_css?( 'h4.modal-title', text: "Pricing Setup" ,wait: 2, visible: :any)
+    end
+  end
+
   context 'on a Provider' do
     context 'and the user creates a new pricing setup' do
       before :each do
@@ -44,7 +59,7 @@ RSpec.describe 'User adds Organization Pricing Setup', js: true do
       end
 
       it 'should create a new pricing setup' do
-        find("#new_pricing_setup_link").click
+        click_the_new_link_and_wait_for_the_modal
         wait_for_javascript_to_finish
 
         find('#pricing_setup_display_date').click

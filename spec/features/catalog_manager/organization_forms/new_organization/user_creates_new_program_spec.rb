@@ -38,31 +38,32 @@ RSpec.describe 'User creates new organization', js: true do
       wait_for_javascript_to_finish
       find("#provider-#{@provider.id}").click
       wait_for_javascript_to_finish
-      click_link 'Create New Program'
+      retry_until do
+        click_link 'Create New Program'
+        page.has_field?('organization_name')
+      end
       wait_for_javascript_to_finish
 
       fill_in 'organization_name', with: 'Test Program'
       click_button 'Save'
-      wait_for_javascript_to_finish
+      wait_until(20) { page.has_content?("New Organization created successfully") }
     end
 
     it 'should add a new program' do
+      expect(page).to have_selector("h3", text: 'Test Program')
       expect(Program.count).to eq(1)
       expect(Program.where(name: 'Test Program').first.parent).to eq(@provider)
-    end
-
-    it 'should show the program form' do
-      expect(page).to have_selector("h3", text: 'Test Program')
     end
 
     it 'should disable the new provider after it is created' do
       find("#institution-#{@institution.id}").click
       wait_for_javascript_to_finish
+
       find("#provider-#{@provider.id}").click
       wait_for_javascript_to_finish
 
-      expect(Program.where(name: 'Test Program').first.is_available).to eq(false)
       expect(page).to have_selector('.text-program.unavailable-org', text: 'Test Program')
+      expect(Program.where(name: 'Test Program').first.is_available).to eq(false)
     end
 
     it 'should throw error if the same program name is added again' do

@@ -43,8 +43,10 @@ RSpec.describe 'User manages user rights', js: true do
     click_link 'User Rights'
     wait_for_javascript_to_finish
 
-    accept_confirm do
-      find('.remove-user-rights').click
+    retry_until(seconds: 30) do
+      accept_confirm do
+        find('.remove-user-rights').click
+      end
     end
     wait_for_javascript_to_finish
   end

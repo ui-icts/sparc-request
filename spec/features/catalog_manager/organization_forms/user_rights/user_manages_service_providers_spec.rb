@@ -52,21 +52,32 @@ RSpec.describe 'User manages Catalog Managers', js: true do
       end
 
       it 'should delete the Service Provider for the identity' do
-        find('#service_provider').click
+
+        retry_until do
+          find('#service_provider').click
+          page.has_text?("Service Provider removed successfully",wait: 3)
+        end
         wait_for_javascript_to_finish
 
         expect(ServiceProvider.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
       end
 
       it 'should remove edit historic data access' do
-        find("#sp-is-primary-contact-#{@identity.id}").click
+        retry_until do
+          find("#sp-is-primary-contact-#{@identity.id}").click
+          page.has_text?("Service Provider successfully updated.",wait: 3)
+        end
+
         wait_for_javascript_to_finish
 
         expect(ServiceProvider.where(identity_id: @identity.id, organization_id: @provider.id).first.is_primary_contact).to eq(false)
       end
 
       it 'should add hold emails' do
-        find("#sp-hold-emails-#{@identity.id}").click
+        retry_until do
+          find("#sp-hold-emails-#{@identity.id}").click
+          page.has_text?("Service Provider successfully updated.",wait: 3)
+        end
         wait_for_javascript_to_finish
 
         expect(ServiceProvider.where(identity_id: @identity.id, organization_id: @provider.id).first.hold_emails).to eq(true)
@@ -90,21 +101,30 @@ RSpec.describe 'User manages Catalog Managers', js: true do
       end
 
       it 'should delete the Service Provider for the identity' do
-        find('#service_provider').click
+        retry_until do
+          find('#service_provider').click
+          page.has_text?("Service Provider removed successfully.",wait: 3)
+        end
         wait_for_javascript_to_finish
 
         expect(ServiceProvider.where(identity_id: @identity.id, organization_id: @provider.id).count).to eq(0)
       end
 
       it 'should add edit historic data access' do
-        find("#sp-is-primary-contact-#{@identity.id}").click
+        retry_until do
+          find("#sp-is-primary-contact-#{@identity.id}").click
+          page.has_text?("Service Provider successfully updated.",wait: 3)
+        end
         wait_for_javascript_to_finish
 
         expect(ServiceProvider.where(identity_id: @identity.id, organization_id: @provider.id).first.is_primary_contact).to eq(true)
       end
 
       it 'should remove hold emails' do
-        find("#sp-hold-emails-#{@identity.id}").click
+        retry_until do
+          find("#sp-hold-emails-#{@identity.id}").click
+          page.has_text?("Service Provider successfully updated.",wait: 3)
+        end
         wait_for_javascript_to_finish
 
         expect(ServiceProvider.where(identity_id: @identity.id, organization_id: @provider.id).first.hold_emails).to eq(false)
@@ -129,7 +149,10 @@ RSpec.describe 'User manages Catalog Managers', js: true do
     end
 
     it 'should create a Service Provider for the identity' do
-      find('#service_provider').click
+      retry_until do
+        find('#service_provider').click
+        page.has_text?("Service Provider created successfully.",wait: 3)
+      end
       wait_for_javascript_to_finish
 
       expect(ServiceProvider.where(identity_id: @identity.id,

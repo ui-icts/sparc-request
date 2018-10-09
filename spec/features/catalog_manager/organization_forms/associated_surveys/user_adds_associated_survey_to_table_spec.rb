@@ -48,11 +48,14 @@ RSpec.describe 'User manages associated surveys', js: true do
       end
       
       bootstrap_select('.new_associated_survey', "Version #{@survey.version}")
-      find("button.add-associated-survey").click
-      wait_for_javascript_to_finish
+      retry_until(seconds: 30) do
+        find("button.add-associated-survey").click
+        page.has_text?("Survey added successfully.",wait: 10)
+      end
 
-      expect(AssociatedSurvey.where(associable_id: @provider.id).count).to eq(1)
+
       expect(page).to have_selector("#survey-row-#{@provider.associated_surveys.first.id}")
+      expect(AssociatedSurvey.where(associable_id: @provider.id).count).to eq(1)
     end
   end
 
@@ -69,8 +72,11 @@ RSpec.describe 'User manages associated surveys', js: true do
 
       bootstrap_select('.new_associated_survey', "Version #{@survey.version}")
       page.has_css?("button.add-associated-survey")
-      find("button.add-associated-survey").click
-      wait_for_javascript_to_finish
+
+      retry_until(seconds: 30) do
+        find("button.add-associated-survey").click
+        page.has_css?('div.flash .alert', wait: 10)
+      end
 
       expect(page).to have_content('The survey you are trying to add is already associated with this Organization')
     end

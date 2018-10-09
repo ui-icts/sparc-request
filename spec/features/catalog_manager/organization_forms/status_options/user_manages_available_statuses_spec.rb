@@ -45,7 +45,7 @@ RSpec.describe 'User manages status options', js: true do
         within :css, '#status-row-ctrc_approved' do
           if page.has_checked_field?(class: 'available-status-checkbox', count: 1)
             uncheck class: 'available-status-checkbox'
-            wait_until { page.document.has_content?("Status updated successfully.") }
+            wait_until(20) { page.document.has_content?("Status updated successfully.") }
           end
         end
       end
@@ -54,7 +54,7 @@ RSpec.describe 'User manages status options', js: true do
 
         within :css, '#status-row-ctrc_approved' do
           check class: 'available-status-checkbox'
-          wait_until { page.document.has_content?("Status updated successfully.") }
+          wait_until(20) { page.document.has_content?("Status updated successfully.") }
         end
 
 
@@ -80,7 +80,7 @@ RSpec.describe 'User manages status options', js: true do
         within :css, '#status-row-ctrc_approved' do
           unless page.has_field?(class: 'available-status-checkbox', checked: true, count: 1)
             check class: 'available-status-checkbox'
-            wait_until { page.document.has_content?("Status updated successfully.") }
+            wait_until(20) { page.document.has_content?("Status updated successfully.") }
           end
         end
       end
@@ -88,7 +88,7 @@ RSpec.describe 'User manages status options', js: true do
       it 'should remove the available status' do
         within :css, '#status-row-ctrc_approved' do
           uncheck class: 'available-status-checkbox'
-          wait_until { page.document.has_content?("Status updated successfully.") }
+          wait_until(20) { page.document.has_content?("Status updated successfully.") }
         end
 
         within :css, '#status-row-ctrc_approved' do
