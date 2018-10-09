@@ -93,5 +93,7 @@ module SparcRails
       
     ##  Error pages
     config.exceptions_app = self.routes
+
+    config.client_flash_timeout = 4000
   end
 end
