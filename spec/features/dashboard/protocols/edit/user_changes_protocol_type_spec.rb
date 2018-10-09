@@ -117,8 +117,11 @@ RSpec.describe 'User changes protocol type', js: true do
         before :each do
           bootstrap_select '#protocol_type', 'Study'
 
-          accept_confirm do
-            find('#protocol-type-button').click
+          retry_until do
+            accept_confirm do
+              find('#protocol-type-button').click
+            end
+            page.has_text?("Protocol Type Updated!", wait: 10)
           end
 
           wait_for_javascript_to_finish

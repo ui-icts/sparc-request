@@ -105,6 +105,7 @@ RSpec.describe 'service request list', js: true do
       context "user clicks 'Show Chosen Services'" do # research_billing_qty, insurance_billing_qty, or effort_billing_qty is 1
         it "should show SSR's of each status that are 'chosen' except for first-draft" do
           @page.consolidated_request_all.click
+          wait_until(30) { page.has_css?('.modal-header h4', text: "Consolidated Request Summary") }
           #defaults to 'Show Chosen Services'
           expect(@page.consolidated_request_modal).to have_content(@complete_li.service.display_service_name)
           expect(@page.consolidated_request_modal).to have_content(@draft_li.service.display_service_name)

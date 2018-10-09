@@ -32,7 +32,10 @@ module WaitForJavascript
   end
 
   def finished_all_ajax_requests?
-    page.evaluate_script('jQuery.active').to_i == 0
+    #page.evaluate_script('jQuery.active').to_i == 0
+    page.evaluate_script <<~JS
+    (typeof(jQuery) !== 'undefined' && jQuery.active === 0);
+    JS
   end
 
   def finished_all_animations?

@@ -248,7 +248,7 @@ RSpec.describe 'User sets each Service Calendar field', js: true do
       context 'subject count' do
         before :each do
           find('.edit-subject-count.editable').click
-          find('.editable-input input').set('a number')
+          find('.editable-input input').set('a number').hover #clears tooltip
           find('.editable-submit').click
         end
 
