@@ -22,7 +22,9 @@ before_script:
 jobs:
   include:
     - script:
-      - bundle exec rspec spec/features
+      - bundle exec rspec --fail-fast spec/features/catalog spec/features/catalog_manager spec/features/confirmation spec/features/review spec/features/service_details
+    - script:
+      - bundle exec rspec --fail-fast spec/features/dashboard spec/features/document_management spec/features/happy_spec.rb spec/features/obtain_research_pricing spec/features/protocol spec/features/service_calendar spec/features/service_subsidy spec/features/surveyor
     # - script:
     #   - bundle exec rspec spec/api
     #   - bundle exec rspec spec/extensions
