@@ -45,8 +45,10 @@ RSpec.describe 'User creates new organization', js: true do
       wait_for_javascript_to_finish
 
       fill_in 'organization_name', with: 'Test Program'
-      click_button 'Save'
-      wait_until(40) { page.has_content?("New Organization created successfully") }
+      retry_until do
+        click_button 'Save'
+        page.has_content?("New Organization created successfully", wait: 5)
+      end
     end
 
     it 'should add a new program' do
