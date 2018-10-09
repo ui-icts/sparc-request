@@ -20,3 +20,5 @@
 
 Capybara.javascript_driver = :chrome
 Capybara.default_max_wait_time = 2
+SERVER_PORT = 9887
+Capybara.server_port = SERVER_PORT + ENV['TEST_ENV_NUMBER'].to_i
