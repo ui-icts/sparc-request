@@ -19,4 +19,4 @@
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.~
 
 Capybara.javascript_driver = :chrome
-Capybara.default_max_wait_time = 5
+Capybara.default_max_wait_time = 2
