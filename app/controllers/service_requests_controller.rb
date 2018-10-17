@@ -420,7 +420,10 @@ class ServiceRequestsController < ApplicationController
                   link: (article.at_css('.entry-title a') ? article.at_css('.entry-title a')[:href] : ""),
                   date: (article.at_css('.date') ? article.at_css('.date').text : "") }
         end
-      rescue Net::OpenTimeout
+      rescue => e
+        logger.error "Failed to load news feed"
+        logger.warn e.message
+        logger.warn e.backtrace.join
       end
     end
   end
