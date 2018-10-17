@@ -98,6 +98,7 @@ do_build() {
   local _libxslt_dir=$(pkg_path_for libxslt)
   local _zlib_dir=$(pkg_path_for zlib)
   local _openssl_include_dir=$(pkg_path_for openssl)
+  local _mysql2_dir=$(pkg_path_for mysql-client)
 
   # don't let bundler split up the nokogiri config string (it breaks
   # the build), so specify it as an env var instead
@@ -107,6 +108,7 @@ do_build() {
   # we need single quotes otherwise the extconf doesn't build the
   # extension.
   bundle config build.nokogiri '${NOKOGIRI_CONFIG}'
+  bundle config build.mysql2 --with-mysql-dir=${_mysql2_dir}
 
   # We need to add tzinfo-data to the Gemfile since we're not in an
   # environment that has this from the OS
