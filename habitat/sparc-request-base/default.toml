@@ -1,6 +1,7 @@
 # Use this file to templatize your application's native configuration files.
 # See the docs at https//www.habitat.sh/docs/create-packages-configure/.
 # You can safely delete this file if you don't need it.
+time_zone = "Eastern Time (US & Canada)"
 rails_binding_ip = "0.0.0.0"
 rails_port = 3000
 
@@ -120,3 +121,9 @@ namespace = ""
 [shibboleth]
 
 request_type = "header"
+
+[customization]
+
+org_logo = "sctr_header_sized.jpg"
+institution_logo = "musc_header.jpg"
+institution = "University"

@@ -11,13 +11,13 @@ pkg_deps=(
   core/libxml2
   core/libxslt
   core/libyaml
-  core/gcc-libs
-  core/node
   core/mysql-client
+  core/node
   core/curl
   core/rsync
 
   core/ruby/2.4.2
+  core/bundler
   chrisortman/eye
 
   core/busybox-static

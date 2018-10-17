@@ -4,7 +4,7 @@ export HOME={{pkg.svc_var_path}}/home
 # This is where the package files are installed to
 export RAILS_ROOT="{{pkg.path}}/static/release"
 
-export TZ="America/Chicago"
+export TZ="{{cfg.time_zone}}"
 export GEM_HOME="$RAILS_ROOT/vendor/bundle/ruby/2.4.0"
 export GEM_PATH="$GEM_HOME:{{pkgPathFor "core/ruby"}}/lib/ruby/gems/2.4.0:{{pkgPathFor "core/bundler"}}"
 export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
@@ -28,9 +28,12 @@ fi
 {{#if cfg.use_syslog ~}}
 export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
 {{/if}}
+## Exception Notifier
+export EXCEPTION_SENDER_ADDRESS="SPARC Notifier <no-reply@{{cfg.sparc.production.host}}"
+export EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
 ## SPARC VALUES
-export org_logo=org_logo_197x57.png
-export institution_logo=institution_logo_136x86.gif
-export institution=University of Iowa
+export org_logo="{{cfg.customization.org_logo}}"
+export institution_logo="{{cfg.customization.institution_logo}}"
+export institution="{{cfg.customization.institution}}"
 export SPARC_VERSION=v{{pkg.version}}
