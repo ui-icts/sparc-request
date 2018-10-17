@@ -277,8 +277,6 @@ DEPARTMENTS = {
 replace 'subject_ethnicities', with: SUBJECT_ETHNICITIES
 replace 'subject_genders', with: SUBJECT_GENDERS
 
-replace 'institutions', with: { "UIOWA": "University of Iowa" }
-
 replace 'colleges', with: COLLEGES
 
 replace 'departments', with: DEPARTMENTS
