@@ -15,17 +15,6 @@ update 'en' do
   change 'message.red_message', to: ''
   change 'calendar_page.headers.subjects', to: '# Subjects'
 
-  update 'organization_form' do
-
-    change 'disabled', to: "Display in I-CART"
-  end
-
-  update 'cm_shared' do
-    change 'title', to: "I-CART Request Services Catalog"
-    # Added for additional details, can maybe be removed
-    add 'panel_title', 'Documents'
-  end
-
   update 'study_form' do
 
     change 'hr_number', to: "HawkIRB #:"
