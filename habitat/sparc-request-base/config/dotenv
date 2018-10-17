@@ -32,6 +32,8 @@ export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
 export EXCEPTION_SENDER_ADDRESS="SPARC Notifier <no-reply@{{cfg.sparc.production.host}}"
 export EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
+export SECRET_KEY_BASE="{{cfg.secret_key_base}}"
+
 ## SPARC VALUES
 export org_logo="{{cfg.customization.org_logo}}"
 export institution_logo="{{cfg.customization.institution_logo}}"

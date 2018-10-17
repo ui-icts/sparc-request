@@ -33,6 +33,8 @@ site_banner = ""
 
 use_syslog = false
 
+secret_key_base = "7bfdc7493c8ddafbbcc4cb46fee20225ff91aa89a66bae4d623a2c426c34fae8eb8c926b11a0efc524a13af48fff22cd9326665090e41e2e6cfbbba4430f989b"
+#
 ## SPARC specific settings
 #
 [sparc.production]
