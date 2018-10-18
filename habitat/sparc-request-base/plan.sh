@@ -16,7 +16,7 @@ pkg_deps=(
   core/curl
   core/rsync
 
-  core/ruby
+  core/ruby24
   core/bundler
   chrisortman/eye
 
