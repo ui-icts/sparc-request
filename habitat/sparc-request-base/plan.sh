@@ -134,7 +134,7 @@ do_build() {
      cp -a $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
    fi
 
-   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --binstubs --no-clean
+   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --no-binstubs --no-clean
 
   # cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
   # Some bundle files when they install have permissions that don't
