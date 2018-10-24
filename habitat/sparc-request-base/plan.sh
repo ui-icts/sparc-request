@@ -16,8 +16,7 @@ pkg_deps=(
   core/curl
   core/rsync
 
-  core/ruby24
-  core/bundler
+  core/ruby/2.4.2
   chrisortman/eye
 
   core/busybox-static
@@ -84,9 +83,6 @@ do_prepare() {
 
   build_line "Setting link for /usr/bin/env to 'coreutils'"
   [[ ! -f /usr/bin/env ]] && ln -s "$(pkg_path_for coreutils)/bin/env" /usr/bin/env
-
-  # Need to make sure we can find bundler when we run rails / rake commands later
-  export GEM_PATH="$(pkg_path_for "core/bundler"):$GEM_PATH"
 
   return 0
 }
