@@ -11,7 +11,7 @@ class CleanupDuplicateAccessRights < ActiveRecord::Migration[5.2]
     end
     SuperUser.find_each do |super_user|
       super_user.identity.super_users.includes(:organization).where.not(id: super_user.id).each do |su|
-        if su.organization.parents.include?(super_user.organization)
+        if su.organization&.parents&.include?(super_user.organization)
           puts '#' * 50
           puts "Removing duplicate super user lower access right: Super User ID: #{su.id}, Identity ID: #{su.identity.id}"
           su.destroy
