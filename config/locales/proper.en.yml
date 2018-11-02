@@ -16,7 +16,7 @@ en:
       about: About
       about_alt: About SPARCRequest
     catalog:
-      no_description: No description available.
+      no_description: ''
       accordion:
         header: Browse Service Catalog
       back_to_top: Back to Top
