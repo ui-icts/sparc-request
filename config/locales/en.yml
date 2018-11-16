@@ -417,7 +417,7 @@ en:
       financial_information:
         header: Financial Information
         subtext: Used for reporting purposes and saved for your future use
-        udak_project_number: 'Financial Account (UDAK #):'
+        udak_project_number: 'MFK #'
         rate: 'Indirect Cost Rate:'
         rfa: 'Funding Opportunity # / RFA:'
         potential_start_date: 'Potential Funding Start Date:'

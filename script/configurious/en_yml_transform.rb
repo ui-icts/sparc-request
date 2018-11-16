@@ -23,6 +23,8 @@ update 'en' do
     change 'udak_project_number', to: "Financial Account (MFK#):"
   end
 
+  change 'protocols.studies.financial_information.udak_project_number', to: 'MFK #'
+
   update 'footer' do
     change 'mail_to', to: ""
     change 'mail_link', to: ""
