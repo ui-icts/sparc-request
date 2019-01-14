@@ -33,7 +33,7 @@ fi
 export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
 {{/if}}
 ## Exception Notifier
-export EXCEPTION_SENDER_ADDRESS="SPARC Notifier <no-reply@{{cfg.sparc.production.host}}"
+export EXCEPTION_SENDER_ADDRESS="{{cfg.sparc.production.no_reply_from}}"
 export EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
 export SECRET_KEY_BASE="{{cfg.secret_key_base}}"
