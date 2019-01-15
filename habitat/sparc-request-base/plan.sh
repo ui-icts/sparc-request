@@ -13,7 +13,7 @@ pkg_deps=(
   core/libyaml
   core/mysql-client
   core/node
-  core/curl/7.54.1 #curb fails with 7.62.0 as of 2018-11-02
+  core/curl
   core/rsync
 
   core/ruby24
