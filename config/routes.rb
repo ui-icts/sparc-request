@@ -371,9 +371,6 @@ SparcRails::Application.routes.draw do
     end
   end
 
-  get 'excel/webquery/consolidated_request/:id', to: 'excel_api#consolidated_request'
-  mount API::Base => '/'
-
   root to: 'service_requests#catalog'
 
   ## error page routes ##

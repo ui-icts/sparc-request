@@ -6,6 +6,7 @@
     </tr>
   <% end %>
 </table>
+
 <table>
   <% @protocol.project_roles.each do |au| %>
     <tr>
@@ -15,6 +16,7 @@
     </tr>
   <% end %>
 </table>
+
 <% @protocol.service_requests.each do |service_request| %>
 <table>
   <% service_request.arms.each do |arm| %>

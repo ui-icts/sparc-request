@@ -147,7 +147,10 @@ class ProtocolsController < ApplicationController
   def show
     respond_to do |format|
       format.js
-      format.html
+      format.xlsx { 
+        response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}) Report.xlsx\""
+      }
+      format.html { render layout: false }
     end
   end
 
