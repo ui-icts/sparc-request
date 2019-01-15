@@ -16,7 +16,7 @@ pkg_deps=(
   core/curl/7.54.1 #curb fails with 7.62.0 as of 2018-11-02
   core/rsync
 
-  core/ruby/2.4.2
+  core/ruby24
   chrisortman/eye
 
   core/busybox-static
