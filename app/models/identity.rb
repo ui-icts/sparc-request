@@ -194,7 +194,16 @@ class Identity < ApplicationRecord
     identity = Identity.where(ldap_uid: auth.uid).first
 
     unless identity
-      identity = Identity.create ldap_uid: auth.uid, first_name: auth.info.first_name, last_name: auth.info.last_name, email: auth.info.email, password: Devise.friendly_token[0,20], approved: true
+      identity = Identity.new ldap_uid: auth.uid, first_name: auth.info.first_name, last_name: auth.info.last_name, email: auth.info.email, password: Devise.friendly_token[0,20], approved: true
+      
+      if identity.valid?
+        if !identity.save
+          Rails.logger.warn("[SHIB] Unable to save identity. No error code")
+        end
+      else
+        Rails.logger.warn("[SHIB] Identity created from shibboleth is invalid")
+        Rails.logger.info(identity.errors.inspect)
+      end
     end
     identity
   end

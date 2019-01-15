@@ -10,7 +10,7 @@ export TZ="{{cfg.time_zone}}"
 export time_zone="{{cfg.time_zone}}"
 
 export GEM_HOME="$RAILS_ROOT/vendor/bundle/ruby/2.4.0"
-export GEM_PATH="$GEM_HOME:{{pkgPathFor "core/ruby"}}/lib/ruby/gems/2.4.0:{{pkgPathFor "core/bundler"}}"
+export GEM_PATH="$GEM_HOME:{{pkgPathFor "core/ruby24"}}/lib/ruby/gems/2.4.0:{{pkgPathFor "core/bundler"}}"
 export LD_LIBRARY_PATH="{{pkgPathFor "core/gcc-libs"}}/lib"
 export PATH="$RAILS_ROOT/bin:{{pkgPathFor "core/node"}}/bin:{{pkgPathFor "chrisortman/eye"}}/bin:$PATH"
 export SENDMAIL_PATH="{{pkgPathFor "core/busybox-static"}}/bin/sendmail"
@@ -33,7 +33,7 @@ fi
 export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
 {{/if}}
 ## Exception Notifier
-export EXCEPTION_SENDER_ADDRESS="SPARC Notifier <no-reply@{{cfg.sparc.production.host}}"
+export EXCEPTION_SENDER_ADDRESS="{{cfg.sparc.production.no_reply_from}}"
 export EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
 export SECRET_KEY_BASE="{{cfg.secret_key_base}}"
