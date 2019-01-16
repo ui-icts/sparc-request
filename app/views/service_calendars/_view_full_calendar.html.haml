@@ -29,6 +29,9 @@
             = t(:calendars)[:show_chosen_services]
           %label.full-calendar-services-toggle{ id: 'all-services', class: display_all_services ? "btn btn-success active" : "btn btn-custom-green", data: { protocol_id: service_request.protocol.id, statuses_hidden: statuses_hidden } }
             = t(:calendars)[:show_all_services]
+      .text-right
+        %a.btn.btn-default{ href: url_for(:controller => :protocols, :action => :show, :id => @protocol, :format => :xlsx)}
+          Download to Excel
     .modal-body
       #modal_errors
       .row
