@@ -1,98 +1,44 @@
 wb = xlsx_package.workbook
 
-row_header_style = wb.styles.add_style b: true, wrap_text: true, sz: 12
-table_header_style = wb.styles.add_style sz: 12, b: true,   alignment: { horizontal: :center, wrap_text: true}
-default = wb.styles.add_style alignment: { horizontal: :left }
+styles = ::CostAnalysis::WorkbookStyles.new(wb)
+
+row_header_style = styles.row_header_style
+table_header_style = styles.table_header_style
+default = styles.default
 
 wb.add_worksheet(name: "Report") do |sheet|
 
   [:id, :title, :short_title, :sponsor_name, :funding_source].each do |p_field|
-    sheet.add_row [p_field.to_s.titleize, @protocol.send(p_field)], :style => [row_header_style, default]
+    sheet.add_row(
+      [p_field.to_s.titleize, @protocol.send(p_field)],
+      :style => [row_header_style, default],
+      :widths => [:auto,:ignore]
+    )
   end
 
   sheet.add_row
   sheet.add_row
 
   @protocol.project_roles.each do |au|
-    sheet.add_row [au.role.titleize, au.identity.full_name,au.identity.email], :style => [row_header_style, default, default]
+    sheet.add_row(
+      [au.role.titleize, au.identity.full_name,au.identity.email],
+      :style => [row_header_style, default, default],
+      :widths => :ignore
+    )
   end
 
   sheet.add_row
   sheet.add_row
 
 
-@protocol.service_requests.each do |service_request|
-  sheet.add_row #table
-  
-  #header row
+  @protocol.service_requests.each do |service_request|
+    sheet.add_row #table
+    bldr = ::CostAnalysis::ServiceRequest.new(service_request, styles)
+    bldr.update(sheet)
+    #header row
 
-  service_request.arms.each do |arm|
-    headers = [
-         t(:calendars)[:pppv][:header_fields][:service],
-         t(:calendars)[:pppv][:header_fields][:notes],
-         t(:calendars)[:pppv][:header_fields][:service_rate].gsub('<br>',"\n"),
-         t(:calendars)[:pppv][:header_fields][:your_cost].gsub('<br>',"\n"),
-         t(:calendars)[:pppv][:header_fields][:quantity_type],
-         t(:calendars)[:pppv][:header_fields][:subject_count]
-      ] + arm.visit_groups.map { |vg| vg.name } + [
-        t(:calendars)[:pppv][:header_fields][:total_per_patient],
-        t(:calendars)[:pppv][:header_fields][:total_per_study]
-      ]
-    sheet.add_row headers, :style => table_header_style
-
-    Dashboard::ServiceCalendars.pppv_line_items_visits_to_display(arm, @service_request, nil, merged: true, statuses_hidden: nil, display_all_services: true).each do |ssr, livs|
-      sheet.add_row [display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)], :style => row_header_style
-
-      livs.each do |liv|
-
-         first_in_row = liv.line_item.service.display_service_name
-         unless liv.line_item.service.is_available
-            first_in_row += inactive_tag
-         end
-
-         row = [
-            first_in_row,
-            '', # notes
-            display_service_rate(liv.line_item),
-            "$#{number_with_precision(Service.cents_to_dollars(liv.line_item.applicable_rate), precision: 2)}",
-            display_unit_type(liv),
-            liv.subject_count
-         ]
-
-         visits = liv.ordered_visits.eager_load(
-           line_items_visit: {
-             line_item: [
-               :admin_rates,
-               service_request: :protocol,
-               service: [
-                 :pricing_maps,
-                 organization: [
-                   :pricing_setups,
-                   parent: [
-                     :pricing_setups,
-                     parent: [
-                       :pricing_setups,
-                       :parent
-                     ]
-                   ]
-                 ]
-               ]
-             ]
-           }
-         )
-
-         row += visits.map do |v|
-
-           qty = v.research_billing_qty + v.insurance_billing_qty
-           qty > 0 ? qty : ""
-
-         end
-
-         sheet.add_row row
-      end
-    end
   end
+
+  # sheet.column_widths nil, 10
 end
 
-  sheet.column_widths nil, 10
-end

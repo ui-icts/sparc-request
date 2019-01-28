@@ -85,10 +85,6 @@ module ServiceCalendarHelper
     header += content_tag(:span, '', class: 'glyphicon glyphicon-lock locked') if locked
     header
   end
-  def display_org_name_text(org_name, ssr, locked)
-    header  = org_name + (ssr.ssr_id ? " (#{ssr.ssr_id})" : "")
-    header
-  end
 
   #############################################
   # Visit Based Services
