@@ -1,44 +1,25 @@
 wb = xlsx_package.workbook
 
+output = ::CostAnalysis::VisitCharges.new(wb)
 styles = ::CostAnalysis::WorkbookStyles.new(wb)
 
 row_header_style = styles.row_header_style
-table_header_style = styles.table_header_style
 default = styles.default
 
 wb.add_worksheet(name: "Report") do |sheet|
 
-  [:id, :title, :short_title, :sponsor_name, :funding_source].each do |p_field|
-    sheet.add_row(
-      [p_field.to_s.titleize, @protocol.send(p_field)],
-      :style => [row_header_style, default],
-      :widths => [:auto,:ignore]
-    )
-  end
+  output.study_information(@protocol, sheet)
 
   sheet.add_row
   sheet.add_row
 
-  @protocol.project_roles.each do |au|
-    sheet.add_row(
-      [au.role.titleize, au.identity.full_name,au.identity.email],
-      :style => [row_header_style, default, default],
-      :widths => :ignore
-    )
-  end
+  output.project_roles(@protocol, sheet)
 
   sheet.add_row
   sheet.add_row
 
+  output.visit_counts_by_service(@protocol,sheet)
 
-  @protocol.service_requests.each do |service_request|
-    sheet.add_row #table
-    bldr = ::CostAnalysis::ServiceRequest.new(service_request, styles)
-    bldr.update(sheet)
-    #header row
-
-  end
-
-  # sheet.column_widths nil, 10
+  sheet.column_widths nil, 10
 end
 
