@@ -37,7 +37,6 @@ module CostAnalysis
         sheet.add_row(
           row,
           :style => [@styles.row_header_style, @styles.default],
-          :widths => [:ignore,:ignore]
         )
       end
     end
@@ -46,9 +45,8 @@ module CostAnalysis
 
       protocol.project_roles.each do |au|
         sheet.add_row(
-          [au.role.titleize, au.identity.full_name,au.identity.email],
-          :style => [@styles.row_header_style, @styles.default, @styles.default],
-          :widths => :ignore
+          [au.role.titleize, au.identity.full_name,nil,nil,au.identity.email],
+          :style => [@styles.row_header_style] + Array.new(4, @styles.default)
         )
       end
     end
@@ -100,21 +98,21 @@ module CostAnalysis
       @styles[:money] = wb.styles.add_style(
         b: false,
         sz: 10,
-        format_code: '$* #,##0.00_);[Red]($* #,##0.00)',
+        format_code: '$* #,##0',
         border: Axlsx::STYLE_THIN_BORDER
       )
 
       @styles[:money_total] = wb.styles.add_style(
         b: true,
         sz: 10,
-        format_code: '$* #,##0.00_);[Red]($#,##0.00)',
+        format_code: '$* #,##0_)',
         border: Axlsx::STYLE_THIN_BORDER
       )
       
       @styles[:service_cost_money] = wb.styles.add_style(
         b: false,
         sz: 10,
-        format_code: '$* #,##0.00_);[Red]($* #,##0.00)',
+        format_code: '$* #,##0.00_)',
       )
 
       @styles[:visit_header] = wb.styles.add_style(
@@ -151,7 +149,7 @@ module CostAnalysis
       row_header_style = @styles.row_header_style
       table_header_style = @styles.table_header_style
       default = @styles.default
-
+      printed_visit_headers = false
       @service_request.arms.each do |arm|
 
         visit_per_patient_totals = []
@@ -165,6 +163,7 @@ module CostAnalysis
           service_per_patient_subtotal = 0
           service_per_study_subtotal = 0
 
+
           headers = [
             display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true),
             nil,
@@ -176,12 +175,24 @@ module CostAnalysis
             "Per Study"
           ]
 
+          header_styles = [@styles.org_hierarchy_header, @styles.org_hierarchy_header] + Array.new(headers.size-2, @styles.visit_header)
+
+          # Dont want to show any of the visit
+          # column headers
+          if printed_visit_headers
+            new_headers = Array.new(headers.size,nil)
+            new_headers[0] = headers[0]
+            headers = new_headers
+
+            header_styles = Array.new(headers.size, @styles.org_hierarchy_header)
+          end
+
           #Header row that lists the program > core > service tree
           sheet.add_row(
             headers,
-            :style => [@styles.org_hierarchy_header, @styles.org_hierarchy_header] + Array.new(headers.size-2, @styles.visit_header),
-            :widths => :ignore
+            :style => header_styles
           )
+          printed_visit_headers = true
 
           #This is each line
           livs.each do |liv|
@@ -247,11 +258,9 @@ module CostAnalysis
             row_widths[0] = :ignore
             row_widths[1] = :auto
 
-            byebug
             sheet.add_row(
               row,
-              :style => row_styles,
-              :widths => row_widths
+              :style => row_styles
             )
             service_per_patient_subtotal += line_per_patient_total
             service_per_study_subtotal += line_per_study_total
@@ -282,7 +291,10 @@ module CostAnalysis
         sheet.add_row(
           [nil,nil,nil,"All Patients",nil] + visit_per_patient_totals.map{|v| v * arm.subject_count },
           :style => visit_summary_style)
+        widths = [30,15,8,8,8] + Array.new(visit_per_patient_totals.size-2, 8) + [8,8]
+        sheet.column_widths(*widths)
       end
+
     end
 
     def pppv_line_item_visits(arm)
