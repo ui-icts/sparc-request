@@ -13,8 +13,7 @@ module CostAnalysis
       
       sheet.add_row(
         ["Study Information"],
-        :style => @styles.study_information_header,
-        :widths => [:ignore]
+        :style => @styles.study_information_header
       )
 
       headers = [
@@ -38,7 +37,7 @@ module CostAnalysis
         sheet.add_row(
           row,
           :style => [@styles.row_header_style, @styles.default],
-          :widths => [10,:ignore]
+          :widths => [:ignore,:ignore]
         )
       end
     end
@@ -95,7 +94,7 @@ module CostAnalysis
         }
       )
 
-      @styles[:table_header_style] = wb.styles.add_style sz: 12, b: true,   alignment: { horizontal: :center, wrap_text: true}
+      @styles[:table_header_style] = wb.styles.add_style sz: 10, b: true,   alignment: { horizontal: :center, wrap_text: true}
       @styles[:default] = wb.styles.add_style alignment: { horizontal: :left }
 
       @styles[:money] = wb.styles.add_style(
@@ -123,7 +122,15 @@ module CostAnalysis
         b: true,
         alignment: {horizontal: :center, wrap_text: true},
         border: Axlsx::STYLE_THIN_BORDER,
-        bg_color: BLUE_BG)
+        bg_color: BLUE_BG
+      )
+
+      @styles[:visit_count] = wb.styles.add_style(
+        sz: 10,
+        b: false,
+        alignment: {horizontal: :center},
+        border: Axlsx::STYLE_THIN_BORDER,
+      )
     end
 
     def method_missing(id)
@@ -146,29 +153,35 @@ module CostAnalysis
       default = @styles.default
 
       @service_request.arms.each do |arm|
-        headers = [
-          "Service Name", #service
-          "Current",
-          "Your\nPrice",
-          "Clinical Qty Type",
-          "Subjects"
-        ] + arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" } + [
-          "Per Patient",
-          "Per Study"
-        ]
-
-        sheet.add_row headers, :style => Array.new(5,table_header_style) + Array.new(headers.size-5, @styles.visit_header)
 
         visit_per_patient_totals = []
         visit_all_patients_totals = []
+        # Watch out side effect. coincidental when this
+        # gets used later that it will have visit headers in the right spot
+        headers = []
 
         pppv_line_item_visits(arm).each do |ssr, livs|
 
           service_per_patient_subtotal = 0
           service_per_study_subtotal = 0
 
+          headers = [
+            display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true),
+            nil,
+            "Current",
+            "Your\nPrice",
+            "Subjects"
+          ] + arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" } + [
+            "Per Patient",
+            "Per Study"
+          ]
+
           #Header row that lists the program > core > service tree
-          sheet.add_row [display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)], :style => @styles.org_hierarchy_header
+          sheet.add_row(
+            headers,
+            :style => [@styles.org_hierarchy_header, @styles.org_hierarchy_header] + Array.new(headers.size-2, @styles.visit_header),
+            :widths => :ignore
+          )
 
           #This is each line
           livs.each do |liv|
@@ -180,9 +193,9 @@ module CostAnalysis
 
             row = [
               first_in_row,
+              display_unit_type(liv),
               display_service_rate(liv.line_item),
               Service.cents_to_dollars(liv.line_item.applicable_rate),
-              display_unit_type(liv),
               liv.subject_count
             ]
 
@@ -196,13 +209,13 @@ module CostAnalysis
 
               qty = v.research_billing_qty + v.insurance_billing_qty
               
-              per_patient = qty * liv.line_item.applicable_rate
+              per_patient = qty * Service.cents_to_dollars(liv.line_item.applicable_rate)
 
               #add to the per patient total for this line
               #TODO: Which cost to use here? I think applicable rate?
               line_per_patient_total += per_patient
               #add to the per study total for this line
-              line_per_study_total += liv.subject_count * liv.line_item.applicable_rate
+              line_per_study_total += (liv.subject_count * Service.cents_to_dollars(liv.line_item.applicable_rate))
 
               #add to per patient total for whole visit (all services)
               visit_per_patient_totals[visit_index] ||= 0
@@ -215,15 +228,30 @@ module CostAnalysis
             row << line_per_patient_total
             row << line_per_study_total
 
-            row_styles = Array.new(row.size,nil)
-            row_styles[1] = @styles.service_cost_money
+            # row_styles = Array.new(row.size,nil)
+            # row_styles[2] = @styles.service_cost_money
+            # row_styles[3] = @styles.service_cost_money
+            #
+            # row_styles[-2] = @styles.money
+            # row_styles[-1] = @styles.money
+            row_styles = Array.new(row.size, @styles.visit_count)
+            row_styles[0] = nil
+            row_styles[1] = nil
             row_styles[2] = @styles.service_cost_money
+            row_styles[3] = @styles.service_cost_money
+            row_styles[4] = nil
             row_styles[-2] = @styles.money
             row_styles[-1] = @styles.money
+
+            row_widths = Array.new(row.size, 5)
+            row_widths[0] = :ignore
+            row_widths[1] = :auto
+
+            byebug
             sheet.add_row(
               row,
               :style => row_styles,
-              :widths => :auto
+              :widths => row_widths
             )
             service_per_patient_subtotal += line_per_patient_total
             service_per_study_subtotal += line_per_study_total
@@ -239,8 +267,7 @@ module CostAnalysis
         # Summarizing the visit
         sheet.add_row(
           [nil,nil,nil,nil,nil] + headers[5..-3],
-          :style => [nil,nil,nil,nil,nil] + Array.new(visit_per_patient_totals.size,@styles.visit_header),
-          :widths => Array.new(5,:ignore) + Array.new(visit_per_patient_totals.size,:auto)
+          :style => [nil,nil,nil,nil,nil] + Array.new(visit_per_patient_totals.size,@styles.visit_header)
         )
 
         visit_summary_style = [nil,nil,nil,@styles.visit_summary_row_header,nil] + Array.new(visit_per_patient_totals.size,@styles.money_total)
@@ -248,8 +275,7 @@ module CostAnalysis
         #print row of per patien totals by visit
         sheet.add_row(
           [nil,nil,nil,"Per Patient",nil] + visit_per_patient_totals, 
-          :style => visit_summary_style,
-          :widths => Array.new(5,:ignore) + Array.new(visit_per_patient_totals.size,:auto)
+          :style => visit_summary_style
         )
 
         #print row of all patients totals by visit
