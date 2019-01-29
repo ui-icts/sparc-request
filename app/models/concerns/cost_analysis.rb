@@ -1,29 +1,138 @@
 module CostAnalysis
 
+  class VisitCharges
+
+    include Dashboard::ProjectsHelper
+
+    def initialize(workbook)
+      @workbook = workbook
+      @styles = WorkbookStyles.new(workbook)
+    end
+
+    def study_information(protocol, sheet)
+      
+      sheet.add_row(
+        ["Study Information"],
+        :style => @styles.study_information_header,
+        :widths => [:ignore]
+      )
+
+      headers = [
+        "CRU Protocol #",
+        "Enrollment Period",
+        "Short Title",
+        "Study Title",
+        "Funding Source",
+        "Target Enrollment"
+      ]
+      
+      values = [
+        protocol.id,
+        "#{protocol.start_date.strftime("%m/%d/%Y")}-#{protocol.end_date.strftime("%m/%d/%Y")}",
+        protocol.short_title,
+        protocol.title,
+        "#{protocol.sponsor_name} (#{display_funding_source(protocol)})",
+        ""
+      ]
+      headers.zip(values).each do |row|
+        sheet.add_row(
+          row,
+          :style => [@styles.row_header_style, @styles.default],
+          :widths => [10,:ignore]
+        )
+      end
+    end
+
+    def project_roles(protocol, sheet)
+
+      protocol.project_roles.each do |au|
+        sheet.add_row(
+          [au.role.titleize, au.identity.full_name,au.identity.email],
+          :style => [@styles.row_header_style, @styles.default, @styles.default],
+          :widths => :ignore
+        )
+      end
+    end
+
+    def visit_counts_by_service(protocol, sheet)
+
+      protocol.service_requests.each do |service_request|
+        sheet.add_row #table
+        bldr = ::CostAnalysis::ServiceRequest.new(service_request, @styles)
+        bldr.update(sheet)
+        #header row
+
+      end
+    end
+  end
+
   class WorkbookStyles
-    attr_reader :row_header_style, :table_header_style, :default, :money,:visit_header
+
+    BLUE_BG = "C5D9F1"
+    GRAY_BG = "E8E8E8"
+
     def initialize(wb)
+      @styles = {}
+      @styles[:study_information_header] = wb.styles.add_style(
+        b: true,
+        sz: 12,
+        bg_color: BLUE_BG
+      )
 
-      @row_header_style = wb.styles.add_style b: true, wrap_text: true, sz: 12
-      @table_header_style = wb.styles.add_style sz: 12, b: true,   alignment: { horizontal: :center, wrap_text: true}
-      @default = wb.styles.add_style alignment: { horizontal: :left }
+      @styles[:row_header_style] = wb.styles.add_style b: true, wrap_text: true, sz: 10
 
-      @money = wb.styles.add_style(
+      @styles[:org_hierarchy_header] = wb.styles.add_style(
         b: true,
         sz: 10,
-        format_code: '$#,###,##0',
+        bg_color: GRAY_BG
+      )
+
+      @styles[:visit_summary_row_header] = wb.styles.add_style(
+        b: true,
+        sz: 10,
+        alignment: {
+          horizontal: :right
+        }
+      )
+
+      @styles[:table_header_style] = wb.styles.add_style sz: 12, b: true,   alignment: { horizontal: :center, wrap_text: true}
+      @styles[:default] = wb.styles.add_style alignment: { horizontal: :left }
+
+      @styles[:money] = wb.styles.add_style(
+        b: false,
+        sz: 10,
+        format_code: '$* #,##0.00_);[Red]($* #,##0.00)',
         border: Axlsx::STYLE_THIN_BORDER
       )
 
-      @visit_header = wb.styles.add_style(
+      @styles[:money_total] = wb.styles.add_style(
+        b: true,
+        sz: 10,
+        format_code: '$* #,##0.00_);[Red]($#,##0.00)',
+        border: Axlsx::STYLE_THIN_BORDER
+      )
+      
+      @styles[:service_cost_money] = wb.styles.add_style(
+        b: false,
+        sz: 10,
+        format_code: '$* #,##0.00_);[Red]($* #,##0.00)',
+      )
+
+      @styles[:visit_header] = wb.styles.add_style(
         sz: 10,
         b: true,
         alignment: {horizontal: :center, wrap_text: true},
         border: Axlsx::STYLE_THIN_BORDER,
-        bg_color: "C5D9F1")
+        bg_color: BLUE_BG)
+    end
+
+    def method_missing(id)
+      @styles[id] or raise "No workbook style #{id}"
     end
   end
 
+
+  
   class ServiceRequest
     def initialize(service_request, styles)
       @service_request = service_request
@@ -39,8 +148,8 @@ module CostAnalysis
       @service_request.arms.each do |arm|
         headers = [
           "Service Name", #service
-          "Service\nRate",
-          "Your\nCost",
+          "Current",
+          "Your\nPrice",
           "Clinical Qty Type",
           "Subjects"
         ] + arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" } + [
@@ -55,8 +164,11 @@ module CostAnalysis
 
         pppv_line_item_visits(arm).each do |ssr, livs|
 
+          service_per_patient_subtotal = 0
+          service_per_study_subtotal = 0
+
           #Header row that lists the program > core > service tree
-          sheet.add_row [display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)], :style => row_header_style
+          sheet.add_row [display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)], :style => @styles.org_hierarchy_header
 
           #This is each line
           livs.each do |liv|
@@ -104,29 +216,46 @@ module CostAnalysis
             row << line_per_study_total
 
             row_styles = Array.new(row.size,nil)
+            row_styles[1] = @styles.service_cost_money
+            row_styles[2] = @styles.service_cost_money
             row_styles[-2] = @styles.money
             row_styles[-1] = @styles.money
-            sheet.add_row row, :style => row_styles
+            sheet.add_row(
+              row,
+              :style => row_styles,
+              :widths => :auto
+            )
+            service_per_patient_subtotal += line_per_patient_total
+            service_per_study_subtotal += line_per_study_total
           end
+
+          # sub total for the service
+          sheet.add_row(
+            Array.new(5 + visit_per_patient_totals.size, nil) + [service_per_patient_subtotal, service_per_study_subtotal],
+            :style => @styles.money_total
+          )
         end # end of visit line items
 
         # Summarizing the visit
         sheet.add_row(
-          Array.new(5,nil) + headers[5..-3],
-          :style => Array.new(5,nil) + Array.new(visit_per_patient_totals.size,@styles.visit_header),
+          [nil,nil,nil,nil,nil] + headers[5..-3],
+          :style => [nil,nil,nil,nil,nil] + Array.new(visit_per_patient_totals.size,@styles.visit_header),
           :widths => Array.new(5,:ignore) + Array.new(visit_per_patient_totals.size,:auto)
         )
 
-        visit_summary_style = Array.new(5,nil) + Array.new(visit_per_patient_totals.size,@styles.money)
+        visit_summary_style = [nil,nil,nil,@styles.visit_summary_row_header,nil] + Array.new(visit_per_patient_totals.size,@styles.money_total)
+
         #print row of per patien totals by visit
         sheet.add_row(
-          Array.new(5,"") + visit_per_patient_totals, 
+          [nil,nil,nil,"Per Patient",nil] + visit_per_patient_totals, 
           :style => visit_summary_style,
           :widths => Array.new(5,:ignore) + Array.new(visit_per_patient_totals.size,:auto)
         )
 
         #print row of all patients totals by visit
-        sheet.add_row( Array.new(5,"") + visit_per_patient_totals.map{|v| v * arm.subject_count }, :style => visit_summary_style)
+        sheet.add_row(
+          [nil,nil,nil,"All Patients",nil] + visit_per_patient_totals.map{|v| v * arm.subject_count },
+          :style => visit_summary_style)
       end
     end
 
