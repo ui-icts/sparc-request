@@ -257,10 +257,13 @@ module CostAnalysis
             row_widths = Array.new(row.size, 5)
             row_widths[0] = :ignore
             row_widths[1] = :auto
-
+            row_widths[-2] = 5
+            row_widths[-1] = 5
+          
             sheet.add_row(
               row,
-              :style => row_styles
+              :style => row_styles,
+              :widths => row_widths
             )
             service_per_patient_subtotal += line_per_patient_total
             service_per_study_subtotal += line_per_study_total

@@ -20,6 +20,6 @@ wb.add_worksheet(name: "Report") do |sheet|
 
   output.visit_counts_by_service(@protocol,sheet)
 
-  sheet.column_widths nil, 10
+  sheet.column_widths nil, 5
 end
 
