@@ -129,6 +129,12 @@ module CostAnalysis
         alignment: {horizontal: :center},
         border: Axlsx::STYLE_THIN_BORDER,
       )
+
+      @styles[:spacer_row] = wb.styles.add_style(
+        sz: 10,
+        b: false,
+        bg_color: GRAY_BG
+      )
     end
 
     def method_missing(id)
@@ -273,6 +279,12 @@ module CostAnalysis
           sheet.add_row(
             Array.new(5 + visit_per_patient_totals.size, nil) + [service_per_patient_subtotal, service_per_study_subtotal],
             :style => @styles.money_total
+          )
+
+          #blank spacer row
+          sheet.add_row(
+            Array.new(5 + visit_per_patient_totals.size + 2, nil),
+            :style => @styles.spacer_row
           )
         end # end of visit line items
 
