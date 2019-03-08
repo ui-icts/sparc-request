@@ -308,6 +308,16 @@ module CostAnalysis
           :style => visit_summary_style)
         widths = [30,15,8,8,8] + Array.new(visit_per_patient_totals.size-2, 8) + [8,8]
         sheet.column_widths(*widths)
+
+        #blank
+        sheet.add_row([])
+
+        #total study cost
+        sheet.add_row(
+          [nil,nil,nil,"Total Study Cost",nil, visit_per_patient_totals.map{|v| v * arm.subject_count}.sum],
+          :style => visit_summary_style
+        )
+
       end
 
     end
