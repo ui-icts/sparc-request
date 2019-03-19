@@ -296,18 +296,20 @@ module CostAnalysis
 
         visit_summary_style = [nil,nil,nil,@styles.visit_summary_row_header,nil] + Array.new(visit_per_patient_totals.size,@styles.money_total)
 
-        #print row of per patien totals by visit
-        sheet.add_row(
-          [nil,nil,nil,"Per Patient",nil] + visit_per_patient_totals, 
-          :style => visit_summary_style
-        )
+        unless visit_per_patient_totals.empty?
+          #print row of per patient totals by visit
+          sheet.add_row(
+            [nil,nil,nil,"Per Patient",nil] + visit_per_patient_totals, 
+            :style => visit_summary_style
+          )
 
-        #print row of all patients totals by visit
-        sheet.add_row(
-          [nil,nil,nil,"All Patients",nil] + visit_per_patient_totals.map{|v| v * arm.subject_count },
-          :style => visit_summary_style)
-        widths = [30,15,8,8,8] + Array.new(visit_per_patient_totals.size-2, 8) + [8,8]
-        sheet.column_widths(*widths)
+          #print row of all patients totals by visit
+          sheet.add_row(
+            [nil,nil,nil,"All Patients",nil] + visit_per_patient_totals.map{|v| v * arm.subject_count },
+            :style => visit_summary_style)
+          widths = [30,15,8,8,8] + Array.new(visit_per_patient_totals.size, 8)
+          sheet.column_widths(*widths)
+        end
 
         #blank
         sheet.add_row([])
