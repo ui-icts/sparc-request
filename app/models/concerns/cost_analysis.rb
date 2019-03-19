@@ -129,6 +129,12 @@ module CostAnalysis
         alignment: {horizontal: :center},
         border: Axlsx::STYLE_THIN_BORDER,
       )
+
+      @styles[:spacer_row] = wb.styles.add_style(
+        sz: 10,
+        b: false,
+        bg_color: GRAY_BG
+      )
     end
 
     def method_missing(id)
@@ -257,10 +263,13 @@ module CostAnalysis
             row_widths = Array.new(row.size, 5)
             row_widths[0] = :ignore
             row_widths[1] = :auto
-
+            row_widths[-2] = 5
+            row_widths[-1] = 5
+          
             sheet.add_row(
               row,
-              :style => row_styles
+              :style => row_styles,
+              :widths => row_widths
             )
             service_per_patient_subtotal += line_per_patient_total
             service_per_study_subtotal += line_per_study_total
@@ -270,6 +279,12 @@ module CostAnalysis
           sheet.add_row(
             Array.new(5 + visit_per_patient_totals.size, nil) + [service_per_patient_subtotal, service_per_study_subtotal],
             :style => @styles.money_total
+          )
+
+          #blank spacer row
+          sheet.add_row(
+            Array.new(5 + visit_per_patient_totals.size + 2, nil),
+            :style => @styles.spacer_row
           )
         end # end of visit line items
 
@@ -281,18 +296,30 @@ module CostAnalysis
 
         visit_summary_style = [nil,nil,nil,@styles.visit_summary_row_header,nil] + Array.new(visit_per_patient_totals.size,@styles.money_total)
 
-        #print row of per patien totals by visit
+        unless visit_per_patient_totals.empty?
+          #print row of per patient totals by visit
+          sheet.add_row(
+            [nil,nil,nil,"Per Patient",nil] + visit_per_patient_totals, 
+            :style => visit_summary_style
+          )
+
+          #print row of all patients totals by visit
+          sheet.add_row(
+            [nil,nil,nil,"All Patients",nil] + visit_per_patient_totals.map{|v| v * arm.subject_count },
+            :style => visit_summary_style)
+          widths = [30,15,8,8,8] + Array.new(visit_per_patient_totals.size, 8)
+          sheet.column_widths(*widths)
+        end
+
+        #blank
+        sheet.add_row([])
+
+        #total study cost
         sheet.add_row(
-          [nil,nil,nil,"Per Patient",nil] + visit_per_patient_totals, 
+          [nil,nil,nil,"Total Study Cost",nil, visit_per_patient_totals.map{|v| v * arm.subject_count}.sum],
           :style => visit_summary_style
         )
 
-        #print row of all patients totals by visit
-        sheet.add_row(
-          [nil,nil,nil,"All Patients",nil] + visit_per_patient_totals.map{|v| v * arm.subject_count },
-          :style => visit_summary_style)
-        widths = [30,15,8,8,8] + Array.new(visit_per_patient_totals.size-2, 8) + [8,8]
-        sheet.column_widths(*widths)
       end
 
     end
