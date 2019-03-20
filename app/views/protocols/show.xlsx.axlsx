@@ -1,25 +1,5 @@
 wb = xlsx_package.workbook
 
-output = ::CostAnalysis::VisitCharges.new(wb)
-styles = ::CostAnalysis::WorkbookStyles.new(wb)
-
-row_header_style = styles.row_header_style
-default = styles.default
-
-wb.add_worksheet(name: "Report") do |sheet|
-
-  output.study_information(@protocol, sheet)
-
-  sheet.add_row
-  sheet.add_row
-
-  output.project_roles(@protocol, sheet)
-
-  sheet.add_row
-  sheet.add_row
-
-  output.visit_counts_by_service(@protocol,sheet)
-
-  sheet.column_widths nil, 5
-end
-
+generator = ::CostAnalysis::Generator.new
+generator.protocol = @protocol
+generator.to_workbook(wb)
