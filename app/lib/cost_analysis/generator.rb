@@ -3,8 +3,8 @@ module CostAnalysis
     attr_writer :protocol
     def to_workbook(workbook)
 
-      output = ::CostAnalysis::VisitCharges.new(workbook)
-      styles = ::CostAnalysis::WorkbookStyles.new(workbook)
+      output = VisitCharges.new(workbook)
+      styles = WorkbookStyles.new(workbook)
 
       row_header_style = styles.row_header_style
       default = styles.default
@@ -24,6 +24,22 @@ module CostAnalysis
         output.visit_counts_by_service(@protocol,sheet)
 
         sheet.column_widths nil, 5
+      end
+    end
+
+    def to_pdf(doc)
+      pdf = CostAnalysis::Generators::PDF.new(doc)
+      pdf.study_information = StudyInformation.new(@protocol)
+      pdf.update
+    end
+
+    def preview(thing)
+      case thing
+      when :pdf
+        pdf = Prawn::Document.new(:page_layout => :landscape)
+        to_pdf(pdf)
+        pdf.render_file("preview.pdf")
+        `open preview.pdf`
       end
     end
   end

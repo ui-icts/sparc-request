@@ -150,6 +150,10 @@ class ProtocolsController < ApplicationController
       format.xlsx { 
         response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}) Report.xlsx\""
       }
+      format.pdf {
+        response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}).pdf\""
+        pdf = Prawn::Document.new
+      }
       format.html { render layout: false }
     end
   end
