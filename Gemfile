@@ -57,7 +57,8 @@ gem 'omniauth'
 gem 'omniauth-shibboleth'
 gem 'paperclip', '~> 6.1'
 gem 'pdfkit'
-gem 'prawn', '0.12.0'
+gem 'prawn'
+gem 'prawn-table'
 gem 'premailer-rails'
 gem 'rack-mini-profiler'
 gem 'rails', '5.2'
@@ -118,6 +119,7 @@ group :test do
   gem 'rails-controller-testing', require: false
   gem 'rspec-activemodel-mocks'
   gem 'rspec-html-matchers'
+  gem 'rspec-collection_matchers'
   gem 'shoulda-matchers', require: false
   gem 'shoulda-callback-matchers'
   gem 'site_prism'

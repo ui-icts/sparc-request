@@ -150,6 +150,14 @@ class ProtocolsController < ApplicationController
       format.xlsx { 
         response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}) Report.xlsx\""
       }
+      format.pdf {
+        response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}).pdf\""
+        pdf = Prawn::Document.new(:page_layout => :landscape)
+        generator = CostAnalysis::Generator.new
+        generator.protocol = @protocol
+        generator.to_pdf(pdf)
+        send_data pdf.render, filename: "Cost Analysis (#{@protocol.id}).pdf", type: "application/pdf", disposition: "inline"
+      }
       format.html { render layout: false }
     end
   end

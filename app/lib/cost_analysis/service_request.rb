@@ -1,153 +1,43 @@
 module CostAnalysis
 
-  class VisitCharges
-
-    include Dashboard::ProjectsHelper
-
-    def initialize(workbook)
-      @workbook = workbook
-      @styles = WorkbookStyles.new(workbook)
-    end
-
-    def study_information(protocol, sheet)
-      
-      sheet.add_row(
-        ["Study Information"],
-        :style => @styles.study_information_header
-      )
-
-      headers = [
-        "CRU Protocol #",
-        "Enrollment Period",
-        "Short Title",
-        "Study Title",
-        "Funding Source",
-        "Target Enrollment"
-      ]
-      
-      values = [
-        protocol.id,
-        "#{protocol.start_date.strftime("%m/%d/%Y")}-#{protocol.end_date.strftime("%m/%d/%Y")}",
-        protocol.short_title,
-        protocol.title,
-        "#{protocol.sponsor_name} (#{display_funding_source(protocol)})",
-        ""
-      ]
-      headers.zip(values).each do |row|
-        sheet.add_row(
-          row,
-          :style => [@styles.row_header_style, @styles.default],
-        )
-      end
-    end
-
-    def project_roles(protocol, sheet)
-
-      protocol.project_roles.each do |au|
-        sheet.add_row(
-          [au.role.titleize, au.identity.full_name,nil,nil,au.identity.email],
-          :style => [@styles.row_header_style] + Array.new(4, @styles.default)
-        )
-      end
-    end
-
-    def visit_counts_by_service(protocol, sheet)
-
-      protocol.service_requests.each do |service_request|
-        sheet.add_row #table
-        bldr = ::CostAnalysis::ServiceRequest.new(service_request, @styles)
-        bldr.update(sheet)
-        #header row
-
-      end
-    end
-  end
-
-  class WorkbookStyles
-
-    BLUE_BG = "C5D9F1"
-    GRAY_BG = "E8E8E8"
-
-    def initialize(wb)
-      @styles = {}
-      @styles[:study_information_header] = wb.styles.add_style(
-        b: true,
-        sz: 12,
-        bg_color: BLUE_BG
-      )
-
-      @styles[:row_header_style] = wb.styles.add_style b: true, wrap_text: true, sz: 10
-
-      @styles[:org_hierarchy_header] = wb.styles.add_style(
-        b: true,
-        sz: 10,
-        bg_color: GRAY_BG
-      )
-
-      @styles[:visit_summary_row_header] = wb.styles.add_style(
-        b: true,
-        sz: 10,
-        alignment: {
-          horizontal: :right
-        }
-      )
-
-      @styles[:table_header_style] = wb.styles.add_style sz: 10, b: true,   alignment: { horizontal: :center, wrap_text: true}
-      @styles[:default] = wb.styles.add_style alignment: { horizontal: :left }
-
-      @styles[:money] = wb.styles.add_style(
-        b: false,
-        sz: 10,
-        format_code: '$* #,##0',
-        border: Axlsx::STYLE_THIN_BORDER
-      )
-
-      @styles[:money_total] = wb.styles.add_style(
-        b: true,
-        sz: 10,
-        format_code: '$* #,##0_)',
-        border: Axlsx::STYLE_THIN_BORDER
-      )
-      
-      @styles[:service_cost_money] = wb.styles.add_style(
-        b: false,
-        sz: 10,
-        format_code: '$* #,##0.00_)',
-      )
-
-      @styles[:visit_header] = wb.styles.add_style(
-        sz: 10,
-        b: true,
-        alignment: {horizontal: :center, wrap_text: true},
-        border: Axlsx::STYLE_THIN_BORDER,
-        bg_color: BLUE_BG
-      )
-
-      @styles[:visit_count] = wb.styles.add_style(
-        sz: 10,
-        b: false,
-        alignment: {horizontal: :center},
-        border: Axlsx::STYLE_THIN_BORDER,
-      )
-
-      @styles[:spacer_row] = wb.styles.add_style(
-        sz: 10,
-        b: false,
-        bg_color: GRAY_BG
-      )
-    end
-
-    def method_missing(id)
-      @styles[id] or raise "No workbook style #{id}"
-    end
-  end
-
-
-  
   class ServiceRequest
-    def initialize(service_request, styles)
+    def initialize(service_request, styles=nil)
       @service_request = service_request
       @styles = styles
+    end
+
+    def visits
+      Enumerator.new do |yielder|
+        @service_request.arms.each do |arm|
+          visit_labels = arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" }
+          yielder << [visit_labels, line_items(arm)]
+        end
+      end
+    end
+    def line_items(arm)
+      Enumerator.new do |yielder|
+        @service_request.arms.each do |arm|
+          pppv_line_item_visits(arm).each do |ssr, livs|
+            program_or_core = display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)
+            #This is each line
+            livs.each do |liv|
+
+              vli = VisitLineItem.new
+              vli.description = liv.line_item.service.display_service_name
+              vli.unit_type = display_unit_type(liv)
+              vli.service_rate = display_service_rate(liv.line_item)
+              vli.applicable_rate = Service.cents_to_dollars(liv.line_item.applicable_rate)
+              vli.subjects = liv.subject_count
+
+              vli.visit_counts = eager_loaded_visits(liv).map do |v|
+                v.research_billing_qty + v.insurance_billing_qty
+              end
+
+              yielder << [program_or_core, vli]
+            end
+          end
+        end
+      end
     end
 
     def update(sheet) #workbook
@@ -168,7 +58,6 @@ module CostAnalysis
 
           service_per_patient_subtotal = 0
           service_per_study_subtotal = 0
-
 
           headers = [
             display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true),
