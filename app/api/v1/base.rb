@@ -81,7 +81,6 @@ module SPARCCWF
           end
 
           get do
-            byebug
             find_objects(published_resource_to_s, params)
             if @objects
               present @objects, with: presenter(published_resource_to_s, params[:depth])

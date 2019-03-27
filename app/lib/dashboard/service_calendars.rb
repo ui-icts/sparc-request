@@ -146,7 +146,6 @@ module Dashboard
             arr << ["&nbsp;&nbsp; - #{vg.name}/Day #{vg.day}".html_safe, "#{vg.id}", page: page + 1] if arm.visit_groups.present?
           end
           rescue NoMethodError => e
-            byebug
             raise "Invalid ending index of #{ending_visit}"''
           end
         end
