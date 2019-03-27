@@ -13,6 +13,20 @@ module CostAnalysis
       @summary_rows = summary_rows
     end
 
+    def row_count
+      @data.size
+    end
+
+    def combine_with(other)
+
+      if other
+        pad = self.data.size
+        self.data += other.data
+        self.header_rows += other.header_rows.map { |i| i + pad }
+        self.summary_rows += other.summary_rows.map{ |i| i + pad }
+      end
+      self
+    end
     def to_s
       col_size = 10
       s = []
@@ -118,38 +132,51 @@ module CostAnalysis
       @visit_labels.size
     end
 
-    def pages
-      pages_needed = visit_count.div(VISITS_PER_PAGE)
-      pages_needed += 1 if visit_count.remainder(VISITS_PER_PAGE) > 0
+    def pages(visit_columns_per_page)
+      pages_needed = visit_count.div(visit_columns_per_page)
+      pages_needed += 1 if visit_count.remainder(visit_columns_per_page) > 0
       page_start = 1
       pages_needed.times do |p|
-        yield page_start, VISITS_PER_PAGE
+        yield page_start, visit_columns_per_page
         page_start += 1
       end
     end
 
     def paged(visit_columns_per_page:, rows_per_page:)
 
-      Enumerator.new do |yielder|
-        self.pages do |page_num, page_size|
-          data = []
-          header_rows = []
-          summary_rows = []
+      page_datas = []
+      self.pages(visit_columns_per_page) do |page_num, page_size|
+        data = []
+        header_rows = []
+        summary_rows = []
 
-          data << self.build_header_row(page_num-1, page_size)
+        data << self.build_header_row(page_num-1, page_size)
 
-          self.cores.each do |core|
-            header_rows << data.size
-            data << self.build_program_core_row(core, page_size)
+        self.cores.each do |core|
+          header_rows << data.size
+          data << self.build_program_core_row(core, page_size)
 
-            core_rows = self.build_line_item_rows(@line_items[core], page_num - 1, page_size)
-            data.concat(core_rows)
-          end
-          data << self.build_summary_row(page_num-1, page_size)
-          summary_rows << (data.size - 1)
-
-          yielder << VisitPageData.new(data,header_rows,summary_rows)
+          core_rows = self.build_line_item_rows(@line_items[core], page_num - 1, page_size)
+          data.concat(core_rows)
         end
+        data << self.build_summary_row(page_num-1, page_size)
+        summary_rows << (data.size - 1)
+
+        page_datas << VisitPageData.new(data,header_rows,summary_rows)
+      end
+
+      current = nil
+      Enumerator.new do |yielder|
+        page_datas.each do |pd|
+          if pd.row_count + (current&.row_count || 0) <= rows_per_page
+            current = pd.combine_with current
+          else
+            yielder << current
+            current = pd
+          end
+        end
+
+        yielder << current unless current.nil?
       end
     end
 

@@ -1,5 +1,5 @@
 require 'rails_helper'
-
+require 'byebug'
 RSpec.describe CostAnalysis::VisitTable do
 
   def visit_line_item(service, visit_count)
@@ -42,9 +42,9 @@ RSpec.describe CostAnalysis::VisitTable do
 
       let(:number_of_visits) { 15 }
 
-      context "visits columns per page is 14 and rows per page is 10" do
+      context "visit columns per page is 14 and rows per page is 10" do
         let(:visit_columns_per_page) { 14 }
-        let(:rows_per_page) { 10 }
+        let(:rows_per_page) { 4 }
 
         it { is_expected.to have_exactly(2).items }
         it "should have column labels; core1; service; and summary on each page" do
@@ -57,6 +57,15 @@ RSpec.describe CostAnalysis::VisitTable do
           expect(page2.data[0]).to end_with("visit-15")
         end
 
+      end
+
+      context "visit columns per page is 14 but rows per page is very large" do
+        let(:visit_columns_per_page) { 14 }
+        let(:rows_per_page) { 400 }
+
+        it "should put everything on the same page" do
+          expect(subject).to have_exactly(1).items
+        end
       end
     end
 
@@ -83,6 +92,21 @@ RSpec.describe CostAnalysis::VisitTable do
           expect(page2.data).to have_exactly(6).items
         end
 
+      end
+
+      context "visit columns per page is 50 and rows per page is 100" do
+        let(:visit_columns_per_page) { 50 }
+        let(:rows_per_page) { 100 }
+
+        it { is_expected.to have_exactly(1).items }
+
+        it "should have column labels;core1;service1;core2;service2;summary" do
+          expect(page1.data).to have_exactly(6).items
+        end
+
+        it "should have visit 15 as the last column" do
+          expect(page1.data[0]).to end_with("visit-15")
+        end
       end
     end
 

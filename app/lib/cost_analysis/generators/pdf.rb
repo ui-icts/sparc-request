@@ -44,7 +44,7 @@ module CostAnalysis
 
           move_down 20
 
-          visit_table.paged(visit_columns_per_page: 14, rows_per_page: 20).each do |page|
+          visit_table.paged(visit_columns_per_page: 14, rows_per_page: 50).each do |page|
 
             table(
               page.data,
