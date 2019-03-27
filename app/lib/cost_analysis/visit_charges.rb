@@ -97,9 +97,16 @@ module CostAnalysis
 
     def project_roles(protocol, sheet)
 
-      protocol.project_roles.each do |au|
+      si = StudyInformation.new(protocol)
+      si.primary_investigators.each do |c|
         sheet.add_row(
-          [au.role.titleize, au.identity.full_name,nil,nil,au.identity.email],
+          ["Primary Investigator", c.name,nil,nil,c.email],
+          :style => [@styles.row_header_style] + Array.new(4, @styles.default)
+        )
+      end
+      si.additional_contacts.each do |c|
+        sheet.add_row(
+          [c.role.titleize, c.name,nil,nil,c.email],
           :style => [@styles.row_header_style] + Array.new(4, @styles.default)
         )
       end

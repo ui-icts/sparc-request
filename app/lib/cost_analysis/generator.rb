@@ -29,7 +29,7 @@ module CostAnalysis
 
     def to_pdf(doc)
       pdf = CostAnalysis::Generators::PDF.new(doc)
-      pdf.study_information = StudyInformation.new(@protocol)
+      pdf.study_information = CostAnalysis::StudyInformation.new(@protocol)
       pdf.update
     end
 
