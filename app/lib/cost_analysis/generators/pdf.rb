@@ -21,6 +21,9 @@ module CostAnalysis
           bounding_box([0,y], :width => 700, :height => 50) do
             text "CRU Protocol#: #{study_information.protocol_number}", :align => :left, :valign => :center, :size => 16
             text study_information.enrollment_period, :align => :right, :valign => :top
+            study_information.primary_investigators.each do |pi|
+              text pi.name, :align => :right, :valign => :bottom
+            end
           end
           stroke_horizontal_rule
 
@@ -36,13 +39,6 @@ module CostAnalysis
 
           move_down 20
 
-
-          table(
-            primary_investigators + additional_contacts,
-            :width => 700,
-            :cell_style => {:border_width => 1, :border_color => 'E8E8E8'})
-
-          move_down 20
 
           visit_tables.each do |visit_table|
             visit_table.paged(visit_columns_per_page: 14, rows_per_page: 20).each do |page|
@@ -89,6 +85,15 @@ module CostAnalysis
                 # start_new_page
             end
           end
+
+          move_down 20
+
+          table(
+            primary_investigators + additional_contacts,
+            :width => 700,
+            :cell_style => {:border_width => 1, :border_color => 'E8E8E8'})
+
+
         end
       end
     end
