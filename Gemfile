@@ -119,6 +119,7 @@ group :test do
   gem 'rails-controller-testing', require: false
   gem 'rspec-activemodel-mocks'
   gem 'rspec-html-matchers'
+  gem 'rspec-collection_matchers'
   gem 'shoulda-matchers', require: false
   gem 'shoulda-callback-matchers'
   gem 'site_prism'

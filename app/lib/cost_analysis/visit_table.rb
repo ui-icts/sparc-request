@@ -22,17 +22,32 @@ module CostAnalysis
       s.join("\n")
     end
 
+    def column_label_row
+      data[0]
+    end
+
+    def core_label_row
+      data[1]
+    end
+
+    def data_rows
+      data[2..-2]
+    end
+
+    def summary_row
+      data[-1]
+    end
     #These all need return arrays of strings
     def printable_header_lines(col_size=10)
       s = []
       s << ("-" * 140)
-      s << data[0].map{ |c| c.center(col_size) }.join
-      s << data[1].map{ |c| c[:content]}.join(" ")
+      s << column_label_row.map{ |c| c.center(col_size) }.join
+      s << core_label_row.map{ |c| c[:content]}.join(" ")
       s
     end
 
     def printable_data_rows(col_size=10)
-      data[2..-2].map{ |c|
+      data_rows.map{ |c|
         row = ""
         row += c[0].rjust(col_size)
         row += c[1..-1].map{ |ic| ic.to_s.center(col_size) }.join
@@ -42,9 +57,9 @@ module CostAnalysis
 
     def printable_summary_rows(col_size=10)
       row = ""
-      header = data[-1][0]
+      header = summary_row[0]
       row += header[:content].ljust(col_size*header[:colspan])
-      data[-1][1..-1].each do |c|
+      summary_row[1..-1].each do |c|
         row += c.to_s.center(col_size)
       end
       [row]
@@ -64,9 +79,6 @@ module CostAnalysis
       nursing = "Nursing Services > Clinical Research Unit > ICTS > UIOWA (0003)"
       lab = "Lab > Clinical Research Unit > ICTS > UIOWA (0002)"
 
-      @line_items[nursing] = []
-      @line_items[lab] = []
-
       ["Bundle: Level 1","Height and Weight","Blood Draw/ Venipuncture (Adult)", "Urine Collection"].each do |service|
         li = VisitLineItem.new
         li.description = service
@@ -75,7 +87,7 @@ module CostAnalysis
         li.applicable_rate = 35.0
         li.subjects = 50
         li.visit_counts = Array.new(visit_count) { rand(0...3) }
-        @line_items[nursing] << li
+        add_line_item nursing, li
       end
 
       ["Sample Processing: Level A", "Sample Processing: Urine", "Dry Ice"].each do |service|
@@ -86,7 +98,7 @@ module CostAnalysis
         li.applicable_rate = 35.0
         li.subjects = 6
         li.visit_counts = Array.new(visit_count) { rand(0...3) }
-        @line_items[lab] << li
+        add_line_item lab, li
       end
 
       visit_count.times do |c|
@@ -94,6 +106,10 @@ module CostAnalysis
       end
     end
 
+    def add_line_item(program_or_core, line_item)
+      @line_items[program_or_core] = [] unless @line_items.has_key?(program_or_core)
+      @line_items[program_or_core] << line_item
+    end
     def cores
       @line_items.keys
     end
@@ -119,50 +135,59 @@ module CostAnalysis
           data = []
           header_rows = []
           summary_rows = []
-          headers = true
+
+          data << self.build_header_row(page_num-1, page_size)
 
           self.cores.each do |core|
-            core_rows = self.line_item_arr(core, headers: headers, page:page_num, page_size: page_size)
-            if headers
-              header_rows << data.size + 1
-            else
-              header_rows << data.size
-            end
+            header_rows << data.size
+            data << self.build_program_core_row(core, page_size)
+
+            core_rows = self.build_line_item_rows(@line_items[core], page_num - 1, page_size)
             data.concat(core_rows)
-            summary_rows << (data.size - 1)
-            headers = false
           end
-          pd = 
+          data << self.build_summary_row(page_num-1, page_size)
+          summary_rows << (data.size - 1)
+
           yielder << VisitPageData.new(data,header_rows,summary_rows)
         end
       end
     end
-    def line_item_arr(program_or_core, headers: true, page: 1, page_size: 14)
-      items = []
-      page_idx = page - 1
-      if headers
-        items << STATIC_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
-        # items << [{:colspan => 2, :content => program_or_core}] + ["Current","Your Price", "Subjects"] + @visit_labels.drop(page_idx*page_size).take(page_size)
-      else
-      end
 
-      items << [{:colspan => (5 + page_size), :content => program_or_core, :align => :left, :size => 16}]
-      summary_row = Array.new(page_size,0)
-      @line_items[program_or_core].each do |li|
-        visit_counts = li.visit_counts.drop(page_idx*page_size).take(page_size)
-        #count is maybe qty?
-        #page_size is the number of visits we show in the table
-        #don't forget about cents_to_dollars
-        visit_counts.each_with_index do |count,idx|
-          summary_row[idx] += (count * li.applicable_rate)
-        end
-        items << [li.description, li.unit_type, li.service_rate, li.applicable_rate, li.subjects] + visit_counts.map { |c| c == 0 ? "" : c.to_s }
-      end
-
-      items << [{content: "Per Patient", colspan: 5}] + summary_row
-      items
+    def build_header_row(page_idx, page_size)
+      STATIC_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
     end
 
+    def build_program_core_row(program_or_core, page_size)
+      [{:colspan => (5 + page_size), :content => program_or_core, :align => :left, :size => 16}]
+    end
+
+    def build_line_item_rows(line_items, page_idx, page_size)
+      items = []
+      line_items.each do |li|
+        visit_counts = li.visit_counts.drop(page_idx*page_size).take(page_size)
+        items << [li.description, li.unit_type, li.service_rate, li.applicable_rate, li.subjects] + visit_counts.map { |c| c == 0 ? "" : c.to_s }
+      end
+      items
+
+    end
+
+    def build_summary_row(page_idx, page_size)
+      summary_row = Array.new(page_size,0)
+      @line_items.each do |program_or_core, lines|
+
+        lines.each do |li|
+
+          visit_counts = li.visit_counts.drop(page_idx*page_size).take(page_size)
+          #count is maybe qty?
+          #page_size is the number of visits we show in the table
+          #don't forget about cents_to_dollars
+          visit_counts.each_with_index do |count,idx|
+            summary_row[idx] += (count * li.applicable_rate)
+          end
+        end
+      end
+      [{content: "Per Patient", colspan: 5}] + summary_row
+    end
   end
 
 end
