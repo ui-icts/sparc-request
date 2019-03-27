@@ -1,9 +1,43 @@
 module CostAnalysis
 
   class ServiceRequest
-    def initialize(service_request, styles)
+    def initialize(service_request, styles=nil)
       @service_request = service_request
       @styles = styles
+    end
+
+    def visits
+      Enumerator.new do |yielder|
+        @service_request.arms.each do |arm|
+          visit_labels = arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" }
+          yielder << [visit_labels, line_items(arm)]
+        end
+      end
+    end
+    def line_items(arm)
+      Enumerator.new do |yielder|
+        @service_request.arms.each do |arm|
+          pppv_line_item_visits(arm).each do |ssr, livs|
+            program_or_core = display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)
+            #This is each line
+            livs.each do |liv|
+
+              vli = VisitLineItem.new
+              vli.description = liv.line_item.service.display_service_name
+              vli.unit_type = display_unit_type(liv)
+              vli.service_rate = display_service_rate(liv.line_item)
+              vli.applicable_rate = Service.cents_to_dollars(liv.line_item.applicable_rate)
+              vli.subjects = liv.subject_count
+
+              vli.visit_counts = eager_loaded_visits(liv).map do |v|
+                v.research_billing_qty + v.insurance_billing_qty
+              end
+
+              yielder << [program_or_core, vli]
+            end
+          end
+        end
+      end
     end
 
     def update(sheet) #workbook

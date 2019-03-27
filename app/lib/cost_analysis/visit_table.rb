@@ -83,13 +83,11 @@ module CostAnalysis
   class VisitTable
 
     STATIC_HEADERS = ["","","Current","Your Price", "Subjects"]
-    VISITS_PER_PAGE = 14
+
     attr_accessor :line_items, :visit_labels
 
-    def initialize
+    def self.sample
       visit_count = 60
-      @visit_labels = []
-      @line_items = {}
       nursing = "Nursing Services > Clinical Research Unit > ICTS > UIOWA (0003)"
       lab = "Lab > Clinical Research Unit > ICTS > UIOWA (0002)"
 
@@ -118,6 +116,11 @@ module CostAnalysis
       visit_count.times do |c|
         @visit_labels << "Visit #{c+1}"
       end
+
+    end
+    def initialize
+      @visit_labels = []
+      @line_items = {}
     end
 
     def add_line_item(program_or_core, line_item)
