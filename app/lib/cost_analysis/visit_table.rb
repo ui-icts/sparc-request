@@ -22,7 +22,8 @@ module CostAnalysis
 
     include ActionView::Helpers::NumberHelper
 
-    STATIC_HEADERS = ["","","Current","Your Price", "Subjects"]
+    VISIT_HEADERS = ["","","Current","Your Price", "Subjects"]
+    SUMMARY_HEADERS = ["","","Current","Your Price", "Qty"]
 
     attr_accessor :line_items, :visit_labels
 
@@ -112,7 +113,7 @@ module CostAnalysis
     end
 
     def build_header_row(page_idx, page_size)
-      STATIC_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
+      VISIT_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
     end
 
     def build_program_core_row(program_or_core, colspan)
@@ -149,7 +150,7 @@ module CostAnalysis
 
     def summarized_by_service
       table = TableWithGroupHeaders.new
-      table.add_column_labels (STATIC_HEADERS + ["Per Patient", "Per Study"])
+      table.add_column_labels (SUMMARY_HEADERS + ["Per Patient", "Per Study"])
       per_patient_total = 0.0
       per_study_total = 0.0
       cores.each do |core|
