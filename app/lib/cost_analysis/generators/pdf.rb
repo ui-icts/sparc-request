@@ -39,7 +39,10 @@ module CostAnalysis
 
           move_down 20
 
+          visit_tables.each do |visit_table|
 
+
+          end
           visit_tables.each do |visit_table|
             visit_table.paged(visit_columns_per_page: 14, rows_per_page: 20).each do |page|
 

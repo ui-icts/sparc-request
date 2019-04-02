@@ -14,6 +14,7 @@ module CostAnalysis
         end
       end
     end
+
     def line_items(arm)
       Enumerator.new do |yielder|
         @service_request.arms.each do |arm|
