@@ -155,6 +155,13 @@ module CostAnalysis
             text "Modifications and extensions may be subject to price changes reflective of current CRU rates.", :size => 11, :align => :center
             text "Adverse reactions requiring additional time or personnel will be an additional $100/hour.", :size => 11, :align => :center
           end
+
+          number_pages "<page>", {
+            :at => [bounds.right - 150, bounds.bottom - 5],
+            :width => 150,
+            :align => :right,
+            :start_count_at => 1,
+          }
         end
       end
     end
