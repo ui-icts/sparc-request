@@ -25,6 +25,7 @@ module CostAnalysis
               text pi.name, :align => :right, :valign => :bottom
             end
           end
+          move_down 5
           stroke_horizontal_rule
 
           move_down 30
@@ -87,7 +88,7 @@ module CostAnalysis
           visit_tables.each do |visit_table|
             visit_table.paged(visit_columns_per_page: 14, rows_per_page: 20).each do |page|
 
-              table(
+              prawn_table = make_table(
                 page.table_rows,
                 :cell_style => {
                   :size => 8,
@@ -99,6 +100,7 @@ module CostAnalysis
                   :border_width => 1,
                   :border_color => '4c4c4c'
                 }, :header => true) do
+
                   # service & core rows
                   cells.columns(0).align = :left
 
@@ -125,6 +127,11 @@ module CostAnalysis
                   end
                   cells.columns(0..1).rows(0).borders = [:bottom]
                 end
+
+                unless prawn_table.cells.fits_on_current_page?(cursor, bounds)
+                  start_new_page
+                end
+                prawn_table.draw
                 move_down 5
                 # start_new_page
             end
@@ -132,11 +139,18 @@ module CostAnalysis
 
           move_down 20
 
-          table(
+          investigator_table = make_table(
             primary_investigators + additional_contacts,
             :width => 700,
             :cell_style => {:border_width => 1, :border_color => 'E8E8E8'})
 
+    
+          move_down 20
+
+          unless investigator_table.cells.fits_on_current_page?(cursor, bounds)
+            start_new_page
+          end
+          investigator_table.draw
 
           move_down 20
 
