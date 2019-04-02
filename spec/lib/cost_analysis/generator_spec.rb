@@ -17,6 +17,6 @@ RSpec.describe CostAnalysis::Generator do
     subject.protocol = protocol
     subject.to_pdf(doc)
 
-    expect(doc).to have_received(:text).with("Study Information")
+    expect(doc).to have_received(:text).with("CRU Protocol#:")
   end
 end

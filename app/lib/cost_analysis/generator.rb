@@ -31,9 +31,9 @@ module CostAnalysis
       pdf = CostAnalysis::Generators::PDF.new(doc)
       pdf.study_information = CostAnalysis::StudyInformation.new(@protocol)
 
-
       @protocol.service_requests.each do |sr|
         service_request = CostAnalysis::ServiceRequest.new(sr)
+
         service_request.visits.each do |visit_labels, line_items|
           table = CostAnalysis::VisitTable.new
           table.visit_labels = visit_labels
@@ -42,7 +42,9 @@ module CostAnalysis
           end
           pdf.visit_tables << table
         end
+
       end
+
       pdf.update
     end
 
