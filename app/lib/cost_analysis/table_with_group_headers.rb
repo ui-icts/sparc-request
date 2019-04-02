@@ -2,7 +2,7 @@ module CostAnalysis
 
   class TableWithGroupHeaders
 
-    attr_reader :header_rows, :summary_rows
+    attr_accessor :header_rows, :summary_rows, :data
 
     def initialize()
       @data = []

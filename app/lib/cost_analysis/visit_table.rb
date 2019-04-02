@@ -80,18 +80,18 @@ module CostAnalysis
     def paged(visit_columns_per_page:, rows_per_page:)
 
       page_datas = []
-      self.pages(visit_columns_per_page) do |page_num, page_size|
+      self.pages(visit_columns_per_page) do |page_num, page_size, visits_this_page|
         data = TableWithGroupHeaders.new
 
         data.add_column_labels self.build_header_row(page_num-1, page_size)
 
         self.cores.each do |core|
-          data.add_header self.build_program_core_row(core, 5 + page_size)
+          data.add_header self.build_program_core_row(core, 5 + visits_this_page)
 
           core_rows = self.build_line_item_rows(@line_items[core], page_num - 1, page_size)
           data.concat(core_rows)
         end
-        data.add_summary self.build_summary_row(page_num-1, page_size)
+        data.add_summary self.build_summary_row(page_num-1, page_size, visits_this_page)
 
         page_datas << data
       end
@@ -129,13 +129,13 @@ module CostAnalysis
 
     end
 
-    def build_summary_row(page_idx, page_size)
-      summary_row = Array.new(page_size,0)
+    def build_summary_row(page_idx, page_size, visits_this_page)
+      summary_row = Array.new(visits_this_page,0)
       @line_items.each do |program_or_core, lines|
 
         lines.each do |li|
 
-          visit_counts = li.visit_counts.drop(page_idx*page_size).take(page_size)
+          visit_counts = li.visit_counts.drop(page_idx*page_size).take(visits_this_page)
           #count is maybe qty?
           #page_size is the number of visits we show in the table
           #don't forget about cents_to_dollars
@@ -169,7 +169,8 @@ module CostAnalysis
       pages_needed += 1 if visit_count.remainder(visit_columns_per_page) > 0
       page_start = 1
       pages_needed.times do |p|
-        yield page_start, visit_columns_per_page
+        visits_this_page = visit_labels.drop( (page_start-1) * visit_columns_per_page).take(visit_columns_per_page).size
+        yield page_start, visit_columns_per_page, visits_this_page
         page_start += 1
       end
     end
