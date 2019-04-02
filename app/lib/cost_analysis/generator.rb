@@ -31,7 +31,6 @@ module CostAnalysis
       pdf = CostAnalysis::Generators::PDF.new(doc)
       pdf.study_information = CostAnalysis::StudyInformation.new(@protocol)
 
-
       @protocol.service_requests.each do |sr|
         service_request = CostAnalysis::ServiceRequest.new(sr)
 
@@ -45,6 +44,7 @@ module CostAnalysis
         end
 
       end
+
       pdf.update
     end
 

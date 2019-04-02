@@ -1,12 +1,17 @@
 module CostAnalysis
 
-  class VisitPageData
-    attr_accessor :data, :header_rows, :summary_rows
+  class TableWithGroupHeaders
 
-    def initialize(data = nil, header_rows = nil, summary_rows = nil)
-      @data = data || []
-      @header_rows = header_rows || []
-      @summary_rows = summary_rows || []
+    attr_reader :header_rows, :summary_rows
+
+    def initialize()
+      @data = []
+      @header_rows = []
+      @summary_rows = []
+    end
+
+    def add_column_labels(row)
+      @data << row
     end
 
     def add_header(row)
@@ -31,6 +36,9 @@ module CostAnalysis
       @data.size
     end
 
+    def table_rows
+      @data
+    end
     def combine_with(other)
 
       if other
@@ -41,6 +49,7 @@ module CostAnalysis
       end
       self
     end
+
     def to_s
       col_size = 10
       s = []
@@ -50,21 +59,8 @@ module CostAnalysis
       s.join("\n")
     end
 
-    def column_label_row
-      data[0]
-    end
+    private
 
-    def core_label_row
-      data[1]
-    end
-
-    def data_rows
-      data[2..-2]
-    end
-
-    def summary_row
-      data[-1]
-    end
     #These all need return arrays of strings
     def printable_header_lines(col_size=10)
       s = []
@@ -92,6 +88,23 @@ module CostAnalysis
       end
       [row]
     end
+
+    def column_label_row
+      data[0]
+    end
+
+    def core_label_row
+      data[1]
+    end
+
+    def data_rows
+      data[2..-2]
+    end
+
+    def summary_row
+      data[-1]
+    end
+
   end
 
 end

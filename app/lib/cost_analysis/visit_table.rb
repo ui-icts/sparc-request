@@ -2,6 +2,20 @@ module CostAnalysis
 
   class VisitLineItem
     attr_accessor :description, :unit_type, :service_rate, :applicable_rate, :subjects, :visit_counts
+
+    def per_patient_total
+      visit_counts.reduce(0.0) do |total, count|
+        total + (count * applicable_rate)
+      end
+    end
+
+    def total_visit_count
+      visit_counts.sum
+    end
+
+    def per_study_total
+      subjects * applicable_rate
+    end
   end
 
   class VisitTable
@@ -65,12 +79,12 @@ module CostAnalysis
 
       page_datas = []
       self.pages(visit_columns_per_page) do |page_num, page_size|
-        data = VisitPageData.new
+        data = TableWithGroupHeaders.new
 
-        data.add_data self.build_header_row(page_num-1, page_size)
+        data.add_column_labels self.build_header_row(page_num-1, page_size)
 
         self.cores.each do |core|
-          data.add_header self.build_program_core_row(core, page_size)
+          data.add_header self.build_program_core_row(core, 5 + page_size)
 
           core_rows = self.build_line_item_rows(@line_items[core], page_num - 1, page_size)
           data.concat(core_rows)
@@ -99,15 +113,15 @@ module CostAnalysis
       STATIC_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
     end
 
-    def build_program_core_row(program_or_core, page_size)
-      [{:colspan => (5 + page_size), :content => program_or_core, :align => :left, :size => 16}]
+    def build_program_core_row(program_or_core, colspan)
+      [{:colspan => colspan, :content => program_or_core, :align => :left, :size => 16}]
     end
 
     def build_line_item_rows(line_items, page_idx, page_size)
       items = []
       line_items.each do |li|
         visit_counts = li.visit_counts.drop(page_idx*page_size).take(page_size)
-        items << [li.description, li.unit_type, li.service_rate, li.applicable_rate, li.subjects] + visit_counts.map { |c| c == 0 ? "" : c.to_s }
+        items << [li.description, li.unit_type, to_m(li.service_rate), to_m(li.applicable_rate), li.subjects] + visit_counts.map { |c| c == 0 ? "" : c.to_s }
       end
       items
 
@@ -128,12 +142,24 @@ module CostAnalysis
           end
         end
       end
-      [{content: "Per Patient", colspan: 5}] + summary_row
+      [{content: "Per Patient", colspan: 5}] + summary_row.map{ |x| to_m(x) }
     end
 
     def summarized_by_service
-      data = VisitPageData.new
-
+      table = TableWithGroupHeaders.new
+      table.add_column_labels (STATIC_HEADERS + ["Per Patient", "Per Study"])
+      per_patient_total = 0.0
+      per_study_total = 0.0
+      cores.each do |core|
+        table.add_header build_program_core_row(core, 7)
+        @line_items[core].each do |li|
+          per_study_total += li.per_study_total
+          per_patient_total += li.per_patient_total
+          table.add_data [li.description, li.unit_type, to_m(li.service_rate), to_m(li.applicable_rate), li.total_visit_count] + [to_m(li.per_patient_total), to_m(li.per_study_total)]
+        end
+      end
+      table.add_summary [{content: "", colspan: 5}] + [to_m(per_patient_total), to_m(per_study_total)]
+      table
     end
 
     def pages(visit_columns_per_page)
@@ -146,6 +172,9 @@ module CostAnalysis
       end
     end
 
+    def to_m(v)
+      "%.2f" % v
+    end
   end
 
 end

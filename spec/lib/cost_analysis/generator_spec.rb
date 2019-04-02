@@ -15,8 +15,6 @@ RSpec.describe CostAnalysis::Generator do
   it 'should render into a pdf' do
     doc = spy('PDF Document')
     subject.protocol = protocol
-    require 'byebug'
-    byebug
     subject.to_pdf(doc)
 
     expect(doc).to have_received(:text).with("CRU Protocol#:")
