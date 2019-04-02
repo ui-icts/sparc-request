@@ -14,7 +14,7 @@ module CostAnalysis
     end
 
     def per_study_total
-      subjects * applicable_rate
+      subjects * per_patient_total
     end
   end
 
