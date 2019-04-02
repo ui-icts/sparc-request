@@ -20,6 +20,8 @@ module CostAnalysis
 
   class VisitTable
 
+    include ActionView::Helpers::NumberHelper
+
     STATIC_HEADERS = ["","","Current","Your Price", "Subjects"]
 
     attr_accessor :line_items, :visit_labels
@@ -173,7 +175,7 @@ module CostAnalysis
     end
 
     def to_m(v)
-      "%.2f" % v
+      number_with_precision(v, :precision => 2, :delimiter => ",")
     end
   end
 
