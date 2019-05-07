@@ -124,6 +124,7 @@ group :test do
   gem 'shoulda-callback-matchers'
   gem 'site_prism'
   gem 'webmock'
+  gem 'pdf-inspector', require: false
 end
 
 group :assets do
