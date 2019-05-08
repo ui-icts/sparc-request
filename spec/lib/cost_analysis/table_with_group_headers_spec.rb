@@ -78,19 +78,6 @@ RSpec.describe CostAnalysis::TableWithGroupHeaders do
       end
     end
 
-    context 'when the row is a single column with span' do
-      let(:row_tpl) { [{:colspan => 10}] }
-      it 'adjusts the colspan to match the cols' do
-        parts = subject.split(keep: 1, cols: 2)
-        expect(parts).to have(5).items
-        expect(parts[0].table_rows).to contain_exactly([{:colspan => 3}])
-        expect(parts[1].table_rows).to contain_exactly([{:colspan => 3}])
-        expect(parts[2].table_rows).to contain_exactly([{:colspan => 3}])
-        expect(parts[3].table_rows).to contain_exactly([{:colspan => 3}])
-        expect(parts[4].table_rows).to contain_exactly([{:colspan => 3}])
-      end
-    end
-
     context 'leading span column and data columns' do
       let(:row_tpl) { [{:colspan => 2},:a,:b,1,2,3,4] }
       it 'understands keep in context of colspan' do

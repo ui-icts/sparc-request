@@ -95,7 +95,6 @@ module CostAnalysis
           visit_tables.each do |visit_table|
             visit_table.line_item_detail.split(keep: 5,cols: 14).each do |page|
 
-              byebug
               prawn_table = make_table(
                 page.table_rows,
                 :cell_style => {
