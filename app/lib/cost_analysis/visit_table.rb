@@ -1,3 +1,4 @@
+require 'byebug'
 module CostAnalysis
 
   class VisitLineItem
@@ -22,43 +23,10 @@ module CostAnalysis
 
     include ActionView::Helpers::NumberHelper
 
-    VISIT_HEADERS = ["","","Current","Your Price", "Subjects"]
-    SUMMARY_HEADERS = ["","","Current","Your Price", "Qty"]
+    VISIT_HEADERS = ["","Current","Your Price", "Subjects"]
+    SUMMARY_HEADERS = ["","Current","Your Price", "Qty"]
 
-    attr_accessor :line_items, :visit_labels
-
-    def self.sample
-      visit_count = 60
-      nursing = "Nursing Services > Clinical Research Unit > ICTS > UIOWA (0003)"
-      lab = "Lab > Clinical Research Unit > ICTS > UIOWA (0002)"
-
-      ["Bundle: Level 1","Height and Weight","Blood Draw/ Venipuncture (Adult)", "Urine Collection"].each do |service|
-        li = VisitLineItem.new
-        li.description = service
-        li.unit_type = "First"
-        li.service_rate = 50.0
-        li.applicable_rate = 35.0
-        li.subjects = 50
-        li.visit_counts = Array.new(visit_count) { rand(0...3) }
-        add_line_item nursing, li
-      end
-
-      ["Sample Processing: Level A", "Sample Processing: Urine", "Dry Ice"].each do |service|
-        li = VisitLineItem.new
-        li.description = service
-        li.unit_type = "Sample"
-        li.service_rate = 50.0
-        li.applicable_rate = 35.0
-        li.subjects = 6
-        li.visit_counts = Array.new(visit_count) { rand(0...3) }
-        add_line_item lab, li
-      end
-
-      visit_count.times do |c|
-        @visit_labels << "Visit #{c+1}"
-      end
-
-    end
+    attr_accessor :arm_name, :line_items, :visit_labels
 
     def initialize
       @visit_labels = []
@@ -76,6 +44,36 @@ module CostAnalysis
 
     def visit_count
       @visit_labels.size
+    end
+
+    def summarized_by_service
+      table = TableWithGroupHeaders.new
+      table.add_column_labels ([self.arm_name] + SUMMARY_HEADERS + ["Per Patient", "Per Study"])
+      per_patient_total = 0.0
+      per_study_total = 0.0
+      cores.each do |core|
+        table.add_header build_program_core_row(core, 7)
+        @line_items[core].each do |li|
+          per_study_total += li.per_study_total
+          per_patient_total += li.per_patient_total
+          table.add_data [li.description, li.unit_type, to_money(li.service_rate), to_money(li.applicable_rate), li.total_visit_count] + [to_money(li.per_patient_total), to_money(li.per_study_total)]
+        end
+      end
+      table.add_summary [{content: "", colspan: 5}] + [to_money(per_patient_total), to_money(per_study_total)]
+      table
+    end
+
+    def line_item_detail
+      data = TableWithGroupHeaders.new
+      data.add_column_labels self.build_header_row(0, visit_count)
+      self.cores.each do |core|
+        data.add_header self.build_program_core_row(core, 5 + visit_count)
+
+        core_rows = self.build_line_item_rows(@line_items[core], 0, visit_count)
+        data.concat(core_rows)
+      end
+      data.add_summary self.build_summary_row(0, visit_count, visit_count)
+      data
     end
 
     def paged(visit_columns_per_page:, rows_per_page:)
@@ -100,20 +98,26 @@ module CostAnalysis
       current = nil
       Enumerator.new do |yielder|
         page_datas.each do |pd|
-          if pd.row_count + (current&.row_count || 0) <= rows_per_page
-            current = pd.combine_with current
-          else
-            yielder << current
-            current = pd
-          end
+          yielder << pd
+          # if pd.row_count + (current&.row_count || 0) <= rows_per_page
+          #   current = pd.combine_with current
+          # else
+          #   byebug if current.nil?
+          #   yielder << current
+          #   current = pd
+          # end
         end
 
-        yielder << current unless current.nil?
+        # yielder << current unless current.nil?
       end
     end
 
-    def build_header_row(page_idx, page_size)
-      VISIT_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
+    def build_header_row(page_idx, page_size=nil)
+      if page_idx == :all
+        [self.arm_name] + VISIT_HEADERS + @visit_labels
+      else
+        [self.arm_name] + VISIT_HEADERS + @visit_labels.drop(page_idx*page_size).take(page_size)
+      end
     end
 
     def build_program_core_row(program_or_core, colspan)
@@ -124,7 +128,7 @@ module CostAnalysis
       items = []
       line_items.each do |li|
         visit_counts = li.visit_counts.drop(page_idx*page_size).take(page_size)
-        items << [li.description, li.unit_type, to_m(li.service_rate), to_m(li.applicable_rate), li.subjects] + visit_counts.map { |c| c == 0 ? "" : c.to_s }
+        items << [li.description, li.unit_type, to_money(li.service_rate), to_money(li.applicable_rate), li.subjects] + visit_counts.map { |c| c == 0 ? "" : c.to_s }
       end
       items
 
@@ -145,24 +149,7 @@ module CostAnalysis
           end
         end
       end
-      [{content: "Per Patient", colspan: 5}] + summary_row.map{ |x| to_m(x) }
-    end
-
-    def summarized_by_service
-      table = TableWithGroupHeaders.new
-      table.add_column_labels (SUMMARY_HEADERS + ["Per Patient", "Per Study"])
-      per_patient_total = 0.0
-      per_study_total = 0.0
-      cores.each do |core|
-        table.add_header build_program_core_row(core, 7)
-        @line_items[core].each do |li|
-          per_study_total += li.per_study_total
-          per_patient_total += li.per_patient_total
-          table.add_data [li.description, li.unit_type, to_m(li.service_rate), to_m(li.applicable_rate), li.total_visit_count] + [to_m(li.per_patient_total), to_m(li.per_study_total)]
-        end
-      end
-      table.add_summary [{content: "", colspan: 5}] + [to_m(per_patient_total), to_m(per_study_total)]
-      table
+      [{content: "Per Patient", colspan: 5}] + summary_row.map{ |x| to_money(x) }
     end
 
     def pages(visit_columns_per_page)
@@ -176,7 +163,7 @@ module CostAnalysis
       end
     end
 
-    def to_m(v)
+    def to_money(v)
       number_with_precision(v, :precision => 2, :delimiter => ",")
     end
   end

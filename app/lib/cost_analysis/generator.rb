@@ -9,12 +9,14 @@ module CostAnalysis
       @protocol.service_requests.each do |sr|
         service_request = CostAnalysis::ServiceRequest.new(sr)
 
-        service_request.visits.each do |visit_labels, line_items|
+        service_request.arms.each do |arm|
           table = CostAnalysis::VisitTable.new
-          table.visit_labels = visit_labels
-          line_items.each do |core, line_item|
+          table.arm_name = arm.name
+          table.visit_labels = arm.visit_labels
+          arm.line_items.each do |core, line_item|
             table.add_line_item core, line_item
           end
+
           pdf.visit_tables << table
         end
 

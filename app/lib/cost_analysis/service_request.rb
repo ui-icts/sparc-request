@@ -1,23 +1,30 @@
+require 'byebug'
 module CostAnalysis
 
+  class Arm
+    attr_accessor :name, :visit_labels, :line_items
+  end
+
   class ServiceRequest
-    def initialize(service_request, styles=nil)
+    def initialize(service_request)
       @service_request = service_request
-      @styles = styles
     end
 
-    def visits
+    def arms
       Enumerator.new do |yielder|
         @service_request.arms.each do |arm|
-          visit_labels = arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" }
-          yielder << [visit_labels, line_items(arm)]
+          ca_arm = CostAnalysis::Arm.new
+          ca_arm.name = arm.name
+          ca_arm.visit_labels = arm.visit_groups.map { |vg| "#{vg.name}\nDay#{vg.day}" }
+          ca_arm.line_items = line_items(arm)
+
+          yielder << ca_arm
         end
       end
     end
 
     def line_items(arm)
       Enumerator.new do |yielder|
-        @service_request.arms.each do |arm|
           pppv_line_item_visits(arm).each do |ssr, livs|
             program_or_core = display_org_name_text(livs[0].line_item.service.organization_hierarchy, ssr, true)
             #This is each line
@@ -37,7 +44,6 @@ module CostAnalysis
               yielder << [program_or_core, vli]
             end
           end
-        end
       end
     end
 
