@@ -1,22 +1,16 @@
 require 'rails_helper'
+require 'pdf/inspector'
 
 RSpec.describe CostAnalysis::Generator do
 
-  let(:protocol) { build(:protocol) }
-
-  it 'should render into a workbook' do
-    wb = spy('Axlsx::Workbook')
-    subject.protocol = protocol
-    subject.to_workbook(wb)
-
-    expect(wb).to have_received(:add_worksheet).with(name: 'Report')
-  end
+  let(:pi) { create(:identity) }
+  let(:protocol) { create(:protocol_federally_funded, primary_pi: pi) }
 
   it 'should render into a pdf' do
-    doc = spy('PDF Document')
+    doc = Prawn::Document.new(:page_layout => :landscape)
     subject.protocol = protocol
     subject.to_pdf(doc)
-
-    expect(doc).to have_received(:text).with("CRU Protocol#:")
+    pdf_text = PDF::Inspector::Text.analyze(doc.render)
+    expect(pdf_text.strings).to include(match(/CRU Protocol#: [0-9]+/))
   end
 end

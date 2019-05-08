@@ -42,7 +42,8 @@ module CostAnalysis
 
           visit_tables.each do |visit_table|
             pdf_table = visit_table.summarized_by_service
-            table(
+
+            prawn_table = make_table(
               pdf_table.table_rows,
               :cell_style => {
                 :size => 8,
@@ -81,12 +82,18 @@ module CostAnalysis
                   cells.columns(0..1).rows(0).borders = [:bottom]
               end
 
+              unless prawn_table.cells.fits_on_current_page?(cursor, bounds)
+                start_new_page
+              end
+              prawn_table.draw
+              move_down 5
+
           end
 
           move_down 20
 
           visit_tables.each do |visit_table|
-            visit_table.paged(visit_columns_per_page: 14, rows_per_page: 20).each do |page|
+            visit_table.line_item_detail.split(keep: 5,cols: 14).each do |page|
 
               prawn_table = make_table(
                 page.table_rows,
@@ -126,15 +133,15 @@ module CostAnalysis
                     cells.rows(sr).style(:font_style => :bold)
                   end
                   cells.columns(0..1).rows(0).borders = [:bottom]
-                end
+                end #end make_table
 
                 unless prawn_table.cells.fits_on_current_page?(cursor, bounds)
                   start_new_page
                 end
                 prawn_table.draw
                 move_down 5
-                # start_new_page
             end
+            # start_new_page
           end
 
           move_down 20
@@ -144,20 +151,21 @@ module CostAnalysis
             :width => 700,
             :cell_style => {:border_width => 1, :border_color => 'E8E8E8'})
 
-    
           move_down 20
 
           unless investigator_table.cells.fits_on_current_page?(cursor, bounds)
             start_new_page
           end
+
           investigator_table.draw
 
           move_down 20
 
           default_leading 3
+
           bounding_box([100, cursor], :width => 500, :height => 115, :fill => 'E8E8E8') do
             transparent(1.0) {
-              stroke_bounds 
+              stroke_bounds
               fill_color 'd5edda'
               fill_rectangle [0,115], 500, 115
             }
