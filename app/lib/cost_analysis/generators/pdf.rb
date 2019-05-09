@@ -1,3 +1,5 @@
+require 'byebug'
+
 module CostAnalysis
   module Generators
     class PDF
@@ -153,7 +155,10 @@ module CostAnalysis
 
           move_down 20
 
-          unless investigator_table.cells.fits_on_current_page?(cursor, bounds)
+          # byebug
+          fit_table_and_disclaimer = investigator_table.cells.height_with_span + 125 < (investigator_table.cells[0,0].y + cursor) - bounds.absolute_bottom
+
+          unless fit_table_and_disclaimer
             start_new_page
           end
 
