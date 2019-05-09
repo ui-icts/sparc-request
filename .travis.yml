@@ -8,7 +8,7 @@ before_install:
 install:
 - curl https://raw.githubusercontent.com/habitat-sh/habitat/master/components/hab/install.sh | sudo bash
 script:
-- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base > build_logs/sparc_request_base.log
+- hab studio -r /hab/studio/sparc build -R habitat/sparc-request-base | tee build_logs/sparc_request_base.log
 - travis_wait hab pkg upload results/*.hart
 after_success:
 - cat build_logs/sparc_request_base.log
