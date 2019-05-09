@@ -19,3 +19,4 @@ env:
   - HAB_ORIGIN=chrisortman
   - HAB_ORIGIN_KEYS=chrisortman
   - HAB_NONINTERACTIVE=true
+  - HAB_LICENSE=accept
