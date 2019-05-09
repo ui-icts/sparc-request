@@ -1,5 +1,3 @@
-require 'byebug'
-
 module CostAnalysis
 
   class TableWithGroupHeaders
