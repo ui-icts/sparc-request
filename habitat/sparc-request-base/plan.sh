@@ -233,23 +233,23 @@ do_install() {
 
 create_symlinks() {
 
-  rm -rfv ${pkg_prefix}/static/release/log
-  rm -rfv ${pkg_prefix}/static/release/tmp
-  rm -rfv ${pkg_prefix}/static/release/public/system
-  rm -rfv ${pkg_prefix}/static/release/config/database.yml
-  rm -rfv ${pkg_prefix}/static/release/config/application.yml
-  rm -rfv ${pkg_prefix}/static/release/config/epic.yml
-  rm -rfv ${pkg_prefix}/static/release/config/ldap.yml
+  rm -rf ${pkg_prefix}/static/release/log
+  rm -rf ${pkg_prefix}/static/release/tmp
+  rm -rf ${pkg_prefix}/static/release/public/system
+  rm -rf ${pkg_prefix}/static/release/config/database.yml
+  rm -rf ${pkg_prefix}/static/release/config/application.yml
+  rm -rf ${pkg_prefix}/static/release/config/epic.yml
+  rm -rf ${pkg_prefix}/static/release/config/ldap.yml
 
-  ln -sfv ${pkg_svc_var_path}/log ${pkg_prefix}/static/release/log
-  ln -sfv ${pkg_svc_var_path}/tmp ${pkg_prefix}/static/release/tmp
-  ln -sfv ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
+  ln -sf ${pkg_svc_var_path}/log ${pkg_prefix}/static/release/log
+  ln -sf ${pkg_svc_var_path}/tmp ${pkg_prefix}/static/release/tmp
+  ln -sf ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
 
-  ln -sfv ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
-  ln -sfv ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
-  ln -sfv ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
-  ln -sfv ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
-  ln -sfv ${pkg_svc_config_path}/appenv ${pkg_prefix}/static/release/.env
+  ln -sf ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
+  ln -sf ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
+  ln -sf ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
+  ln -sf ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
+  ln -sf ${pkg_svc_config_path}/appenv ${pkg_prefix}/static/release/.env
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their
