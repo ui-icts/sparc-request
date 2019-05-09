@@ -126,11 +126,12 @@ do_build() {
    # cp -a /hab/cache/src/sparc-request-$pkg_version/vendor/bundle /hab/cache/src/bundle_cache
    # but you'll probably have to put the pkg version in there
    if [[ -e $HAB_CACHE_SRC_PATH/bundle_cache ]]; then
-     echo "Restoring cached bundle install"
+     build_line "Restoring cached bundle install"
      cp -a $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
    fi
 
-   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --no-binstubs --no-clean
+   build_line "Bundle install gems"
+   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --no-binstubs --no-clean --quiet
 
   # cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
   # Some bundle files when they install have permissions that don't
@@ -142,7 +143,7 @@ do_build() {
   # Need to generate a database.yml if there isn't one
   if [[ ! -e config/database.yml ]]; then
     clean_up_db=true
-    echo "Creating stub database.yml"
+    build_line "Creating stub database.yml"
     cat << NULLDB > config/database.yml
 production:
   adapter: nulldb
@@ -151,17 +152,18 @@ NULLDB
   fi
 
   if [[ ! -e config/epic.yml ]]; then
-    echo "Copying default epic.yml for asset compilation"
+    build_line "Copying default epic.yml for asset compilation"
     cp config/epic.yml.example config/epic.yml
   fi
 
   if [[ ! -e config/ldap.yml ]]; then
-    echo "Copying default ldap.yml for asset compilation"
+    build_line "Copying default ldap.yml for asset compilation"
     cp config/ldap.yml.example config/ldap.yml
     sed -e "s#test#production#" -i "config/ldap.yml"
   fi
 
-  RAILS_ENV=production bin/rake assets:precompile
+  build_line "Precompiling assets"
+  RAILS_ENV=production bin/rake assets:precompile > /dev/null
 
   # need to clean up these yaml files
   rm config/epic.yml
@@ -203,7 +205,7 @@ do_install() {
   # that is all versioned out.
   # EDIT: I changed the cp -r to cp -a cuz maybe that's better
   # since I'm setting my user to hab up above anyway?
-  echo "Copying current files to ${pkg_prefix}"
+  build_line "Copying current files to ${pkg_prefix}"
   mkdir -p "${pkg_prefix}/static/release"
   cp -a . "${pkg_prefix}/static/release"
 
