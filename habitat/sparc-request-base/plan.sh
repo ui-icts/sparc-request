@@ -6,11 +6,12 @@ pkg_origin=chrisortman
 pkg_version="3.3.1"
 pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_version}.tar.bz2"
 # Overwritten later because we compute it based on the repo
-pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
 pkg_deps=(
   core/libxml2
   core/libxslt
   core/libyaml
+  core/zlib
+  core/openssl
   core/mysql-client
   core/node
   core/curl
@@ -28,6 +29,7 @@ pkg_build_deps=(
   core/make
   core/which
   core/cacerts
+  core/tar
 )
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -50,31 +52,24 @@ do_begin() {
 }
 
 do_download() {
-  export GIT_SSL_CAINFO="$(pkg_path_for core/cacerts)/ssl/certs/cacert.pem"
-
-  # This is a way of getting the git code that I found in the chef plan
-  build_line "Fake download! Creating archive of latest repository commit from $PLAN_CONTEXT"
-  cd $PLAN_CONTEXT/../..
-  git archive --prefix=${pkg_name}-${pkg_version}/ --output=$HAB_CACHE_SRC_PATH/${pkg_filename} HEAD
-
-  pkg_shasum=$(trim $(sha256sum $HAB_CACHE_SRC_PATH/${pkg_filename} | cut -d " " -f 1))
+  return 0
 }
 
 do_verify() {
-  do_default_verify
-  # return 0
+  return 0
 }
 
+do_unpack() {
+  build_line "Cloning source files"
+  cd $PLAN_CONTEXT/../../
+  { git ls-files; git ls-files --exclude-standard --others; } \
+    | _tar_pipe_app_cp_to $HAB_CACHE_SRC_PATH/${pkg_dirname}
+}
 # The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
 # in case there was a previously-built version of your package installed on
 # disk. This ensures you start with a clean build environment.
 do_clean() {
   do_default_clean
-}
-
-do_unpack() {
-  do_default_unpack
-  # return 0
 }
 
 do_prepare() {
@@ -163,7 +158,7 @@ NULLDB
   fi
 
   build_line "Precompiling assets"
-  RAILS_ENV=production bin/rake assets:precompile > /dev/null
+  RAILS_ENV=production bin/rake -s assets:precompile
 
   # need to clean up these yaml files
   rm config/epic.yml
@@ -266,5 +261,40 @@ do_strip() {
 # temporary files or perform other post-install clean-up actions.
 do_end() {
   return 0
+}
+
+# **Internal** Use a "tar pipe" to copy the app source into a destination
+# directory. This function reads from `stdin` for its file/directory manifest
+# where each entry is on its own line ending in a newline. Several filters and
+# changes are made via this copy strategy:
+#
+# * All user and group ids are mapped to root/0
+# * No extended attributes are copied
+# * Some file editor backup files are skipped
+# * Some version control-related directories are skipped
+# * Any `./habitat/` directory is skipped
+# * Any `./vendor/bundle` directory is skipped as it may have native gems
+_tar_pipe_app_cp_to() {
+  local dst_path tar
+  dst_path="$1"
+  tar="$(pkg_path_for tar)/bin/tar"
+
+  mkdir -p $dst_path
+
+  "$tar" -cp \
+      --owner=root:0 \
+      --group=root:0 \
+      --no-xattrs \
+      --exclude-backups \
+      --exclude-vcs \
+      --exclude='habitat' \
+      --exclude='node_modules' \
+      --exclude='vendor/bundle' \
+      --exclude='results' \
+      --files-from=- \
+      -f - \
+  | "$tar" -x \
+      -C "$dst_path" \
+      -f -
 }
 
