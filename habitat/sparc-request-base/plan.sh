@@ -10,8 +10,6 @@ pkg_deps=(
   core/libxml2
   core/libxslt
   core/libyaml
-  core/zlib
-  core/openssl
   core/mysql-client
   core/node
   core/curl
