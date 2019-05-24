@@ -24,7 +24,7 @@ class ProtocolsController < ApplicationController
   protect_from_forgery except: :show
 
   before_action :initialize_service_request,  unless: :from_portal?,  except: [:approve_epic_rights, :push_to_epic, :push_to_epic_status]
-  before_action :authorize_identity,          unless: :from_portal?,  except: [:show, :approve_epic_rights, :push_to_epic, :push_to_epic_status]
+  before_action :authorize_identity,          unless: :from_portal?,  except: [:approve_epic_rights, :push_to_epic, :push_to_epic_status]
   before_action :set_portal
   before_action :find_protocol,               only: [:edit, :update, :show]
 
@@ -147,9 +147,6 @@ class ProtocolsController < ApplicationController
   def show
     respond_to do |format|
       format.js
-      format.xlsx { 
-        response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}) Report.xlsx\""
-      }
       format.pdf {
         response.headers['Content-Disposition'] = "attachment; filename=\"(#{@protocol.id}).pdf\""
         pdf = Prawn::Document.new(:page_layout => :landscape)
@@ -158,7 +155,6 @@ class ProtocolsController < ApplicationController
         generator.to_pdf(pdf)
         send_data pdf.render, filename: "Cost Analysis (#{@protocol.id}).pdf", type: "application/pdf", disposition: "inline"
       }
-      format.html { render layout: false }
     end
   end
 
