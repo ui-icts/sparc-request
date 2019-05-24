@@ -38,7 +38,7 @@ module SPARCCWF
 
         begin
           username == Setting.find_by_key("remote_service_notifier_username").value &&
-          password == Setting.find_by_key("remote_service_notifier_password").value
+            password == Setting.find_by_key("remote_service_notifier_password").value
         rescue
           false
         end
