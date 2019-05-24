@@ -371,6 +371,8 @@ SparcRails::Application.routes.draw do
     end
   end
 
+  mount API::Base => '/'
+
   root to: 'service_requests#catalog'
 
   ## error page routes ##
