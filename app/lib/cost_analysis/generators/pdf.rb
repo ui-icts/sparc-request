@@ -40,21 +40,23 @@ module CostAnalysis
 
           move_down 20
 
-          visit_tables.each do |visit_table|
-            pdf_table = visit_table.summarized_by_service
+          visit_table_style = {
+            :size => 8,
+            :padding => 3,
+            :align => :center,
+            :overflow => :shrink_to_fit,
+            :valign => :middle,
+            :single_line => true,
+            :border_width => 1,
+            :border_color => '4c4c4c'
+          }
 
-            prawn_table = make_table(
-              pdf_table.table_rows,
-              :cell_style => {
-                :size => 8,
-                :padding => 3,
-                :align => :center,
-                :overflow => :shrink_to_fit,
-                :valign => :middle,
-                :single_line => true,
-                :border_width => 1,
-                :border_color => '4c4c4c'
-              }, :header => true) do
+          visit_tables.each do |visit_table|
+            summary_table_data = visit_table.summarized_by_service
+
+            summary_table = make_table(
+              summary_table_data.table_rows,
+              :cell_style => visit_table_style, :header => true) do
                   cells.columns(0).align = :left
 
                   cells.columns(2..6).align = :right
@@ -65,7 +67,7 @@ module CostAnalysis
                   })
 
                   # core header rows
-                  pdf_table.header_rows.each do |hr|
+                  summary_table_data.header_rows.each do |hr|
                     cells.columns(0).rows(hr).style({
                       :align => :left,
                       :valign => :middle,
@@ -74,7 +76,7 @@ module CostAnalysis
                     cells.rows(hr).style(:font_style => :bold)
 
                   end
-                  pdf_table.summary_rows.each do |sr|
+                  summary_table_data.summary_rows.each do |sr|
                     # cells.columns(0).rows(sr).align = :right
                     cells.columns(0).rows(sr).style(:align => :right)
                     cells.rows(sr).style(:font_style => :bold)
@@ -82,66 +84,53 @@ module CostAnalysis
                   cells.columns(0..1).rows(0).borders = [:bottom]
               end
 
-              unless prawn_table.cells.fits_on_current_page?(cursor, bounds)
+              unless summary_table.cells.fits_on_current_page?(cursor, bounds)
                 start_new_page
               end
-              prawn_table.draw
+
+              summary_table.draw
+
               move_down 5
 
-          end
+              visit_table.line_item_detail.split(keep: 5,cols: 14).each do |page|
 
-          move_down 20
+                detail_table = make_table(
+                  page.table_rows,
+                  :cell_style => visit_table_style, :header => true) do
 
-          visit_tables.each do |visit_table|
-            visit_table.line_item_detail.split(keep: 5,cols: 14).each do |page|
+                    # service & core rows
+                    cells.columns(0).align = :left
 
-              prawn_table = make_table(
-                page.table_rows,
-                :cell_style => {
-                  :size => 8,
-                  :padding => 3,
-                  :align => :center,
-                  :overflow => :shrink_to_fit,
-                  :valign => :middle,
-                  :single_line => true,
-                  :border_width => 1,
-                  :border_color => '4c4c4c'
-                }, :header => true) do
-
-                  # service & core rows
-                  cells.columns(0).align = :left
-
-                  # blue header cells
-                  cells.columns(2..-1).rows(0).style({
-                    :background_color => "C5D9F1",
-                    :align => :center
-                  })
-
-                  # core header rows
-                  page.header_rows.each do |hr|
-                    cells.columns(0).rows(hr).style({
-                      :align => :left,
-                      :valign => :middle,
-                      :background_color => "E8E8E8"
+                    # blue header cells
+                    cells.columns(2..-1).rows(0).style({
+                      :background_color => "C5D9F1",
+                      :align => :center
                     })
-                    cells.rows(hr).style(:font_style => :bold)
 
-                  end
-                  page.summary_rows.each do |sr|
-                    # cells.columns(0).rows(sr).align = :right
-                    cells.columns(0).rows(sr).style(:align => :right)
-                    cells.rows(sr).style(:font_style => :bold)
-                  end
-                  cells.columns(0..1).rows(0).borders = [:bottom]
-                end #end make_table
+                    # core header rows
+                    page.header_rows.each do |hr|
+                      cells.columns(0).rows(hr).style({
+                        :align => :left,
+                        :valign => :middle,
+                        :background_color => "E8E8E8"
+                      })
+                      cells.rows(hr).style(:font_style => :bold)
 
-                unless prawn_table.cells.fits_on_current_page?(cursor, bounds)
-                  start_new_page
-                end
-                prawn_table.draw
-                move_down 5
-            end
-            # start_new_page
+                    end
+                    page.summary_rows.each do |sr|
+                      # cells.columns(0).rows(sr).align = :right
+                      cells.columns(0).rows(sr).style(:align => :right)
+                      cells.rows(sr).style(:font_style => :bold)
+                    end
+                    cells.columns(0..1).rows(0).borders = [:bottom]
+                  end #end make_table
+
+                  unless detail_table.cells.fits_on_current_page?(cursor, bounds)
+                    start_new_page
+                  end
+                  detail_table.draw
+                  move_down 5
+              end
           end
 
           move_down 20
@@ -153,7 +142,9 @@ module CostAnalysis
 
           move_down 20
 
-          fit_table_and_disclaimer = investigator_table.cells.height_with_span + 125 < (investigator_table.cells[0,0].y + cursor) - bounds.absolute_bottom
+          disclaimer_lines = I18n.t(:disclaimer,scope: [:reporting,:cost_analysis])
+          disclaimer_height = disclaimer_lines.map{ |l| 20 }.sum
+          fit_table_and_disclaimer = investigator_table.cells.height_with_span + disclaimer_height < (investigator_table.cells[0,0].y + cursor) - bounds.absolute_bottom
 
           unless fit_table_and_disclaimer
             start_new_page
@@ -165,19 +156,16 @@ module CostAnalysis
 
           default_leading 3
 
-          bounding_box([100, cursor], :width => 500, :height => 115, :fill => 'E8E8E8') do
+          bounding_box([100, cursor], :width => 500, :height => disclaimer_height, :fill => 'E8E8E8') do
             transparent(1.0) {
               stroke_bounds
               fill_color 'd5edda'
-              fill_rectangle [0,115], 500, 115
+              fill_rectangle [0,disclaimer_height], 500, disclaimer_height
             }
             move_down 5
-            text "*These charges are for CRU services only.", :size => 11, :align => :center
-            text "If the lab manual is not available during protocol review, lab processing fees will be included as an estimate based on the cost of similar studies.", :size => 11, :align => :center
-            text "Prices are valid as of the approval date and effective for up to 12 months after signing.", :size => 11, :align => :center
-            text "Any changes to the original I-CART request may result in a new cost analysis.", :size => 11, :align => :center
-            text "Modifications and extensions may be subject to price changes reflective of current CRU rates.", :size => 11, :align => :center
-            text "Adverse reactions requiring additional time or personnel will be an additional $100/hour.", :size => 11, :align => :center
+            I18n.t(:disclaimer,scope: [:reporting,:cost_analysis]).each do |line|
+              text line, :size => 11, :align => :center
+            end
           end
 
           number_pages "<page>", {
