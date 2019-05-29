@@ -90,7 +90,7 @@ module SparcRails
       margin_top: '2in',
       margin_bottom: '1in',
       print_media_type: true
-    }, :except => [%r[^/protocols/\d+\.pdf$]]
+    }, :except => [%r[^/dashboard/protocols/\d+\.pdf$]]
       
     ##  Error pages
     config.exceptions_app = self.routes
