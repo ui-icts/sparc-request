@@ -106,7 +106,6 @@ module CostAnalysis
         {:content => "Your Price",:size => 5, :width => 40, :align => :center, :valign => :middle},
         {:content => "Subject", :width => 40, :align => :center, :valign => :middle, :size => 8}
       ]
-      require 'byebug'
       dynamic_columns = @visit_labels.map do |visit_label|
         {
           :content => visit_label,
