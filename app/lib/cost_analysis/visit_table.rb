@@ -20,6 +20,11 @@ module CostAnalysis
 
   class VisitTable
 
+    # How many columns in the table are static / always there vs the dynamic ones
+    # we generate from visits
+    DETAIL_TABLE_STATIC_COLUMNS = 5
+    SUMMARY_TABLE_STATIC_COLUMNS = 7
+
     include ActionView::Helpers::NumberHelper
 
     attr_accessor :arm_name, :line_items, :visit_labels
@@ -55,7 +60,7 @@ module CostAnalysis
       per_patient_total = 0.0
       per_study_total = 0.0
       cores.each do |core|
-        table.add_header build_program_core_row(core, 7)
+        table.add_header(build_program_core_row(core, SUMMARY_TABLE_STATIC_COLUMNS))
         @line_items[core].each do |li|
           per_study_total += li.per_study_total
           per_patient_total += li.per_patient_total
@@ -84,7 +89,7 @@ module CostAnalysis
       data = TableWithGroupHeaders.new
       data.add_column_labels self.build_header_row
       self.cores.each do |core|
-        data.add_header self.build_program_core_row(core, 5 + visit_count)
+        data.add_header(self.build_program_core_row(core, DETAIL_TABLE_STATIC_COLUMNS + visit_count))
 
         core_rows = self.build_line_item_rows(@line_items[core])
         data.concat(core_rows)
@@ -96,18 +101,19 @@ module CostAnalysis
 
     def build_header_row
       static_columns = [
-        {:colspan => 2, :content => self.arm_name},
-        "Current",
-        "Your Price",
-        "Subjects"
-      ] 
-      
+        {:colspan => 2, :content => self.arm_name, :width => 150},
+        {:content => "Current", :size => 5, :width => 40, :align => :center, :valign => :middle},
+        {:content => "Your Price",:size => 5, :width => 40, :align => :center, :valign => :middle},
+        {:content => "Subject", :width => 40, :align => :center, :valign => :middle, :size => 8}
+      ]
+      require 'byebug'
       dynamic_columns = @visit_labels.map do |visit_label|
         {
           :content => visit_label,
           :align => :center,
           :single_line => false,
-          :min_font_size => 8,
+          :overflow => :shrink_to_fit,
+          :size => 8
         }
       end
 
@@ -121,7 +127,7 @@ module CostAnalysis
         :align => :left,
         :valign => :middle,
         :background_color => 'E8E8E8',
-        :size => 16,
+        :size => 10,
         :font_style => :bold
       }]
     end
@@ -136,10 +142,11 @@ module CostAnalysis
           {:content => li.subjects.to_s, :align => :center}
         ]
 
-        visit_data = li.visit_counts.map do |visit_count|
+        visit_data = li.visit_counts.map do |vc|
           {
-            :content => visit_count == 0 ? "" : visit_count.to_s,
-            :align => :center
+            :content => vc == 0 ? "" : vc.to_s,
+            :align => :center,
+            :valign => :middle,
           }
         end
         label_data + visit_data

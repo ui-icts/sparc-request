@@ -44,13 +44,11 @@ module CostAnalysis
           #inherited because they are passed as the cell_style
           #argument
           visit_table_style = {
-            :size => 8,
             :border_width => 1,
             :border_color => '4c4c4c',
-            :single_line => true,
-            :overflow => :shrink_to_fit
+            :overflow => :shrink_to_fit,
+            :size => 8
           }
-
 
           arm_colors = %w( 91c6d8 febc7a 8bcba5 e8aaaf )
           arm_mod = -1
@@ -66,7 +64,7 @@ module CostAnalysis
 
                 # ARM rows
                 cells.columns(0..-1).rows(0).style({
-                  :background_color => arm_colors[arm_mod % arm_colors.size]
+                  :background_color => arm_colors[arm_mod % arm_colors.size],
                 })
             end
 
@@ -78,7 +76,13 @@ module CostAnalysis
 
             move_down 5
 
-            visit_table.line_item_detail.split(keep: 5,cols: 12).each do |page|
+            # Picking the page size that will keep the tables
+            # all as close tot he same size as possible
+            best_page_size = (8..14).min_by do |size|
+              size - (visit_table.visit_count % size)
+            end
+
+            visit_table.line_item_detail.split(keep: VisitTable::DETAIL_TABLE_STATIC_COLUMNS,cols: best_page_size).each do |page|
 
               detail_table = make_table(
                 page.table_rows,
@@ -86,7 +90,8 @@ module CostAnalysis
 
                   # ARM rows
                   cells.columns(0..-1).rows(0).style({
-                    :background_color => arm_colors[arm_mod % arm_colors.size]
+                    :background_color => arm_colors[arm_mod % arm_colors.size],
+                    :single_line => false
                   })
 
                 end
