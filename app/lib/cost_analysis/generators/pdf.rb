@@ -76,7 +76,13 @@ module CostAnalysis
 
             move_down 5
 
-            visit_table.line_item_detail.split(keep: 5,cols: 12).each do |page|
+            # Picking the page size that will keep the tables
+            # all as close tot he same size as possible
+            best_page_size = (8..14).min_by do |size|
+              size - (visit_table.visit_count % size)
+            end
+
+            visit_table.line_item_detail.split(keep: VisitTable::DETAIL_TABLE_STATIC_COLUMNS,cols: best_page_size).each do |page|
 
               detail_table = make_table(
                 page.table_rows,
