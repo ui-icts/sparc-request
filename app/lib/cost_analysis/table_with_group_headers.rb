@@ -116,7 +116,7 @@ module CostAnalysis
             # The header / keep columns go in every table
             #
 
-            if col.is_a?(Hash)
+            if col.is_a?(Hash) && col.has_key?(:colspan)
               keep_count += col[:colspan]
             else
               keep_count += 1

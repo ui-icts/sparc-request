@@ -22,8 +22,6 @@ module CostAnalysis
 
     include ActionView::Helpers::NumberHelper
 
-    SUMMARY_HEADERS = ["","Current","Your Price", "Qty"]
-
     attr_accessor :arm_name, :line_items, :visit_labels
 
     def initialize
@@ -46,7 +44,14 @@ module CostAnalysis
 
     def summarized_by_service
       table = TableWithGroupHeaders.new
-      table.add_column_labels ([self.arm_name] + SUMMARY_HEADERS + ["Per Patient", "Per Study"])
+      table.add_column_labels([
+        {:colspan => 2, :content => self.arm_name},
+        "Current",
+        "Your Price",
+        "Qty",
+        "Per Patient",
+        "Per Study"
+      ])
       per_patient_total = 0.0
       per_study_total = 0.0
       cores.each do |core|
@@ -54,10 +59,24 @@ module CostAnalysis
         @line_items[core].each do |li|
           per_study_total += li.per_study_total
           per_patient_total += li.per_patient_total
-          table.add_data [li.description, li.unit_type, to_money(li.service_rate), to_money(li.applicable_rate), li.total_visit_count] + [to_money(li.per_patient_total), to_money(li.per_study_total)]
+          table.add_data([
+            li.description,
+            li.unit_type,
+            {:content => to_money(li.service_rate), :align => :right},
+            {:content => to_money(li.applicable_rate), :align => :right},
+            {:content => li.total_visit_count.to_s, :align => :center},
+            {:content => to_money(li.per_patient_total), :align => :right},
+            {:content => to_money(li.per_study_total), :align => :right}
+          ])
         end
       end
-      table.add_summary [{content: "", colspan: 5}] + [to_money(per_patient_total), to_money(per_study_total)]
+
+      table.add_summary([
+        {content: "", colspan: 5},
+        {:content => to_money(per_patient_total), :align => :right, :font_style => :bold},
+        {:content => to_money(per_study_total), :align => :right, :font_style => :bold}
+      ])
+
       table
     end
 
@@ -76,11 +95,35 @@ module CostAnalysis
 
 
     def build_header_row
-      [{:colspan => 2, :content => self.arm_name},"Current","Your Price", "Subjects"] + @visit_labels
+      static_columns = [
+        {:colspan => 2, :content => self.arm_name},
+        "Current",
+        "Your Price",
+        "Subjects"
+      ] 
+      
+      dynamic_columns = @visit_labels.map do |visit_label|
+        {
+          :content => visit_label,
+          :align => :center,
+          :single_line => false,
+          :min_font_size => 8,
+        }
+      end
+
+      static_columns + dynamic_columns
     end
 
     def build_program_core_row(program_or_core, colspan)
-      [{:colspan => colspan, :content => program_or_core, :align => :left, :size => 16}]
+      [{
+        :colspan => colspan,
+        :content => program_or_core,
+        :align => :left,
+        :valign => :middle,
+        :background_color => 'E8E8E8',
+        :size => 16,
+        :font_style => :bold
+      }]
     end
 
     def build_line_item_rows(line_items)
@@ -88,24 +131,36 @@ module CostAnalysis
         label_data = [
           li.description,
           li.unit_type,
-          to_money(li.service_rate),
-          to_money(li.applicable_rate),
-          li.subjects
+          {:content => to_money(li.service_rate), :align => :right},
+          {:content => to_money(li.applicable_rate), :align => :right},
+          {:content => li.subjects.to_s, :align => :center}
         ]
-        label_data + li.visit_counts.map { |c| c == 0 ? "" : c.to_s }
+
+        visit_data = li.visit_counts.map do |visit_count|
+          {
+            :content => visit_count == 0 ? "" : visit_count.to_s,
+            :align => :center
+          }
+        end
+        label_data + visit_data
       end
     end
 
     def build_summary_row
-      summary_row = Array.new(visit_count,0)
+      summary_column = Array.new(visit_count,0)
       @line_items.each do |program_or_core, lines|
         lines.each do |li|
           li.visit_counts.each_with_index do |count,idx|
-            summary_row[idx] += (count * li.applicable_rate)
+            summary_column[idx] += (count * li.applicable_rate)
           end
         end
       end
-      [{content: "Per Patient", colspan: 5}] + summary_row.map{ |x| to_money(x) }
+      static_rows = [{content: "Per Patient", colspan: 5, :align => :right, :font_style => :bold}] 
+      dynamic_rows = summary_column.map do |value|
+        {:content => to_money(value), :align => :right, :font_style => :bold}
+      end
+
+      static_rows + dynamic_rows
     end
 
     def to_money(v)
