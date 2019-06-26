@@ -51,23 +51,73 @@ module CostAnalysis
             :border_color => '4c4c4c'
           }
 
+          arm_colors = %w( 91c6d8 febc7a 8bcba5 e8aaaf )
+          arm_mod = -1
+
           visit_tables.each do |visit_table|
+            arm_mod += 1
+
             summary_table_data = visit_table.summarized_by_service
 
             summary_table = make_table(
               summary_table_data.table_rows,
               :cell_style => visit_table_style, :header => true) do
-                  cells.columns(0).align = :left
+                cells.columns(0).align = :left
+                cells.columns(0..-1).rows(0).style({
+                  :background_color => arm_colors[arm_mod % arm_colors.size]
+                })
+                cells.columns(2..6).align = :right
+                # blue header cells
+                cells.columns(2..-1).rows(0).style({
+                  # :background_color => "C5D9F1",
+                  :align => :center
+                })
 
-                  cells.columns(2..6).align = :right
+                # core header rows
+                summary_table_data.header_rows.each do |hr|
+                  cells.columns(0).rows(hr).style({
+                    :align => :left,
+                    :valign => :middle,
+                    :background_color => "E8E8E8"
+                  })
+                  cells.rows(hr).style(:font_style => :bold)
+
+                end
+                summary_table_data.summary_rows.each do |sr|
+                  # cells.columns(0).rows(sr).align = :right
+                  cells.columns(0).rows(sr).style(:align => :right)
+                  cells.rows(sr).style(:font_style => :bold)
+                end
+            end
+
+            unless summary_table.cells.fits_on_current_page?(cursor, bounds)
+              start_new_page
+            end
+
+            summary_table.draw
+
+            move_down 5
+
+            visit_table.line_item_detail.split(keep: 5,cols: 14).each do |page|
+
+              detail_table = make_table(
+                page.table_rows,
+                :cell_style => visit_table_style, :header => true) do
+
+                  # service & core rows
+                  cells.columns(0).align = :left
+                  cells.columns(0..-1).rows(0).style({
+                    :background_color => arm_colors[arm_mod % arm_colors.size]
+                  })
+
                   # blue header cells
                   cells.columns(2..-1).rows(0).style({
-                    :background_color => "C5D9F1",
+                    # :background_color => "C5D9F1",
                     :align => :center
                   })
 
                   # core header rows
-                  summary_table_data.header_rows.each do |hr|
+                  page.header_rows.each do |hr|
                     cells.columns(0).rows(hr).style({
                       :align => :left,
                       :valign => :middle,
@@ -76,61 +126,21 @@ module CostAnalysis
                     cells.rows(hr).style(:font_style => :bold)
 
                   end
-                  summary_table_data.summary_rows.each do |sr|
+                  page.summary_rows.each do |sr|
                     # cells.columns(0).rows(sr).align = :right
                     cells.columns(0).rows(sr).style(:align => :right)
                     cells.rows(sr).style(:font_style => :bold)
                   end
-                  cells.columns(0..1).rows(0).borders = [:bottom]
-              end
 
-              unless summary_table.cells.fits_on_current_page?(cursor, bounds)
-                start_new_page
-              end
+                end #end make_table
 
-              summary_table.draw
-
-              move_down 5
-
-              visit_table.line_item_detail.split(keep: 5,cols: 14).each do |page|
-
-                detail_table = make_table(
-                  page.table_rows,
-                  :cell_style => visit_table_style, :header => true) do
-
-                    # service & core rows
-                    cells.columns(0).align = :left
-
-                    # blue header cells
-                    cells.columns(2..-1).rows(0).style({
-                      :background_color => "C5D9F1",
-                      :align => :center
-                    })
-
-                    # core header rows
-                    page.header_rows.each do |hr|
-                      cells.columns(0).rows(hr).style({
-                        :align => :left,
-                        :valign => :middle,
-                        :background_color => "E8E8E8"
-                      })
-                      cells.rows(hr).style(:font_style => :bold)
-
-                    end
-                    page.summary_rows.each do |sr|
-                      # cells.columns(0).rows(sr).align = :right
-                      cells.columns(0).rows(sr).style(:align => :right)
-                      cells.rows(sr).style(:font_style => :bold)
-                    end
-                    cells.columns(0..1).rows(0).borders = [:bottom]
-                  end #end make_table
-
-                  unless detail_table.cells.fits_on_current_page?(cursor, bounds)
-                    start_new_page
-                  end
-                  detail_table.draw
-                  move_down 5
-              end
+                unless detail_table.cells.fits_on_current_page?(cursor, bounds)
+                  start_new_page
+                end
+                detail_table.draw
+                move_down 5
+            end
+            move_down 5
           end
 
           move_down 20
