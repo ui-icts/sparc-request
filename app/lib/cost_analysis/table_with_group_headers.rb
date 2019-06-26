@@ -59,7 +59,7 @@ module CostAnalysis
       rows.each do |row|
         row_count = 0
         row.each do |col|
-          if col.is_a?(Hash)
+          if col.is_a?(Hash) && col.has_key?(:colspan)
             row_count += col[:colspan].to_i
           else
             row_count += 1
@@ -142,57 +142,22 @@ module CostAnalysis
         data_cols.each_with_index do |table_cols,table_idx|
           tables[table_idx].add_data keep_cols + table_cols
         end
+
       end
 
       #check the sizing of the program core
       #row on a table that might be too short and
       #fix it
-      tables.last.data.each do |r|
-        if full_span?(r)
-          r.first[:colspan] = max_number_of_columns(tables.last.data.reject{ |it| full_span?(it) })
+      tables.each do |table|
+        table.data.each do |r|
+
+          if full_span?(r)
+            r.first[:colspan] = max_number_of_columns(table.data.reject{ |it| full_span?(it) })
+          end
         end
       end
 
       tables
-      # times = 0
-      # yielder = []
-      # loop do
-      #   start_idx = times * cols + keep
-      #   break if start_idx >= column_limit
-      #   other = TableWithGroupHeaders.new
-      #   other.data = self.data.map do |row|
-      #     keep_col = []
-      #     keep_count = 0
-      #     data_col = []
-      #     data_count = 0
-      #
-      #     row.each do |col|
-      #       if keep_count < keep
-      #         keep_col << col
-      #
-      #         if col.is_a?(Hash)
-      #           keep_count += col[:colspan]
-      #         else
-      #           keep_count += 1
-      #         end
-      #       elsif data_count < cols
-      #
-      #       end
-      #     end
-      #
-      #     if row.size == 1 && row[0].is_a?(Hash)
-      #       [row.first.merge({:colspan => cols})]
-      #     else
-      #       row[0,keep] + row[start_idx,cols]
-      #     end
-      #   end
-      #   other.header_rows = self.header_rows
-      #   other.summary_rows = self.summary_rows
-      #
-      #   yielder << other
-      #   times += 1
-      # end
-      # yielder
     end
     
     # A row that only has a single cell spanning the whole table
