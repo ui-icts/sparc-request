@@ -20,6 +20,11 @@ module CostAnalysis
 
   class VisitTable
 
+    # How many columns in the table are static / always there vs the dynamic ones
+    # we generate from visits
+    DETAIL_TABLE_STATIC_COLUMNS = 5
+    SUMMARY_TABLE_STATIC_COLUMNS = 7
+
     include ActionView::Helpers::NumberHelper
 
     attr_accessor :arm_name, :line_items, :visit_labels
@@ -55,7 +60,7 @@ module CostAnalysis
       per_patient_total = 0.0
       per_study_total = 0.0
       cores.each do |core|
-        table.add_header build_program_core_row(core, 7)
+        table.add_header(build_program_core_row(core, SUMMARY_TABLE_STATIC_COLUMNS))
         @line_items[core].each do |li|
           per_study_total += li.per_study_total
           per_patient_total += li.per_patient_total
@@ -84,7 +89,7 @@ module CostAnalysis
       data = TableWithGroupHeaders.new
       data.add_column_labels self.build_header_row
       self.cores.each do |core|
-        data.add_header self.build_program_core_row(core, 5 + visit_count)
+        data.add_header(self.build_program_core_row(core, DETAIL_TABLE_STATIC_COLUMNS + visit_count))
 
         core_rows = self.build_line_item_rows(@line_items[core])
         data.concat(core_rows)
