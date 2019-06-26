@@ -44,13 +44,11 @@ module CostAnalysis
           #inherited because they are passed as the cell_style
           #argument
           visit_table_style = {
-            :size => 8,
             :border_width => 1,
             :border_color => '4c4c4c',
-            :single_line => true,
-            :overflow => :shrink_to_fit
+            :overflow => :shrink_to_fit,
+            :size => 8
           }
-
 
           arm_colors = %w( 91c6d8 febc7a 8bcba5 e8aaaf )
           arm_mod = -1
@@ -66,7 +64,7 @@ module CostAnalysis
 
                 # ARM rows
                 cells.columns(0..-1).rows(0).style({
-                  :background_color => arm_colors[arm_mod % arm_colors.size]
+                  :background_color => arm_colors[arm_mod % arm_colors.size],
                 })
             end
 
@@ -86,7 +84,8 @@ module CostAnalysis
 
                   # ARM rows
                   cells.columns(0..-1).rows(0).style({
-                    :background_color => arm_colors[arm_mod % arm_colors.size]
+                    :background_color => arm_colors[arm_mod % arm_colors.size],
+                    :single_line => false
                   })
 
                 end

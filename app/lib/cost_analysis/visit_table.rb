@@ -96,18 +96,19 @@ module CostAnalysis
 
     def build_header_row
       static_columns = [
-        {:colspan => 2, :content => self.arm_name},
-        "Current",
-        "Your Price",
-        "Subjects"
-      ] 
-      
+        {:colspan => 2, :content => self.arm_name, :width => 150},
+        {:content => "Current", :size => 5, :width => 40, :align => :center, :valign => :middle},
+        {:content => "Your Price",:size => 5, :width => 40, :align => :center, :valign => :middle},
+        {:content => "Subject", :width => 40, :align => :center, :valign => :middle, :size => 8}
+      ]
+      require 'byebug'
       dynamic_columns = @visit_labels.map do |visit_label|
         {
           :content => visit_label,
           :align => :center,
           :single_line => false,
-          :min_font_size => 8,
+          :overflow => :shrink_to_fit,
+          :size => 8
         }
       end
 
@@ -121,7 +122,7 @@ module CostAnalysis
         :align => :left,
         :valign => :middle,
         :background_color => 'E8E8E8',
-        :size => 16,
+        :size => 10,
         :font_style => :bold
       }]
     end
@@ -136,10 +137,11 @@ module CostAnalysis
           {:content => li.subjects.to_s, :align => :center}
         ]
 
-        visit_data = li.visit_counts.map do |visit_count|
+        visit_data = li.visit_counts.map do |vc|
           {
-            :content => visit_count == 0 ? "" : visit_count.to_s,
-            :align => :center
+            :content => vc == 0 ? "" : vc.to_s,
+            :align => :center,
+            :valign => :middle,
           }
         end
         label_data + visit_data
