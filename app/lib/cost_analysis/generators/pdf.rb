@@ -81,6 +81,8 @@ module CostAnalysis
             best_page_size = (8..14).min_by do |size|
               size - (visit_table.visit_count % size)
             end
+            #450 is 720 (page width) - 270 (fixed with static columns)
+            visit_column_width = 450/best_page_size
 
             visit_table.line_item_detail.split(keep: VisitTable::DETAIL_TABLE_STATIC_COLUMNS,cols: best_page_size).each do |page|
 
@@ -94,6 +96,9 @@ module CostAnalysis
                     :single_line => false
                   })
 
+                  cells.columns(VisitTable::DETAIL_TABLE_STATIC_COLUMNS..-1).style({
+                    :width => visit_column_width
+                  })
                 end
 
                 unless detail_table.cells.fits_on_current_page?(cursor, bounds)
