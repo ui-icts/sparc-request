@@ -4,8 +4,18 @@
 pkg_name=sparc-request
 pkg_origin=chrisortman
 pkg_version="3.4.0"
-pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_version}.tar.bz2"
-# Overwritten later because we compute it based on the repo
+
+ruby_pkg="core/ruby24"
+ruby_major="2.4.0"
+
+# If you don't have this, then do_build won't happen inside the cache
+# directory and will happen in /src which could potentially change files you care about
+
+# Have to do this because we are creating the package from our git repo
+pkg_filename=${pkg_name}-${pkg_version}.tar.gz
+
+app_sub_path="static/release"
+
 pkg_deps=(
   core/libxml2
   core/libxslt
@@ -15,7 +25,7 @@ pkg_deps=(
   core/curl
   core/rsync
 
-  core/ruby24
+  $ruby_pkg
   chrisortman/eye
 
   core/busybox-static
@@ -28,6 +38,7 @@ pkg_build_deps=(
   core/which
   core/cacerts
   core/tar
+  core/yarn
 )
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -43,12 +54,19 @@ pkg_exports=(
 )
 pkg_exposes=(rails-port)
 
-# Callback Functions
-#
 do_begin() {
+  # Because we don't have pkg_source set
+  # we need to explicitly set a source path
+  # potentially it could all work without it
+  # but then we'd be changing stuff in our
+  # same directory as where we have our git
+  # repository and I don't want to accidentally
+  # rm -fr something
+  # If you delete this you're going to wind
+  # up in $PLAN_CONTEXT in the do_build func
+  SRC_PATH=$CACHE_PATH
   return 0
 }
-
 do_download() {
   return 0
 }
@@ -63,16 +81,8 @@ do_unpack() {
   { git ls-files; git ls-files --exclude-standard --others; } \
     | _tar_pipe_app_cp_to $HAB_CACHE_SRC_PATH/${pkg_dirname}
 }
-# The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
-# in case there was a previously-built version of your package installed on
-# disk. This ensures you start with a clean build environment.
-do_clean() {
-  do_default_clean
-}
 
 do_prepare() {
-
-  export BUNDLE_SILENCE_ROOT_WARNING=1
 
   build_line "Setting link for /usr/bin/env to 'coreutils'"
   [[ ! -f /usr/bin/env ]] && ln -s "$(pkg_path_for coreutils)/bin/env" /usr/bin/env
@@ -80,51 +90,93 @@ do_prepare() {
   return 0
 }
 
-do_build() {
+do_setup_environment() {
 
-  export CPPFLAGS="${CPPFLAGS} ${CFLAGS}"
+  set_runtime_env TZ "America/Chicago"
+  set_runtime_env time_zone "America/Chicago"
+  push_runtime_env GEM_PATH "${pkg_prefix}/vendor/bundle/ruby/${ruby_major}"
+  set_runtime_env LD_LIBRARY_PATH "$(pkg_path_for "core/gcc-libs")/lib:$(pkg_path_for "core/libevent")"
+  set_runtime_env HOME ${pkg_svc_data_path}
+  set_runtime_env LANG "en_US.UTF-8"
+  set_runtime_env LC_ALL "en_US.UTF-8"
+  set_runtime_env SENDMAIL_PATH "{{pkgPathFor "core/busybox-static"}}/bin/sendmail"
+  set_runtime_env RAILS_ENV "production"
+  set_runtime_env RACK_ENV "production"
+  set_runtime_env RAILS_ROOT "${pkg_prefix}/${app_sub_path}"
+  set_runtime_env EYE_HOME "${pkg_svc_var_path}/eye"
+  set_runtime_env EYE_FILE "{{pkg.svc_config_path}}/sparc.eye"
+
+  set_runtime_env SPARC_VERSION "v{{pkg.version}}"
+  # Build specific
+
+  set_buildtime_env HOME /root
+  mkdir --parents '/hab/cache/artifacts/studio_cache/yarn'
+  set_buildtime_env YARN_CACHE_FOLDER '/hab/cache/artifacts/studio_cache/yarn'
+
+  set_buildtime_env BUNDLE_SILENCE_ROOT_WARNING 1
+
+  set_buildtime_env MY_BUNDLE_CACHE_PATH $HAB_CACHE_SRC_PATH/bundle_cache
+  set_buildtime_env MY_TMP_CACHE_PATH $HAB_CACHE_SRC_PATH/tmp_cache
+  set_buildtime_env MY_NODE_CACHE_PATH $HAB_CACHE_SRC_PATH/node_cache
+
   local _libxml2_dir=$(pkg_path_for libxml2)
   local _libxslt_dir=$(pkg_path_for libxslt)
   local _zlib_dir=$(pkg_path_for zlib)
-  local _openssl_include_dir=$(pkg_path_for openssl)
   local _mysql2_dir=$(pkg_path_for mysql-client)
 
   # don't let bundler split up the nokogiri config string (it breaks
   # the build), so specify it as an env var instead
-  export NOKOGIRI_CONFIG="--use-system-libraries --with-zlib-dir=${_zlib_dir} --with-xslt-dir=${_libxslt_dir} --with-xml2-include=${_libxml2_dir}/include/libxml2 --with-xml2-lib=${_libxml2_dir}/lib"
+  set_buildtime_env NOKOGIRI_CONFIG "--use-system-libraries --with-zlib-dir=${_zlib_dir} --with-xslt-dir=${_libxslt_dir} --with-xml2-include=${_libxml2_dir}/include/libxml2 --with-xml2-lib=${_libxml2_dir}/lib"
+
+  set_buildtime_env MYSQL_CONFIG "--with-mysql-dir=${_mysql2_dir}"
+}
+do_build() {
+
 
   # we control the variable above, and it will be all on one line, and
   # we need single quotes otherwise the extconf doesn't build the
   # extension.
   bundle config build.nokogiri '${NOKOGIRI_CONFIG}'
-  bundle config build.mysql2 --with-mysql-dir=${_mysql2_dir}
+  bundle config build.mysql2 '${MYSQL_CONFIG}'
 
   # We need to add tzinfo-data to the Gemfile since we're not in an
   # environment that has this from the OS
-   if ! grep -q 'gem .*tzinfo-data.*' Gemfile; then
-     echo 'gem "tzinfo-data"' >> Gemfile
-   fi
+  if ! grep -q 'gem .*tzinfo-data.*' Gemfile; then
+    echo 'gem "tzinfo-data"' >> Gemfile
+  fi
 
   # If you want rails console to work you need to
   # provide an implementation of readline
-   if ! grep -q 'gem .*rb-readline.*' Gemfile; then
-     echo 'gem "rb-readline"' >> Gemfile
-   fi
+  if ! grep -q 'gem .*rb-readline.*' Gemfile; then
+    echo 'gem "rb-readline"' >> Gemfile
+  fi
 
+  ####### ZOOM ######
+  if [[ -e $MY_BUNDLE_CACHE_PATH ]]; then
+    build_line "Restoring cached bundle gems"
+    mkdir -p vendor
+    cp -a $MY_BUNDLE_CACHE_PATH vendor/bundle
+  fi
 
-   ####### ZOOM ######
-   # If you want to speed up your habitat package build
-   # while you're dev'ing do this after your first run
-   # in the studio
-   # cp -a /hab/cache/src/sparc-request-$pkg_version/vendor/bundle /hab/cache/src/bundle_cache
-   # but you'll probably have to put the pkg version in there
-   if [[ -e $HAB_CACHE_SRC_PATH/bundle_cache ]]; then
-     build_line "Restoring cached bundle install"
-     cp -a $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
-   fi
+  if [[ -e $MY_NODE_CACHE_PATH ]]; then
+    build_line "Restoring cached node modules"
+    rm -fr node_modules
+    cp -a $MY_NODE_CACHE_PATH node_modules
+  fi
+
+  if [[ -e $MY_TMP_CACHE_PATH ]]; then
+    build_line "Restoring cached assets"
+    mkdir -p tmp
+    cp -a $MY_TMP_CACHE_PATH tmp/cache
+  fi
 
    build_line "Bundle install gems"
-   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --no-binstubs --no-clean --quiet
+   bundle install \
+     --path vendor/bundle \
+     --without test:development \
+     --retry 5 \
+     --no-binstubs \
+     --quiet
 
   # cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
   # Some bundle files when they install have permissions that don't
@@ -180,8 +232,7 @@ do_check() {
 # custom installation steps, such as copying files from HAB_CACHE_SRC_PATH to
 # specific directories in your package, or installing pre-built binaries into
 # your package.
-do_install() {
-
+do_install() { 
   # At this point my current directory is something
   # like /hab/cache/src/sparc-request-0.1.0
   # this the HAB CACHE SRC PATH or some such 
@@ -198,20 +249,19 @@ do_install() {
   # that is all versioned out.
   # EDIT: I changed the cp -r to cp -a cuz maybe that's better
   # since I'm setting my user to hab up above anyway?
-  build_line "Copying current files to ${pkg_prefix}"
-  mkdir -p "${pkg_prefix}/static/release"
-  cp -a . "${pkg_prefix}/static/release"
-
+  build_line "Copying current files to $RAILS_ROOT"
+  mkdir -p "$RAILS_ROOT"
+  cp -a . "$RAILS_ROOT"
 
   # This seems to be some habitat stuff that you 
   # just need to do?
-  for binstub in ${pkg_prefix}/static/release/bin/*; do
+  for binstub in $RAILS_ROOT/bin/*; do
     build_line "Setting shebang for ${binstub} to 'ruby'"
-    [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ruby24)/bin/ruby#" -i "$binstub"
+    [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ${ruby_pkg})/bin/ruby#" -i "$binstub"
   done
-  for binstub in ${pkg_prefix}/static/release/script/*; do
+  for binstub in $RAILS_ROOT/script/*; do
     build_line "Setting shebang for ${binstub} to 'ruby'"
-    [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ruby24)/bin/ruby#" -i "$binstub"
+    [[ -f $binstub ]] && sed -e "s#/usr/bin/env ruby#$(pkg_path_for ${ruby_pkg})/bin/ruby#" -i "$binstub"
   done
 
   if [[ $(readlink /usr/bin/env) = "$(pkg_path_for coreutils)/bin/env" ]]; then
@@ -219,12 +269,15 @@ do_install() {
     rm /usr/bin/env
   fi
 
-  chmod +x ${pkg_prefix}/static/release/script/upgrade/*.sh
+  chmod +x $RAILS_ROOT/script/upgrade/*.sh
 
-  create_symlinks
+  _create_symlinks
+  _create_process_bin "${pkg_prefix}/bin/rake" rake
+  _create_process_bin "${pkg_prefix}/bin/rails" rails
+  _create_process_bin "${pkg_prefix}/bin/eye" eye
 }
 
-create_symlinks() {
+_create_symlinks() {
 
   rm -rf ${pkg_prefix}/static/release/log
   rm -rf ${pkg_prefix}/static/release/tmp
@@ -271,6 +324,19 @@ do_after() {
 # package has been built and installed. You can use this callback to remove any
 # temporary files or perform other post-install clean-up actions.
 do_end() {
+  if [[ "$STORE_CACHES" == "true" ]]; then
+    build_line "Caching expensive dependencies"
+    
+    # Remove first so that our cp command behaves consistently
+    rm -frv $MY_BUNDLE_CACHE_PATH
+    rm -frv $MY_NODE_CACHE_PATH
+    rm -frv $MY_TMP_CACHE_PATH
+
+    cp -a $HAB_CACHE_SRC_PATH/${pkg_dirname}/vendor/bundle $MY_BUNDLE_CACHE_PATH
+    [[ -d $HAB_CACHE_SRC_PATH/${pkg_dirname}/node_modules ]] && cp -a $HAB_CACHE_SRC_PATH/${pkg_dirname}/node_modules $MY_NODE_CACHE_PATH
+    cp -a $HAB_CACHE_SRC_PATH/${pkg_dirname}/tmp/cache $MY_TMP_CACHE_PATH
+  fi
+
   return 0
 }
 
@@ -309,3 +375,30 @@ _tar_pipe_app_cp_to() {
       -f -
 }
 
+_create_process_bin() {
+  local bin cmd env_sh
+  bin="$1"
+  cmd="$2"
+  env_sh="$pkg_svc_config_path/dotenv"
+
+  build_line "Creating ${bin} process bin"
+
+  cat <<EOF > "$bin"
+#!$(pkg_path_for busybox-static)/bin/sh
+set -e
+if test -n "\$DEBUG"; then set -x; fi
+export HOME="$pkg_svc_data_path"
+if [ -f "$env_sh" ]; then
+  export \$(cat "$env_sh")
+else
+  >&2 echo "No dotenv file found: '$env_sh'"
+  >&2 echo "Have you not started this service ($pkg_origin/$pkg_name) before?"
+  >&2 echo ""
+  >&2 echo "Aborting..."
+  exit 1
+fi
+cd $RAILS_ROOT
+exec ./bin/$cmd \$@
+EOF
+  chmod -v 755 "$bin"
+}
