@@ -254,6 +254,19 @@ do_strip() {
   return 0
 }
 
+do_after() {
+  if [[ $HAB_CREATE_PACKAGE == 'false' ]]; then
+    build_line "WARN: Skipping artifact creation because 'HAB_CREATE_PACKAGE=false'"
+
+    _generate_artifact() {
+      return 0
+    }
+
+    _prepare_build_outputs() {
+      return 0
+    }
+  fi
+}
 # There is no default implementation of this callback. This is called after the
 # package has been built and installed. You can use this callback to remove any
 # temporary files or perform other post-install clean-up actions.
