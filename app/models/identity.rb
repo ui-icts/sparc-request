@@ -203,6 +203,7 @@ class Identity < ApplicationRecord
       else
         Rails.logger.warn("[SHIB] Identity created from shibboleth is invalid")
         Rails.logger.info(identity.errors.inspect)
+        Rails.logger.info(auth.inspect)
       end
     end
     identity

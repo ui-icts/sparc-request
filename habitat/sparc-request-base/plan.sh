@@ -6,7 +6,6 @@ pkg_origin=chrisortman
 pkg_version="3.4.0"
 pkg_source="https://github.com/ui-icts/sparc-request/archive/${pkg_name}-${pkg_version}.tar.bz2"
 # Overwritten later because we compute it based on the repo
-pkg_shasum="b663cefcbd5fabd7fabb00e6a114c24103391014cfe1c5710a668de30dd30371"
 pkg_deps=(
   core/libxml2
   core/libxslt
@@ -28,6 +27,7 @@ pkg_build_deps=(
   core/make
   core/which
   core/cacerts
+  core/tar
 )
 pkg_bin_dirs=(bin)
 pkg_lib_dirs=(lib)
@@ -50,31 +50,24 @@ do_begin() {
 }
 
 do_download() {
-  export GIT_SSL_CAINFO="$(pkg_path_for core/cacerts)/ssl/certs/cacert.pem"
-
-  # This is a way of getting the git code that I found in the chef plan
-  build_line "Fake download! Creating archive of latest repository commit from $PLAN_CONTEXT"
-  cd $PLAN_CONTEXT/../..
-  git archive --prefix=${pkg_name}-${pkg_version}/ --output=$HAB_CACHE_SRC_PATH/${pkg_filename} HEAD
-
-  pkg_shasum=$(trim $(sha256sum $HAB_CACHE_SRC_PATH/${pkg_filename} | cut -d " " -f 1))
+  return 0
 }
 
 do_verify() {
-  do_default_verify
-  # return 0
+  return 0
 }
 
+do_unpack() {
+  build_line "Cloning source files"
+  cd $PLAN_CONTEXT/../../
+  { git ls-files; git ls-files --exclude-standard --others; } \
+    | _tar_pipe_app_cp_to $HAB_CACHE_SRC_PATH/${pkg_dirname}
+}
 # The default implementation removes the HAB_CACHE_SRC_PATH/$pkg_dirname folder
 # in case there was a previously-built version of your package installed on
 # disk. This ensures you start with a clean build environment.
 do_clean() {
   do_default_clean
-}
-
-do_unpack() {
-  do_default_unpack
-  # return 0
 }
 
 do_prepare() {
@@ -126,11 +119,12 @@ do_build() {
    # cp -a /hab/cache/src/sparc-request-$pkg_version/vendor/bundle /hab/cache/src/bundle_cache
    # but you'll probably have to put the pkg version in there
    if [[ -e $HAB_CACHE_SRC_PATH/bundle_cache ]]; then
-     echo "Restoring cached bundle install"
+     build_line "Restoring cached bundle install"
      cp -a $HAB_CACHE_SRC_PATH/bundle_cache vendor/bundle
    fi
 
-   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --no-binstubs --no-clean
+   build_line "Bundle install gems"
+   bundle install --path vendor/bundle --without test development --jobs 2 --retry 5 --no-binstubs --no-clean --quiet
 
   # cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
   # Some bundle files when they install have permissions that don't
@@ -142,7 +136,7 @@ do_build() {
   # Need to generate a database.yml if there isn't one
   if [[ ! -e config/database.yml ]]; then
     clean_up_db=true
-    echo "Creating stub database.yml"
+    build_line "Creating stub database.yml"
     cat << NULLDB > config/database.yml
 production:
   adapter: nulldb
@@ -151,17 +145,18 @@ NULLDB
   fi
 
   if [[ ! -e config/epic.yml ]]; then
-    echo "Copying default epic.yml for asset compilation"
+    build_line "Copying default epic.yml for asset compilation"
     cp config/epic.yml.example config/epic.yml
   fi
 
   if [[ ! -e config/ldap.yml ]]; then
-    echo "Copying default ldap.yml for asset compilation"
+    build_line "Copying default ldap.yml for asset compilation"
     cp config/ldap.yml.example config/ldap.yml
     sed -e "s#test#production#" -i "config/ldap.yml"
   fi
 
-  RAILS_ENV=production bin/rake assets:precompile
+  build_line "Precompiling assets"
+  RAILS_ENV=production bin/rake -s assets:precompile
 
   # need to clean up these yaml files
   rm config/epic.yml
@@ -203,7 +198,7 @@ do_install() {
   # that is all versioned out.
   # EDIT: I changed the cp -r to cp -a cuz maybe that's better
   # since I'm setting my user to hab up above anyway?
-  echo "Copying current files to ${pkg_prefix}"
+  build_line "Copying current files to ${pkg_prefix}"
   mkdir -p "${pkg_prefix}/static/release"
   cp -a . "${pkg_prefix}/static/release"
 
@@ -231,23 +226,23 @@ do_install() {
 
 create_symlinks() {
 
-  rm -rfv ${pkg_prefix}/static/release/log
-  rm -rfv ${pkg_prefix}/static/release/tmp
-  rm -rfv ${pkg_prefix}/static/release/public/system
-  rm -rfv ${pkg_prefix}/static/release/config/database.yml
-  rm -rfv ${pkg_prefix}/static/release/config/application.yml
-  rm -rfv ${pkg_prefix}/static/release/config/epic.yml
-  rm -rfv ${pkg_prefix}/static/release/config/ldap.yml
+  rm -rf ${pkg_prefix}/static/release/log
+  rm -rf ${pkg_prefix}/static/release/tmp
+  rm -rf ${pkg_prefix}/static/release/public/system
+  rm -rf ${pkg_prefix}/static/release/config/database.yml
+  rm -rf ${pkg_prefix}/static/release/config/application.yml
+  rm -rf ${pkg_prefix}/static/release/config/epic.yml
+  rm -rf ${pkg_prefix}/static/release/config/ldap.yml
 
-  ln -sfv ${pkg_svc_var_path}/log ${pkg_prefix}/static/release/log
-  ln -sfv ${pkg_svc_var_path}/tmp ${pkg_prefix}/static/release/tmp
-  ln -sfv ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
+  ln -sf ${pkg_svc_var_path}/log ${pkg_prefix}/static/release/log
+  ln -sf ${pkg_svc_var_path}/tmp ${pkg_prefix}/static/release/tmp
+  ln -sf ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
 
-  ln -sfv ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
-  ln -sfv ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
-  ln -sfv ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
-  ln -sfv ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
-  ln -sfv ${pkg_svc_config_path}/appenv ${pkg_prefix}/static/release/.env
+  ln -sf ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
+  ln -sf ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
+  ln -sf ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
+  ln -sf ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
+  ln -sf ${pkg_svc_config_path}/appenv ${pkg_prefix}/static/release/.env
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their
@@ -264,5 +259,40 @@ do_strip() {
 # temporary files or perform other post-install clean-up actions.
 do_end() {
   return 0
+}
+
+# **Internal** Use a "tar pipe" to copy the app source into a destination
+# directory. This function reads from `stdin` for its file/directory manifest
+# where each entry is on its own line ending in a newline. Several filters and
+# changes are made via this copy strategy:
+#
+# * All user and group ids are mapped to root/0
+# * No extended attributes are copied
+# * Some file editor backup files are skipped
+# * Some version control-related directories are skipped
+# * Any `./habitat/` directory is skipped
+# * Any `./vendor/bundle` directory is skipped as it may have native gems
+_tar_pipe_app_cp_to() {
+  local dst_path tar
+  dst_path="$1"
+  tar="$(pkg_path_for tar)/bin/tar"
+
+  mkdir -p $dst_path
+
+  "$tar" -cp \
+      --owner=root:0 \
+      --group=root:0 \
+      --no-xattrs \
+      --exclude-backups \
+      --exclude-vcs \
+      --exclude='habitat' \
+      --exclude='node_modules' \
+      --exclude='vendor/bundle' \
+      --exclude='results' \
+      --files-from=- \
+      -f - \
+  | "$tar" -x \
+      -C "$dst_path" \
+      -f -
 }
 
