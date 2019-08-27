@@ -26,7 +26,6 @@ pkg_deps=(
   core/rsync
 
   $ruby_pkg
-  chrisortman/eye
 
   core/busybox-static
   )
@@ -104,7 +103,6 @@ do_setup_environment() {
   set_runtime_env RACK_ENV "production"
   set_runtime_env RAILS_ROOT "${pkg_prefix}/${app_sub_path}"
   set_runtime_env EYE_HOME "${pkg_svc_var_path}/eye"
-  set_runtime_env EYE_FILE "{{pkg.svc_config_path}}/sparc.eye"
 
   set_runtime_env SPARC_VERSION "v{{pkg.version}}"
   # Build specific
@@ -295,7 +293,7 @@ _create_symlinks() {
   ln -sf ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
   ln -sf ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
   ln -sf ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
-  ln -sf ${pkg_svc_config_path}/appenv ${pkg_prefix}/static/release/.env
+  ln -sf ${pkg_svc_config_path}/dotenv ${pkg_prefix}/static/release/.env
 }
 
 # The default implementation is to strip any binaries in $pkg_prefix of their

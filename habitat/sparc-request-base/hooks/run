@@ -1,7 +1,19 @@
 #!{{pkgPathFor "core/busybox-static"}}/bin/bash
 
-. /hab/svc/sparc-request/config/dotenv
+cd $RAILS_ROOT
+
+# We export these values here because
+# we need it to be in the ENV for 
+# eye
+# We don't have to do this for a bunch
+# of the other stuff because it is
+# exported by the set_runtime_env calls
+# in the plan. They are paths or values
+# whereas this is a port that can change
+export RAILS_PORT={{cfg.rails.port}}
+{{#if cfg.use_syslog ~}}
+export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
+{{/if}}
 
 exec 2>&1
-
-exec {{pkgPathFor "chrisortman/eye"}}/bin/leye load -f
+exec bin/eye load application.eye -f

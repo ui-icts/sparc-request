@@ -98,6 +98,7 @@ group :development, :test, :profile do
   gem 'progress_bar'
 end
 gem 'puma', '~> 3.12'
+gem 'eye'
 
 group :development, :test do
   gem 'pry'

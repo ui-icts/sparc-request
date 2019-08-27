@@ -1,4 +1,4 @@
-RAILS_ROOT = ENV["RAILS_ROOT"] || File.expand_path(File.dirname(__FILE__) + "/../../../")
+RAILS_ROOT = ENV["RAILS_ROOT"] || File.expand_path(File.dirname(__FILE__))
 RAILS_ENV = ENV["RAILS_ENV"] || "development"
 RAILS_PORT = ENV["RAILS_PORT"] || "3000"
 
@@ -7,6 +7,8 @@ USE_SYSLOG = ENV['RAILS_LOG_TO_SYSLOG'].present?
 if USE_SYSLOG
   require 'syslog/logger'
 end
+
+WORKERS_COUNT=1
 
 def puma_log
   if USE_SYSLOG
@@ -17,24 +19,42 @@ def puma_log
   end
 end
 
-def dj_log(num)
+def dj_log(name)
   if USE_SYSLOG
     #Syslog::Logger.new('sparc-request-jobs')
     ":syslog"
   else
-    "log/dj-#{num}.log"
+    "log/#{name}.log"
   end
 end
 
-WORKERS_COUNT=1
+def delayed_job_process(proxy, name)
+  rails_env = proxy.env['RAILS_ENV']
+  proxy.process(name) do
+    start_command 'bin/delayed_job -e #{rails_env} run'
+    pid_file "tmp/pids/#{name}.pid"
+    stdall dj_log(name)
+    daemonize true
+    stop_signals [:INT, 30.seconds, :TERM, 10.seconds, :KILL]
+    check :cpu, every: 30, below: 80, times: 3
+    check :memory, every: 30, below: 300.megabytes, times: 5
+  end
+end
 Eye.config do
-  logger syslog
+  if USE_SYSLOG
+    logger syslog
+  else
+    logger "#{RAILS_ROOT}/log/eye.log"
+  end
 end
 
 Eye.application 'sparc' do
-
-  env ENV.to_h
   working_dir RAILS_ROOT
+  env({
+    "RAILS_ENV" => RAILS_ENV,
+    "RAILS_PORT" => RAILS_PORT
+  })
+  load_env ".env"
 #  env 'APP_ENV' => 'production' # global env for each processes
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
 
@@ -59,15 +79,7 @@ Eye.application 'sparc' do
   group 'jobs' do
     chain grace: 5.seconds
     (1..WORKERS_COUNT).each do |i|
-      process "dj-#{i}" do
-        pid_file "tmp/pids/delayed_job.#{i}.pid"
-        start_command 'bin/delayed_job run'
-        daemonize true
-        stop_signals [:INT, 30.seconds, :TERM, 10.seconds, :KILL]
-        stdall dj_log(i)
-        # ensure the CPU is below 30% at least 3 out of the last 5 times checked
-        check :cpu, every: 30, below: 80, times: 3
-      end
+      delayed_job_process self, "dj-#{i}"
     end
   end
 end
