@@ -8,6 +8,8 @@ fi
 
 ## Exception Notifier
 export EXCEPTION_SENDER_ADDRESS="{{cfg.sparc.production.no_reply_from}}"
+# Added SPARC 3.4
+export sender_address="{{cfg.sparc.production.no_reply_from}}"
 export EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
 export SECRET_KEY_BASE="{{cfg.secret_key_base}}"
