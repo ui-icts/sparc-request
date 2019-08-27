@@ -1,5 +1,5 @@
-id,key,value,concept_code,parent_id,sort_order,category,default,reserved
-"",ccom,Carver College of Medicine (CCOM),"","","",affiliation_type,"",""
-"",icts,Institute for Clinical and Translation Science (ICTS),"","","",affiliation_type,"",""
-"",hccc,Holden Comprehensive Cancer Center (HCCC),"","","",affiliation_type,"",""
-"",iihg,Iowa Institute of Human Genetics (IIHG),"","","",affiliation_type,"",""
+id,key,value,concept_code,parent_id,sort_order,category,default,reserved,is_available
+"",ccom,Carver College of Medicine (CCOM),"","","",affiliation_type,"","",1
+"",icts,Institute for Clinical and Translation Science (ICTS),"","","",affiliation_type,"","",1
+"",hccc,Holden Comprehensive Cancer Center (HCCC),"","","",affiliation_type,"","",1
+"",iihg,Iowa Institute of Human Genetics (IIHG),"","","",affiliation_type,"","",1

@@ -1,16 +1,16 @@
-id,key,value,concept_code,parent_id,sort_order,category,default,reserved
-"",co-investigator,Co-Investigator,"","",1,user_role,"",""
-"",faculty-collaborator,Faculty Collaborator,"","",2,user_role,"",""
-"",consultant,Consultant,"","",3,user_role,"",""
-"",staff-scientist,Staff scientist (doctoral level),"","",4,user_role,"",""
-"",postdoc,"Postdoctoral Scholar, Fellow, or Other Postdoctoral Position","","",5,user_role,"",""
-"",grad-research-assistant,Graduate Research Assistant,"","",6,user_role,"",""
-"",undergrad-research-assistant,Undergraduate Research Assistant,"","",7,user_role,"",""
-"",research-assistant-coordinator,Research Assistant/Coordinator,"","",8,user_role,"",""
-"",technician,Technician,"","",9,user_role,"",""
-"",mentor,Mentor,"","",10,user_role,"",""
-"",general-access-user,General Access User,"","",11,user_role,"",""
-"",business-grants-manager,Billing/Business Manager,"","",12,user_role,"",""
-"",research-nurse,Research Nurse,"","",13,user_role,"",""
-"",other,Other,"","",14,user_role,"",""
-"",primary-pi,Primary Investigator,"","",15,user_role,"",""
+id,key,value,concept_code,parent_id,sort_order,category,default,reserved,is_available
+"",co-investigator,Co-Investigator,"","",1,user_role,"","",1
+"",faculty-collaborator,Faculty Collaborator,"","",2,user_role,"","",1
+"",consultant,Consultant,"","",3,user_role,"","",1
+"",staff-scientist,Staff scientist (doctoral level),"","",4,user_role,"","",1
+"",postdoc,"Postdoctoral Scholar, Fellow, or Other Postdoctoral Position","","",5,user_role,"","",1
+"",grad-research-assistant,Graduate Research Assistant,"","",6,user_role,"","",1
+"",undergrad-research-assistant,Undergraduate Research Assistant,"","",7,user_role,"","",1
+"",research-assistant-coordinator,Research Assistant/Coordinator,"","",8,user_role,"","",1
+"",technician,Technician,"","",9,user_role,"","",1
+"",mentor,Mentor,"","",10,user_role,"","",1
+"",general-access-user,General Access User,"","",11,user_role,"","",1
+"",business-grants-manager,Billing/Business Manager,"","",12,user_role,"","",1
+"",research-nurse,Research Nurse,"","",13,user_role,"","",1
+"",other,Other,"","",14,user_role,"","",1
+"",primary-pi,Primary Investigator,"","",15,user_role,"","",1

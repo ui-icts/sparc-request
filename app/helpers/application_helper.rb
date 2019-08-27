@@ -37,6 +37,10 @@ module ApplicationHelper
     raw(returning_html)
   end
 
+  def format_date(date)
+    date.try(:strftime, '%D') || ""
+  end
+
   def css_class(organization)
     case organization.type
     when 'Institution'
@@ -170,7 +174,7 @@ module ApplicationHelper
         true
       end
     else ## show base module when logged out
-      accessible = true if ['sparc_dashboard', 'sparc_request'].include? identifier
+      accessible = true if ['sparc_dashboard', 'sparc_request', 'sparc_info'].include? identifier
     end
 
     render_navbar_link(name, path, highlighted) if accessible

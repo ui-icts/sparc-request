@@ -1,782 +1,151 @@
----
-accordion_color_options:
-  blue: blue-provider
-  light-blue: light-blue-provider
-  orange: orange-provider
-  red: red-provider
-  green: green-provider
-alert_statuses:
-  active: active
-  clear: clear
-alert_types:
-  google_calendar: google_calendar
-  news_feed: news_feed
-audit_actions:
-  create: Added
-  destroy: Deleted
-colleges:
-  Administration: administration
-  College of Dental Medicine: college_of_dental_medicine
-  College of Graduate Studies: college_of_graduate_studies
-  College of Health Professions: college_of_health_professions
-  College of Medicine: college_of_medicine
-  College of Nursing: college_of_nursing
-  College of Pharmacy: college_of_pharmacy
-  Other: other
-  Not MUSC Personnel: not_musc_personnel
-departments:
-  Accounting: Accounting
-  Administration Support Service: Administration Support Service
-  Adult and Gerontology: Adult and Gerontology
-  Aerospace Studies: Aerospace Studies
-  African American Studies: African American Studies
-  American Studies: American Studies
-  Anatomy and Cell Biology: Anatomy and Cell Biology
-  Anesthesia: Anesthesia
-  Animal Care Unit: Animal Care Unit
-  Anthropology: Anthropology
-  Art and Art History: Art and Art History
-  Asian and Slavic Lang. and Lit: Asian and Slavic Lang. and Lit
-  Biocatalysis Bioprocessing Ctr: Biocatalysis Bioprocessing Ctr
-  Biochemistry: Biochemistry
-  Bioengineering: Bioengineering
-  Biology: Biology
-  Biomedical Engineering: Biomedical Engineering
-  Biostatistics: Biostatistics
-  Bus Admin College: Bus Admin College
-  Bus Admin Graduate Programs: Bus Admin Graduate Programs
-  Bus Admin Undergrad: Bus Admin Undergrad
-  Bus Centers and Institutes: Bus Centers and Institutes
-  Business Admin Research: Business Admin Research
-  Cad Research Engineering: Cad Research Engineering
-  Cancer Center: Cancer Center
-  Cardiothoracic Surgery: Cardiothoracic Surgery
-  Cardiovascular Center: Cardiovascular Center
-  CCOM Central Control: CCOM Central Control
-  Cent Elect Microscopy Facility: Cent Elect Microscopy Facility
-  Center For Muscular Dystrophy: Center For Muscular Dystrophy
-  Center For The Book: Center For The Book
-  Center On Aging: Center On Aging
-  Central Admin Facilities: Central Admin Facilities
-  Chemical and Biochem Engineer: Chemical and Biochem Engineer
-  Chemistry: Chemistry
-  Cinematic Arts: Cinematic Arts
-  Civil Environmental Engineer: Civil Environmental Engineer
-  Classics: Classics
-  Clinical Pastoral Care: Clinical Pastoral Care
-  Clinical Research Center: Clinical Research Center
-  Communication Sciences Disordr: Communication Sciences Disordr
-  Communication Studies: Communication Studies
-  Community and Behavioral Hlth: Community and Behavioral Hlth
-  Computer Science: Computer Science
-  Connie Belin Natl Center Educ: Connie Belin Natl Center Educ
-  Consultation and Res Med Educ: Consultation and Res Med Educ
-  Continuing Education Medicine: Continuing Education Medicine
-  Continuing Education Pharmacy: Continuing Education Pharmacy
-  CranioFACial Anomalie Rsch Ctr: CranioFACial Anomalie Rsch Ctr
-  Creative Media Group: Creative Media Group
-  Creative Writing: Creative Writing
-  Ctr Bioinformatic Comp Biology: Ctr Bioinformatic Comp Biology
-  Ctr For Adv Study In Meas and: Ctr For Adv Study In Meas and
-  Ctr for Health Policy and Res: Ctr for Health Policy and Res
-  Ctr for Public Health Practice: Ctr for Public Health Practice
-  Ctr for Public Health Stats: Ctr for Public Health Stats
-  Ctr for Stats Genetics Res: Ctr for Stats Genetics Res
-  Ctr Hlth Effect Of Environment: Ctr Hlth Effect Of Environment
-  Dance: Dance
-  DCE Courses and Workshops: DCE Courses and Workshops
-  Dental Clinic Administration: Dental Clinic Administration
-  Dentistry Administration: Dentistry Administration
-  Department Emergency Medicine: Department Emergency Medicine
-  Dermatology: Dermatology
-  Diabetes Research Center: Diabetes Research Center
-  Div of World Languages WLLC: Div of World Languages WLLC
-  Division Continuing Education: Division Continuing Education
-  Division Drug Information Svc: Division Drug Information Svc
-  Division Of Performing Arts: Division Of Performing Arts
-  Division Of Sponsored Programs: Division Of Sponsored Programs
-  Dows Institute Research: Dows Institute Research
-  Earth & Environmental Sciences: Earth & Environmental Sciences
-  Economics: Economics
-  Educ Policy Leadership Studies: Educ Policy Leadership Studies
-  Educ Teacher Leader Center: Educ Teacher Leader Center
-  Education Administration: Education Administration
-  Educational Placement: Educational Placement
-  Electrical Computer Engineer: Electrical Computer Engineer
-  Endodontics: Endodontics
-  Engineering Admin Ge: Engineering Admin Ge
-  Engineering Computer Network: Engineering Computer Network
-  Engineering Electronics Shop: Engineering Electronics Shop
-  Engineering Mechanical Shop: Engineering Mechanical Shop
-  English: English
-  Environmental Health & Safety: Environmental Health & Safety
-  Epidemiology: Epidemiology
-  ESL: ESL
-  Ethnic Inclusion: Ethnic Inclusion
-  Evaluation and Assessment Ctr: Evaluation and Assessment Ctr
-  Faculty Practice Admin: Faculty Practice Admin
-  Faculty Research Assistants: Faculty Research Assistants
-  Family Dentistry: Family Dentistry
-  Family Medicine: Family Medicine
-  Finance: Finance
-  French and Italian: French and Italian
-  Gender, Women's and Sexuality: Gender, Womens and Sexuality
-  General University College: General University College
-  Geographic & Sustnablty Scienc: Geographic & Sustnablty Scienc
-  German: German
-  Global Region Environ Res Ctr: Global Region Environ Res Ctr
-  Grad College Operations Distr: Grad College Operations Distr
-  Graduate College Admin and Gen: Graduate College Admin and Gen
-  Graduate Student Aid Support: Graduate Student Aid Support
-  Health and Human Physiology: Health and Human Physiology
-  Health and Sports Studies: Health and Sports Studies
-  Health Management and Policy: Health Management and Policy
-  Heart & Vascular Center: Heart & Vascular Center
-  High Field NMR Facility: High Field NMR Facility
-  High Res Mass Spect Facility: High Res Mass Spect Facility
-  High Throughput Screen Facilty: High Throughput Screen Facilty
-  History: History
-  Honors Program: Honors Program
-  Hospital Based Programs: Hospital Based Programs
-  Hospital Dentistry: Hospital Dentistry
-  Hubbard Program: Hubbard Program
-  Human Subjects/IRB Office: Human Subjects/IRB Office
-  IA Consortium Substance Abuse: IA Consortium Substance Abuse
-  IDGP in Informatics: IDGP in Informatics
-  IIHR Hydroscience Engineering: IIHR Hydroscience Engineering
-  IMRF: IMRF
-  Industrial Engineering: Industrial Engineering
-  Institute Clin and Trans Scien: Institute Clin and Trans Scien
-  Institute Clinical Research: Institute Clinical Research
-  Institute for Human Genetics: Institute for Human Genetics
-  Inter Departmental Units: Inter Departmental Units
-  Interdepartmental Programs: Interdepartmental Programs
-  Interdepartmental Progs: Interdepartmental Progs
-  Interdisciplinary Informatics: Interdisciplinary Informatics
-  Interdisciplinary Programs: Interdisciplinary Programs
-  Internal Medicine: Internal Medicine
-  International Writing: International Writing
-  International Writing Program: International Writing Program
-  Iowa Lakeside Laboratory: Iowa Lakeside Laboratory
-  Iowa Law Review Balance: Iowa Law Review Balance
-  Iowa Nonprofit Resource Center: Iowa Nonprofit Resource Center
-  Iowa Testing Programs: Iowa Testing Programs
-  IPA - Publications: IPA - Publications
-  JMPEC - Des Moines: JMPEC - Des Moines
-  Journalism and Mass Communic: Journalism and Mass Communic
-  Labor Center: Labor Center
-  Language Media Center: Language Media Center
-  Law Cont Legal Education: Law Cont Legal Education
-  Law Faculty: Law Faculty
-  Law Hp and Disability Cntr: Law Hp and Disability Cntr
-  Law Library: Law Library
-  Law Student Aid: Law Student Aid
-  Law Student Services Programs: Law Student Services Programs
-  Law, Bus & Innovations Center: Law, Bus & Innovations Center
-  Learning Resource Center: Learning Resource Center
-  Liberal Arts and Science Admin: Liberal Arts and Science Admin
-  Linguistics: Linguistics
-  Management and Organizations: Management and Organizations
-  Management Sciences: Management Sciences
-  Marketing: Marketing
-  Mathematics: Mathematics
-  Mechanical Engineering: Mechanical Engineering
-  Medical Audiovisual: Medical Audiovisual
-  Medical Ethics: Medical Ethics
-  Medical Instrument Shop: Medical Instrument Shop
-  Medicinal Natural Products: Medicinal Natural Products
-  Medicine Administration: Medicine Administration
-  Microbiology: Microbiology
-  Military Science: Military Science
-  Museum Of Natural History: Museum Of Natural History
-  Music: Music
-  Nads and Simulation Center: Nads and Simulation Center
-  Neurology: Neurology
-  Neurosurgery: Neurosurgery
-  Nursing: Nursing
-  Nursing Administration and Gen: Nursing Administration and Gen
-  Obermann Center Advan Studies: Obermann Center Advan Studies
-  OBGyn: OBGyn
-  Occupational Environment Hlth: Occupational Environment Hlth
-  Office Of Animal Resources: Office Of Animal Resources
-  Office Of Mgmt and Bus Dev: Office Of Mgmt and Bus Dev
-  Office Of Student Services Edu: Office Of Student Services Edu
-  Office of the IACUC: Office of the IACUC
-  OITC: OITC
-  Operative Dentistry: Operative Dentistry
-  Ophthalmology and Visual Sci: Ophthalmology and Visual Sci
-  Optical Science Tech Ctr OSTC: Optical Science Tech Ctr OSTC
-  Oral and Maxillofacial Surgery: Oral and Maxillofacial Surgery
-  Oral Path Radiology Medicine: Oral Path Radiology Medicine
-  Organization Sys and Community: Organization Sys and Community
-  Orthodontics: Orthodontics
-  Orthopaedic Surgery: Orthopaedic Surgery
-  Otolaryngology Head Neck Surg: Otolaryngology Head Neck Surg
-  Pappajohn Biomedical Res Inst: Pappajohn Biomedical Res Inst
-  Parent Child and Family: Parent Child and Family
-  Pathology: Pathology
-  Pediatric Dentistry: Pediatric Dentistry
-  Pediatrics: Pediatrics
-  Pentacrest Museums: Pentacrest Museums
-  Periodontics: Periodontics
-  Pharmaceutics: Pharmaceutics
-  Pharmacology: Pharmacology
-  Pharmacy: Pharmacy
-  Pharmacy Practice and Science: Pharmacy Practice and Science
-  Philosophy: Philosophy
-  Physical Ther & Rehab Science: Physical Ther & Rehab Science
-  Physician Assistant: Physician Assistant
-  Physics and Astronomy: Physics and Astronomy
-  Physiology: Physiology
-  Political Science: Political Science
-  Ponseti International: Ponseti International
-  Preventive and Community Dent: Preventive and Community Dent
-  Production: Production
-  Prosthodontics: Prosthodontics
-  PSET: PSET
-  Psych and Quant Foundations: Psych and Quant Foundations
-  Psychiatry: Psychiatry
-  Psychology: Psychology
-  Public Health Administration: Public Health Administration
-  Public Health Genetics: Public Health Genetics
-  Public Policy Center: Public Policy Center
-  Radiation Oncology: Radiation Oncology
-  Radiation Research Laboratory: Radiation Research Laboratory
-  Radiology: Radiology
-  Rehabilitation & Counselor Ed: Rehabilitation & Counselor Ed
-  Religious Studies: Religious Studies
-  Research Administration: Research Administration
-  Research Dept: Research Dept
-  Research Information Syst Ris: Research Information Syst Ris
-  Research Services Admin: Research Services Admin
-  Rhetoric: Rhetoric
-  School Library Info Science: School Library Info Science
-  Social Work: Social Work
-  Sociology: Sociology
-  Spanish and Portuguese: Spanish and Portuguese
-  State Archaeologist: State Archaeologist
-  Statewide Residency Train Prog: Statewide Residency Train Prog
-  Statistics Actuarial Science: Statistics Actuarial Science
-  Stead Center: Stead Center
-  Stead Technology Service Group: Stead Technology Service Group
-  Study Abroad: Study Abroad
-  Surgery: Surgery
-  Systems and Practice: Systems and Practice
-  Teaching and Learning: Teaching and Learning
-  Theatre Arts: Theatre Arts
-  U of IA Center for Conferences: U of IA Center for Conferences
-  UI Center for Human Rights: UI Center for Human Rights
-  UI Pharm Drug Development: UI Pharm Drug Development
-  UI Pharmaceutical: UI Pharmaceutical
-  UI Press Office Operations: UI Press Office Operations
-  University College Courses: University College Courses
-  University Employee Hlth Clin: University Employee Hlth Clin
-  University Placement Center: University Placement Center
-  Urban and Regional Planning: Urban and Regional Planning
-  Urology: Urology
-  VP Research Biosciences: VP Research Biosciences
-  Women Science and Engineering: Women Science and Engineering
-  Writing Program: Writing Program
-  Other: Other
-  Not UI Personnel: Not UI Personnel
-epic_push_status_text:
-  started: ''
-  sent_study: ''
-  complete: Study has been sent to Epic.
-  failed: Unable to send study to Epic.
-  awaiting_approval: Awaiting approval before sending to Epic
-  awaiting_final_review: Awaiting final review before sending to Epic
-epic_rights:
-  view_rights: View Research Studies
-  enter_data: Access to input/edit data at patient/encounter level
-  schedule_research: Schedule research-related encounters - additional training required
-  enter_orders: Place Orders - valid medical license required
-  process_orders: Process standing orders for research protocols - additional training
-    required
-  approve: Review and approve research-related patient charges
-  complete: Activate and Complete studies
-epic_rights_info: Once the study is "completed" in Epic, it cannot be moved back to
-  "Active or Inactive" Completing the study will inhibit new participants to be enrolled
-  and associated with the study. Please select only one member of your study team
-  that will be authorized to change a study status to Active/Complete.
-study_type_answers:
-  '1':
-  - true
-  - true
-  - 
-  - 
-  - 
-  - 
-  '2':
-  - true
-  - false
-  - true
-  - 
-  - 
-  - 
-  '3':
-  - true
-  - false
-  - false
-  - false
-  - true
-  - true
-  '4':
-  - true
-  - false
-  - false
-  - false
-  - false
-  - true
-  '5':
-  - true
-  - false
-  - false
-  - false
-  - true
-  - false
-  '6':
-  - true
-  - false
-  - false
-  - false
-  - false
-  - false
-  '7':
-  - true
-  - false
-  - false
-  - true
-  - true
-  - true
-  '8':
-  - true
-  - false
-  - false
-  - true
-  - false
-  - true
-  '9':
-  - true
-  - false
-  - false
-  - true
-  - true
-  - false
-  '10':
-  - true
-  - false
-  - false
-  - true
-  - false
-  - false
-  '11':
-  - false
-  - 
-  - 
-  - false
-  - true
-  - true
-  '12':
-  - false
-  - 
-  - 
-  - false
-  - false
-  - true
-  '13':
-  - false
-  - 
-  - 
-  - false
-  - true
-  - false
-  '14':
-  - false
-  - 
-  - 
-  - false
-  - false
-  - false
-  '15':
-  - false
-  - 
-  - 
-  - true
-  - true
-  - true
-  '16':
-  - false
-  - 
-  - 
-  - true
-  - false
-  - true
-  '17':
-  - false
-  - 
-  - 
-  - true
-  - true
-  - false
-  '0':
-  - false
-  - 
-  - 
-  - true
-  - false
-  - false
-study_type_answers_version_2:
-  '1':
-  - true
-  - 
-  - 
-  - 
-  - 
-  - 
-  '2':
-  - false
-  - true
-  - true
-  - 
-  - 
-  - 
-  '3':
-  - false
-  - true
-  - false
-  - false
-  - true
-  - true
-  '4':
-  - false
-  - true
-  - false
-  - false
-  - false
-  - true
-  '5':
-  - false
-  - true
-  - false
-  - false
-  - true
-  - false
-  '6':
-  - false
-  - true
-  - false
-  - false
-  - false
-  - false
-  '7':
-  - false
-  - true
-  - false
-  - true
-  - true
-  - true
-  '8':
-  - false
-  - true
-  - false
-  - true
-  - false
-  - true
-  '9':
-  - false
-  - true
-  - false
-  - true
-  - true
-  - false
-  '10':
-  - false
-  - true
-  - false
-  - true
-  - false
-  - false
-  '11':
-  - false
-  - false
-  - 
-  - false
-  - true
-  - true
-  '12':
-  - false
-  - false
-  - 
-  - false
-  - false
-  - true
-  '13':
-  - false
-  - false
-  - 
-  - false
-  - true
-  - false
-  '14':
-  - false
-  - false
-  - 
-  - false
-  - false
-  - false
-  '15':
-  - false
-  - false
-  - 
-  - true
-  - true
-  - true
-  '16':
-  - false
-  - false
-  - 
-  - true
-  - false
-  - true
-  '17':
-  - false
-  - false
-  - 
-  - true
-  - true
-  - false
-  '0':
-  - false
-  - false
-  - 
-  - true
-  - false
-  - false
-study_type_answers_version_3:
-  '1':
-  - true
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  '3':
-  - false
-  - true
-  - false
-  - false
-  - false
-  - 
-  - 
-  '4':
-  - false
-  - true
-  - false
-  - true
-  - false
-  - 
-  - 
-  '5':
-  - false
-  - true
-  - false
-  - false
-  - true
-  - 
-  - 
-  '6':
-  - false
-  - true
-  - false
-  - true
-  - true
-  - 
-  - 
-  '7':
-  - false
-  - true
-  - true
-  - false
-  - false
-  - 
-  - 
-  '8':
-  - false
-  - true
-  - true
-  - true
-  - false
-  - 
-  - 
-  '9':
-  - false
-  - true
-  - true
-  - false
-  - true
-  - 
-  - 
-  '10':
-  - false
-  - true
-  - true
-  - true
-  - true
-  - 
-  - 
-  '11':
-  - false
-  - false
-  - false
-  - false
-  - false
-  - 
-  - 
-  '12':
-  - false
-  - false
-  - false
-  - true
-  - false
-  - 
-  - 
-  '13':
-  - false
-  - false
-  - false
-  - false
-  - true
-  - 
-  - 
-  '14':
-  - false
-  - false
-  - false
-  - true
-  - true
-  - 
-  - 
-  '15':
-  - false
-  - false
-  - true
-  - false
-  - false
-  - 
-  - 
-  '16':
-  - false
-  - false
-  - true
-  - true
-  - false
-  - 
-  - 
-  '17':
-  - false
-  - false
-  - true
-  - false
-  - true
-  - 
-  - 
-  '0':
-  - false
-  - false
-  - true
-  - true
-  - true
-  - 
-  - 
-study_type_notes:
-  '1': De-identified Research Participant
-  '3': Break-The-Glass for research associated encounters
-  '4': 'Break-The-Glass for research associated encounters: no notification, pink
-    header, no MyChart access.'
-  '5': 'Break-The-Glass for research associated encounters: no notification, no pink
-    header, MyChart access.'
-  '6': 'Break-The-Glass for research associated encounters: no notification, pink
-    header, MyChart access.'
-  '7': 'Break-The-Glass for research associated encounters: notification, no pink
-    header, no MyChart access.'
-  '8': 'Break-The-Glass for research associated encounters: notification, pink header,
-    no MyChart access.'
-  '9': 'Break-The-Glass for research associated encounters: notification, no pink
-    header, MyChart access.'
-  '10': 'Break-The-Glass for research associated encounters: notification, pink header,
-    MyChart access.'
-  '11': 'Full Epic Functionality:  no notification, no pink header, no MyChart access.'
-  '12': 'Full Epic Functionality:  no notification, pink header, no MyChart access.'
-  '13': 'Full Epic Functionality:  no notification, no pink header, MyChart access.'
-  '14': 'Full Epic Functionality:  no notification, pink header, MyChart access.'
-  '15': 'Full Epic Functionality:  notification, no pink header, no MyChart access.'
-  '16': 'Full Epic Functionality:  notification, pink header, no MyChart access.'
-  '17': 'Full Epic Functionality:  notification, no pink header, MyChart access.'
-  '0': 'Full Epic Functionality:  notification, pink header, MyChart access.'
-study_type_questions:
-- 1a. Does your study require a higher level of privacy for the participants?
-- 1b. Does your study have a Certificate of Confidentiality?
-- 1c. Do participants enrolled in your study require a second DEIDENTIFIED Medical
-  Record that is not connected to their primary record in Epic?
-- 2. Do you wish to receive a notification via Epic InBasket when your research participants
-  are admitted to the hospital or ED?
-- '3. Do you wish to remove the ''Research: Active'' indicator in the Patient Header
-  for your study participants?'
-- 4. Do you need to restrict the sending of study related results, such as laboratory
-  and radiology results, to a participants MyChart?
-study_type_questions_version_2:
-- 1. Does your study have a Certificate of Confidentiality?*
-- 2. Does your study require a higher level of privacy for the participants?*
-- 2b. Do participants enrolled in your study require a second DEIDENTIFIED Medical
-  Record that is not connected to their primary record in Epic?*
-- 3. Do you wish to receive a notification via Epic InBasket when your research participants
-  are admitted to the hospital or ED?*
-- '4. Do you wish to remove the ''Research: Active'' indicator in the Patient Header
-  for your study participants?*'
-- 5. Do you need to restrict the sending of study related results, such as laboratory
-  and radiology results, to a participants MyChart?*
-study_type_questions_version_3:
-- 1. Does your Informed Consent provide information to the participant specifically
-  stating their study participation will be kept private from anyone outside the research
-  team? (i.e. your study has a Certificate of Confidentiality or involves sensitive
-  data collection which requires de-identification of the research participant in
-  Epic.)
-- 2. Does your study require a higher level of privacy protection for the participants?
-  (Your study needs "break the glass" functionality in Epic because it is collection
-  sensitive data, such as HIV/sexually transmitted disease, sexual practice/attitudes,
-  illegal substance, etc., which needs higher privacy protection, yet not complete
-  de-identification of the study participant.)
-- 3. Is it appropriate for study team members to receive Epic InBasket notifications
-  if research participants in this study are hospitalized or admitted to the Emergency
-  Department?
-- '4. Is it appropriate to display the pink "Research: Active" indicator in the Patient
-  Header for all study participants?'
-- 5. Is it appropriate for all study participants to receive associated test results,
-  such as labs and/or imaging findings, via MyChart?
-- 1. Does your Informed Consent provide information to the participant specifically
-  stating their study participation will be kept private from anyone outside the research
-  team? (i.e. your study has a Certificate of Confidentiality or involves sensitive
-  data collection which requires de-identification of the research participant.)
-- 2. Does your study require a higher level of privacy protection for the participants?
-  (Your study needs "break the glass" functionality because it is collection sensitive
-  data, such as HIV/sexually transmitted disease, sexual practice/attitudes, illegal
-  substance, etc., which needs higher privacy protection, yet not complete de-identification
-  of the study participant.)
-subject_ethnicities:
-  american_indian_alaska_native: American Indian/Alaska Native
-  asian: Asian
-  native_hawaiian_other_pacific_islander: Native Hawaiian or Other Pacific Islander
-  black_african_american: Black or African American
-  white: white
-  more_than_one_race: More than one race
-subject_genders:
-  male: Male
-  female: Female
-  other: Other
-browser_versions:
-  Internet Explorer: '1'
-  Mozilla Firefox: '2'
-  Google Chrome: '3'
-  Safari: '4'
+# Copyright © 2011 MUSC Foundation for Research Development
+# All rights reserved.
+
+# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+# 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+# disclaimer in the documentation and/or other materials provided with the distribution.
+
+# 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
+# derived from this software without specific prior written permission.
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+# TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+accordion_color_options: { "blue": 'blue-provider',
+                           "light-blue": 'light-blue-provider',
+                           "orange": 'orange-provider',
+                           "red": 'red-provider',
+                           "green": 'green-provider' }
+
+alert_statuses: { 'active': 'active',
+                  'clear': 'clear' }
+
+alert_types: { 'google_calendar': 'google_calendar',
+               'news_feed': 'news_feed' }
+
+audit_actions: { 'create': 'Added',
+                 'destroy': 'Deleted'}
+
+epic_push_status_text: { 'started': '',
+                         'sent_study': '',
+                         'complete': 'Study has been sent to Epic.',
+                         'failed': 'Unable to send study to Epic.',
+                         'awaiting_approval': 'Awaiting approval before sending to Epic',
+                         'awaiting_final_review': 'Awaiting final review before sending to Epic' }
+
+epic_rights: { 'view_rights': 'View Research Studies',
+               'enter_data': 'Access to input/edit data at patient/encounter level',
+               'schedule_research': 'Schedule research-related encounters - additional training required',
+               'enter_orders': 'Place Orders - valid medical license required',
+               'process_orders': 'Process standing orders for research protocols - additional training required',
+               'approve': 'Review and approve research-related patient charges',
+               'complete': 'Activate and Complete studies'}
+
+study_type_answers: {  '1' : [true, true,   ~,     ~,     ~,     ~],
+                       '2' : [true, false, true,   ~,     ~,     ~],
+                       '3' : [true, false, false, false, true, true],
+                       '4' : [true, false, false, false, false, true],
+                       '5' : [true, false, false, false, true, false],
+                       '6' : [true, false, false, false, false, false],
+                       '7' :[true, false, false, true, true, true],
+                       '8' : [true, false, false, true, false, true],
+                       '9' : [true, false, false, true, true, false],
+                       '10' : [true, false, false, true, false, false],
+                       '11' : [false, ~,     ~,    false, true, true],
+                       '12' : [false, ~,     ~,    false, false, true],
+                       '13' : [false, ~,     ~,    false, true, false],
+                       '14' : [false, ~,     ~,    false, false, false],
+                       '15' : [false, ~,     ~,    true, true, true],
+                       '16' : [false, ~,     ~,    true, false, true],
+                       '17' : [false, ~,     ~,    true, true, false],
+                       '0' : [false, ~,     ~,    true, false, false] }
+
+study_type_answers_version_2: { '1' : [true, ~,    ~,    ~,    ~,    ~],
+                                '2' : [false, true, true,   ~,    ~,    ~],
+                                '3' : [false, true, false, false, true, true],
+                                '4' : [false, true, false, false, false, true],
+                                '5' : [false, true, false, false, true, false],
+                                '6' : [false, true, false, false, false, false],
+                                '7' : [false, true, false, true, true, true],
+                                '8' : [false, true, false, true, false, true],
+                                '9' : [false, true, false, true, true, false],
+                                '10': [false, true, false, true, false, false],
+                                '11': [false, false, ~,    false, true, true],
+                                '12': [false, false, ~,    false, false, true],
+                                '13': [false, false, ~,    false, true, false],
+                                '14': [false, false, ~,    false, false, false],
+                                '15': [false, false, ~,    true, true, true],
+                                '16': [false, false, ~,    true, false, true],
+                                '17': [false, false, ~,    true, true, false],
+                                '0': [false, false, ~,    true, false, false] }
+
+study_type_answers_version_3: { '1' : [true,    ~,    ~,    ~,    ~,    ~,    ~],
+                                '3' : [false, true, false, false, false,    ~,    ~],
+                                '4' : [false, true, false, true, false,    ~,    ~],
+                                '5' : [false, true, false, false, true,    ~,    ~],
+                                '6' : [false, true, false, true, true,    ~,    ~],
+                                '7' : [false, true, true, false, false,    ~,    ~],
+                                '8' : [false, true, true, true, false,    ~,    ~],
+                                '9' : [false, true, true, false, true,    ~,    ~],
+                                '10': [false, true, true, true, true,    ~,    ~],
+                                '11': [false, false, false, false, false,    ~,    ~],
+                                '12': [false, false, false, true, false,    ~,    ~],
+                                '13': [false, false, false, false, true,    ~,    ~],
+                                '14': [false, false, false, true, true,    ~,    ~],
+                                '15': [false, false, true, false, false,    ~,    ~],
+                                '16': [false, false, true, true, false,    ~,    ~],
+                                '17': [false, false, true, false, true,    ~,    ~],
+                                '0': [false, false, true, true, true,    ~,    ~ ] }
+
+study_type_notes:             { '1' : 'De-identified Research Participant',
+                                '3' : 'Break-The-Glass for research associated encounters',
+                                '4' : 'Break-The-Glass for research associated encounters: no notification, pink header, no MyChart access.',
+                                '5' : 'Break-The-Glass for research associated encounters: no notification, no pink header, MyChart access.',
+                                '6' : 'Break-The-Glass for research associated encounters: no notification, pink header, MyChart access.',
+                                '7' : 'Break-The-Glass for research associated encounters: notification, no pink header, no MyChart access.',
+                                '8' : 'Break-The-Glass for research associated encounters: notification, pink header, no MyChart access.',
+                                '9' : 'Break-The-Glass for research associated encounters: notification, no pink header, MyChart access.',
+                                '10': 'Break-The-Glass for research associated encounters: notification, pink header, MyChart access.',
+                                '11': 'Full Epic Functionality:  no notification, no pink header, no MyChart access.',
+                                '12': 'Full Epic Functionality:  no notification, pink header, no MyChart access.',
+                                '13': 'Full Epic Functionality:  no notification, no pink header, MyChart access.',
+                                '14': 'Full Epic Functionality:  no notification, pink header, MyChart access.',
+                                '15': 'Full Epic Functionality:  notification, no pink header, no MyChart access.',
+                                '16': 'Full Epic Functionality:  notification, pink header, no MyChart access.',
+                                '17': 'Full Epic Functionality:  notification, no pink header, MyChart access.',
+                                '0': 'Full Epic Functionality:  notification, pink header, MyChart access.' }
+
+study_type_questions: ["1a. Does your study require a higher level of privacy for the participants?",   
+                         "1b. Does your study have a Certificate of Confidentiality?",   
+                         "1c. Do participants enrolled in your study require a second DEIDENTIFIED Medical Record that is not connected to their primary record in Epic?",   
+                         "2. Do you wish to receive a notification via Epic InBasket when your research participants are admitted to the hospital or ED?",   
+                         "3. Do you wish to remove the 'Research: Active' indicator in the Patient Header for your study participants?",   
+                         "4. Do you need to restrict the sending of study related results, such as laboratory and radiology results, to a participants MyChart?"]     
+
+study_type_questions_version_2: ["1. Does your study have a Certificate of Confidentiality?*",
+                                 "2. Does your study require a higher level of privacy for the participants?*",
+                                 "2b. Do participants enrolled in your study require a second DEIDENTIFIED Medical Record that is not connected to their primary record in Epic?*",
+                                 "3. Do you wish to receive a notification via Epic InBasket when your research participants are admitted to the hospital or ED?*",
+                                 "4. Do you wish to remove the 'Research: Active' indicator in the Patient Header for your study participants?*",
+                                 "5. Do you need to restrict the sending of study related results, such as laboratory and radiology results, to a participants MyChart?*"]
+
+study_type_questions_version_3: ["1. Does your Informed Consent provide information to the participant specifically stating their study participation will be kept private from anyone outside the research team? (i.e. your study has a Certificate of Confidentiality or involves sensitive data collection which requires de-identification of the research participant in Epic.)",
+                               '2. Does your study require a higher level of privacy protection for the participants? (Your study needs "break the glass" functionality in Epic because it is collection sensitive data, such as HIV/sexually transmitted disease, sexual practice/attitudes, illegal substance, etc., which needs higher privacy protection, yet not complete de-identification of the study participant.)',
+                               "3. Is it appropriate for study team members to receive Epic InBasket notifications if research participants in this study are hospitalized or admitted to the Emergency Department?",
+                               '4. Is it appropriate to display the pink "Research: Active" indicator in the Patient Header for all study participants?',
+                               "5. Is it appropriate for all study participants to receive associated test results, such as labs and/or imaging findings, via MyChart?",
+                               "1. Does your Informed Consent provide information to the participant specifically stating their study participation will be kept private from anyone outside the research team? (i.e. your study has a Certificate of Confidentiality or involves sensitive data collection which requires de-identification of the research participant.)",
+                               '2. Does your study require a higher level of privacy protection for the participants? (Your study needs "break the glass" functionality because it is collection sensitive data, such as HIV/sexually transmitted disease, sexual practice/attitudes, illegal substance, etc., which needs higher privacy protection, yet not complete de-identification of the study participant.)']
+
+browser_versions: {
+  'Internet Explorer': '1',
+  'Mozilla Firefox': '2',
+  'Google Chrome': '3',
+  'Safari': '4'
+}

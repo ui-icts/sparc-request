@@ -1,33 +1,65 @@
----
+# Copyright © 2011 MUSC Foundation for Research Development
+# All rights reserved.
+
+# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+# 1. Redistributions of source code must retain the above copyright notice, `list of conditions and the following disclaimer.
+
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+# disclaimer in the documentation and/or other materials provided with the distribution.
+
+# 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
+# derived from this software without specific prior written permission.
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+# TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 en:
+  ###########
+  # ACTIONS #
+  ###########
   actions:
-    add: Add
-    adding: Adding...
-    back: Back
-    approve: Approve
-    cancel: Cancel
-    close: Close
-    continue: Continue
-    delete: Delete
-    edit: Edit
-    filter: Filter
-    print: Print
-    remove: Remove
-    reply: Reply
-    reset: Reset
-    save: Save
-    search: Search
-    send: Send
-    submit: Submit
-    upload: Upload
-    view: View
+    activate: "Activate"
+    add: "Add"
+    adding: "Adding..."
+    back: "Back"
+    approve: "Approve"
+    cancel: "Cancel"
+    close: "Close"
+    complete: "Complete"
+    continue: "Continue"
+    copy: "Copy"
+    create: "Create"
+    delete: "Delete"
+    disable: "Disable"
+    edit: "Edit"
+    filter: "Filter"
+    preview: "Preview"
+    print: "Print"
+    remove: "Remove"
+    reply: "Reply"
+    reset: "Reset"
+    save: "Save"
+    search: "Search"
+    send: "Send"
+    submit: "Submit"
+    upload: "Upload"
+    view: "View"
+
+  ################
+  # ACTIVERECORD #
+  ################
   activerecord:
     errors:
       models:
         form:
           attributes:
             active:
-              taken: A different version of this Form is already active
+              taken: "A different version of this Form is already active"
         project_role:
           attributes:
             identity_id:
@@ -35,1561 +67,1785 @@ en:
         question_response:
           attributes:
             content:
-              blank: required
+              blank: "required"
         system_survey:
           attributes:
             active:
-              taken: A different version of this Survey is already active
+              taken: "A different version of this Survey is already active"
       messages:
-        spoofed_media_type: has format errors. Please re-save the file in a different
-          format and try again.
+        spoofed_media_type: "has format errors. Please re-save the file in a different format and try again."
     attributes:
       arm:
-        name: Arm Name
+        name: "Arm Name"
       fulfillment:
-        time: Quantity
+        time: "Quantity"
       human_subjects_info:
-        nct_number: 'The NCT #'
+        nct_number: "The NCT #"
       identity:
-        ldap_uid: Login
-        first_name: First Name
-        last_name: Last Name
-        password_confirmation: Password Confirmation
+        ldap_uid: "Login"
+        first_name: "First Name"
+        last_name: "Last Name"
+        password_confirmation: "Password Confirmation"
+        orcid: "ORCID"
       note:
-        body: Note
+        body: "Note"
       option:
-        content: Option
+        content: "Option"
       protocol:
-        human_subjects_info: 'The NCT #'
+        human_subjects_info: "The NCT #"
+        guarantor_contact: "Contact"
+        guarantor_phone: "Phone"
+        guarantor_email: "Email"
       question:
-        content: Question
+        content: "Question"
       question_response:
-        content: Question
+        content: "Question"
       survey:
-        active: ''
+        active: ""
       visit:
-        research_billing_qty: Research Billing Quantity
-        insurance_billing_qty: Insurance Billing Quantity
-        effort_billing_qty: Effort Billing Quantity
+        research_billing_qty: "Research Billing Quantity"
+        insurance_billing_qty: "Insurance Billing Quantity"
+        effort_billing_qty: "Effort Billing Quantity"
+
+  ########
+  # ARMS #
+  ########
   arms:
-    add: Add Arm
-    remove: Remove Arm
-    edit: Edit Arm
-    created: Arm Created!
-    updated: Arm Updated!
-    destroyed: Arm Destroyed!
+    add: "Add Arm"
+    remove: "Remove Arm"
+    edit: "Edit Arm"
+    created: "Arm Created!"
+    updated: "Arm Updated!"
+    destroyed: "Arm Destroyed!"
     form_fields:
-      arm: 'Arm:'
-      name: 'Arm Name:'
-      subject_count: 'Subject Count:'
-      visit_count: 'Visit Count:'
+      arm: "Arm:"
+      name: "Arm Name:"
+      subject_count: "Subject Count:"
+      visit_count: "Visit Count:"
     table_fields:
-      name: Arm Name
-      subject_count: Subject Count
-      visit_count: Visit Count
-    delete_warning: Are you sure you want to delete this arm?
-    screening_tooltip: Enter the number of subjects you expect to screen as well as
-      how many screening visits are required. If no screening phase is required, you
-      can change the name of the Arm to meet your needs.
-    name_tooltip: 'Arm Name must be unique within a protocol, and the following special
-      characters are not allowed: [ ] * / \ ? : ).'
+      name: "Arm Name"
+      subject_count: "Subject Count"
+      visit_count: "Visit Count"
+    delete_warning: "Are you sure you want to delete this arm?"
+    screening_tooltip: "Enter the number of subjects you expect to screen as well as how many screening visits are required. If no screening phase is required, you can change the name of the Arm to meet your needs."
     tooltips:
-      add_arm: A group, or subgroup, of participants in a clinical trial that receives
-        specific intervention, or no intervention, according to the study protocol
-      subject_count: Total number of estimated participants per arm
-      visit_count: Total number of visits per arm
+      add_arm: 'A group, or subgroup, of participants in a clinical trial that receive specific intervention, or no intervention, according to the study protocol.'
+      name: "A group, or subgroup, of participants in a clinical trial that receive specific intervention, or no intervention, according to the study protocol. Arm Name must be unique within a protocol, and the following special characters are not allowed: []*/\\?:)."
+      subject_count: 'Total number of estimated participants per arm'
+      visit_count: 'Total number of visits per arm'
+
+  #######################
+  # AUTHORIZATION ERROR #
+  #######################
   authorization_error:
-    header: Authorization Error
-    link: Return to your Dashboard
+    header: "Authorization Error"
+    link: "Return to your Dashboard"
     dashboard:
-      visit_groups: You are not allowed to access that Visit Group.
+      visit_groups: 'You are not allowed to access that Visit Group.'
+
+  ####################
+  # AUTHORIZED USERS #
+  ####################
   authorized_users:
-    header: Authorized Users
-    add_user: Add an Authorized User
+    header: "Authorized Users"
+    add_user: "Add an Authorized User"
     add:
-      header: Add Authorized User
-      select: 'Select User:'
+      header: "Add Authorized User"
+      select: "Select User:"
     edit:
-      header: Edit Authorized User
+      header: "Edit Authorized User"
     delete:
-      self_remove_warning: This action will remove you from the Protocol. Are you
-        sure?
-      remove_warning: Are you sure you want to remove this user?
-      pi_warning: Projects/Studies require a Primary PI. Please add a new one before
-        continuing.
-    created: Authorized User Added!
-    updated: Authorized User Updated!
-    destroyed: Authorized User Removed!
+      self_remove_warning: "This action will remove you from the Protocol. Are you sure?"
+      remove_warning: "Are you sure you want to remove this user?"
+      pi_warning: "Projects/Studies require a Primary PI. Please add a new one before continuing."
+    created: "Authorized User Added!"
+    updated: "Authorized User Updated!"
+    destroyed: "Authorized User Removed!"
     form_fields:
-      era: 'ERA Commons Name:'
-      credentials: 'Credentials:'
-      credentials_prompt: Select a Credential
-      credentials_specify: 'Please Specify:'
-      phone: 'Phone:'
-      subspecialty: 'Subspecialty:'
-      subspecialty_prompt: Select a Subspecialty
-      role: 'Role:'
-      role_prompt: Select a Role
-      role_specify: 'Please Specify:'
-      epic_access: 'Epic EMR Access?:'
-      rights: 'Proxy Rights:'
+      orcid: "ORCID:"
+      era_commons_name: "ERA Commons Name:"
+      credentials: "Credentials:"
+      credentials_prompt: "Select a Credential"
+      credentials_specify: "Please Specify:"
+      phone: "Phone:"
+      subspecialty: "Subspecialty:"
+      subspecialty_prompt: "Select a Subspecialty"
+      role: "Role:"
+      role_prompt: "Select a Role"
+      role_specify: "Please Specify:"
+      epic_access: "Epic EMR Access?:"
+      no_epic_access: "User does not have Epic access"
+      rights: "Proxy Rights:"
+      placeholders:
+        orcid: "XXXX-XXXX-XXXX-XXXX"
+      links:
+        orcid: "https://orcid.org/"
     rights:
       none: Member Only
-      view: View Rights
-      approve: Authorized/Change Study Charges
+      view: "View Rights"
+      approve: "Authorized/Change Study Charges"
       change_warning:
-        dashboard: 'Warning: Changing your Proxy Rights to ''Member Only'' will redirect
-          you to your Dashboard'
-        proper: 'Warning: Changing your Proxy Rights will redirect you to your Dashboard'
+        dashboard: "Warning: Changing your Proxy Rights to 'Member Only' will redirect you to your Dashboard"
+        proper: "Warning: Changing your Proxy Rights will redirect you to your Dashboard"
     change_primary_pi:
       header: "**Warning**"
-      warning: Adding the new Primary PI (<strong>%{new_pi_name}</strong>) will change
-        the current Primary PI (<strong>%{old_pi_name}</strong>) to a general access
-        user on Protocol (<strong>%{protocol_id}</strong>).
-      prompt: Do you wish to proceed?
+      warning: "Adding the new Primary PI (<strong>%{new_pi_name}</strong>) will change the current Primary PI (<strong>%{old_pi_name}</strong>) to a general access user on Protocol (<strong>%{protocol_id}</strong>)."
+      prompt: "Do you wish to proceed?"
     table_fields:
-      name: Full Name
-      role: Role
-      email: Email
-      phone: Phone
-      rights: Proxy Rights
-      epic_emr_access: EPIC EMR </br> Access
+      name: "Full Name"
+      role: "Role"
+      email: "Email"
+      phone: "Phone"
+      rights: "Proxy Rights"
+      epic_emr_access: 'EPIC EMR </br> Access'
     tooltips:
-      epic_access: Granting Epic EMR access populates study personnel in Epic Research
-        Record as long as they have an Epic login
-      rights: Defines access to protocol in SPARCDashboard
-      add_user: Ability to add an Authorized User to a protocol
+      add_user: "Ability to add an Authorized User to a protocol"
+      epic_access: 'Granting Epic EMR access populates study personnel in Epic Research Record as long as they have Epic certification/training.'
+      rights: 'Defines access to protocol in SPARCDashboard'
+      approve: 'Full protocol access.'
+      view: 'View only access.'
+      none: 'No protocol access or email notifications.'
+
+  #############
+  # CALENDARS #
+  #############
   calendars:
-    confirm_row_select: This will reset custom values for this row, do you wish to
-      continue?
-    confirm_column_select: This will reset custom values for this column, do you wish
-      to continue?
-    show_all_services: Show All Services
-    show_chosen_services: Show Chosen Services
+    confirm_row_select: "This will reset custom values for this row, do you wish to continue?"
+    confirm_column_select: "This will reset custom values for this column, do you wish to continue?"
+    show_all_services: 'Show All Services'
+    show_chosen_services: 'Show Chosen Services'
     tabs:
-      template: Template Tab
-      billing: Quantity/Billing Tab
-      pricing: Consolidated Request Tab
+      template: "Template Tab"
+      billing: "Quantity/Billing Tab"
+      pricing: "Consolidated Request Tab"
     inactive: "(Inactive)"
     pppv:
-      clinical_services: Clinical Services
-      header: 'Clinical Services</br>Arm: %{arm_name}'
+      clinical_services: "Clinical Services"
+      header: "Clinical Services</br>Arm: %{arm_name}"
       header_fields:
-        notes: Notes
-        service: Service Name
-        status: Status
-        unit_cost: Unit Costs
-        service_rate: Service<br>Rate
-        your_cost: Your<br>Cost
-        quantity_type: Clinical Qty Type
-        subject_count: N
-        day: Day
+        notes: "Notes"
+        service: "Service Name"
+        status: "Status"
+        unit_cost: "Unit Costs"
+        service_rate: "Service<br>Rate"
+        your_cost: "Your<br>Cost"
+        quantity_type: "Clinical Qty Type"
+        subject_count: "N"
+        day: "Day"
         page_select:
-          previous: View Previous
-          next: View Next
-        total_per_patient: Total Per Patient
-        total_per_study: Total Per Study
-        research: R
-        third_party: T
+          previous: "View Previous"
+          next: "View Next"
+        total_per_patient: "Total Per Patient"
+        total_per_study: "Total Per Study"
+        research: "R"
+        third_party: "T"
         percent: "%"
-        edit_billing_modal: Edit Billing Quantities
+        edit_billing_modal: "Edit Billing Quantities"
       editable_fields:
-        window_before: Edit Window Before Visit
-        day: Edit Visit Day
-        window_after: Edit Window After Visit
-        visit_name: Edit Visit Name
-        your_cost: Edit Your Cost
-        subject_count: Edit Subject Count
-        research: 'Research Billing Quantity:'
-        third_party: 'Insurance Billing Quantity:'
-        percent: 'Effort Billing Quantity:'
+        window_before: "Edit Window Before Visit"
+        day: "Edit Visit Day"
+        window_after: "Edit Window After Visit"
+        visit_name: "Edit Visit Name"
+        your_cost: "Edit Your Cost"
+        subject_count: "Edit Subject Count"
+        research: "Research Billing Quantity:"
+        third_party: "Insurance Billing Quantity:"
+        percent: "Effort Billing Quantity:"
         row_select:
-          check: Check Row
-          uncheck: Uncheck Row
-          confirm: This will reset custom values for this row, do you wish to continue?
+          check: "Check Row"
+          uncheck: "Uncheck Row"
+          confirm: "This will reset custom values for this row, do you wish to continue?"
         column_select:
-          check: Check Column
-          uncheck: Uncheck Column
-          confirm: This will reset custom values for this column, do you wish to continue?
+          check: "Check Column"
+          uncheck: "Uncheck Column"
+          confirm: "This will reset custom values for this column, do you wish to continue?"
+
       totals:
-        maximum_direct: Maximum Total Direct Costs Per Patient
-        maximum_per_patient: Maximum Total Per Patient
-        total_costs: Total Costs (Clinical Services) Per Study -- %{arm_name}
+        maximum_direct: "Maximum Total Direct Costs Per Patient"
+        maximum_per_patient: "Maximum Total Per Patient"
+        total_costs: "Total Costs (Clinical Services) Per Study -- %{arm_name}"
     otf:
-      header: Non-clinical Services
+      header: "Non-clinical Services"
       header_fields:
-        service: Service Name
-        status: Status
-        unit_cost: Unit Costs
-        service_rate: Service Rate
-        your_cost: Your Cost
-        unit_type: 'Unit Type #'
-        qty_type: 'Qty Type #'
-        total_per_study: Total Per Study
+        service: "Service Name"
+        status: "Status"
+        unit_cost: "Unit Costs"
+        service_rate: "Service Rate"
+        your_cost: "Your Cost"
+        unit_type: "Unit Type #"
+        qty_type: "Qty Type #"
+        total_per_study: "Total Per Study"
       editable_fields:
-        quantity: Edit Qty
-        unit_quantity: Edit Units per Qty
+        quantity: "Edit Qty"
+        unit_quantity: "Edit Units per Qty"
       totals:
-        total_direct: Total Direct Costs (Non-clinical Services) Per Study
-        total_costs: Total Costs (Non-clinical Services) Per Study
+        total_direct: "Total Direct Costs (Non-clinical Services) Per Study"
+        total_costs: "Total Costs (Non-clinical Services) Per Study"
     merged_totals:
-      header: Study Cost Totals
-      grand_total: Grand Total
+      header: "Study Cost Totals"
+      grand_total: "Grand Total"
     tooltips:
-      total_per_study: Total proposed cost of Non-clinical Services per study
-      move_visit_button: Ability to change visit position
-      pppv_total_costs: Total proposed cost of services per arm
-      line_item_notes: Line Item Notes
-      pppv_status: Used to track the progress of a service
-      quantity_type: Unit of measurement
-      freeze_header: Freeze Header Row
-      unfreeze_header: Unfreeze Header Row
-      subject_count: Number of participants
-      service_rate: Cost of service prior to any discounts
-      your_cost: Price after research discount (based on selected funding source)
-      window_before: Visit window days before visit
-      window_after: Visit window days after visit
-      visit_day: Day the anticipated visit occurs (incremental)
-      visit_name: Name of the visit
+      total_per_study: 'Total proposed cost of Non-clinical Services per study'
+      move_visit_button: 'Ability to change visit position'
+      pppv_total_costs: 'Total proposed cost of Clinical Services per arm.'
+      otf_total_costs: 'Total proposed cost of Non-Clinical Services per Study/Project.'
+      line_item_notes: 'Line Item Notes'
+      pppv_status: 'Used to track the progress of a service'
+      quantity_type: 'Unit of measurement'
+      freeze_header: 'Freeze Header Row'
+      unfreeze_header: 'Unfreeze Header Row'
+      subject_count: 'Number of participants'
+      service_rate: 'Cost of service prior to any discounts'
+      your_cost: 'Price after research discount (based on selected funding source)'
+      window_before: 'Visit window days before visit'
+      window_after: 'Visit window days after visit'
+      visit_day: 'Day the anticipated visit occurs (incremental)'
+      visit_name: 'Name of the visit'
+
   calendar_structure:
-    header: Calendar Structure
-    lock_calendar: Lock Calendar
-    unlock_calendar: Unlock Calendar
+    header: "Calendar Structure"
+    lock_calendar: "Lock Calendar"
+    unlock_calendar: "Unlock Calendar"
     table_fields:
-      arm_name: Arm Name
-      subject_count: Subject Count
-      visit_count: Visit Count
+      arm_name: "Arm Name"
+      subject_count: "Subject Count"
+      visit_count: "Visit Count"
     tooltips:
-      lock_calendar: Locking the calendar will prevent users from making changes to
-        arm, subject, and visit information.
-      arm_info: The calendar has been locked by an administrator. No changes to the
-        stucture may be made at this time.
+      lock_calendar: 'Locking the calendar will prevent users from making changes to arm, subject, and visit information.'
+      arm_info: 'The calendar has been locked by an administrator. No changes to the stucture may be made at this time.'
+
+  #############
+  # CONSTANTS #
+  #############
   constants:
-    yes_select: 'Yes'
-    no_select: 'No'
+    yes_select: "Yes"
+    no_select: "No"
     prompts:
-      none: Nothing Selected
+      none: "Nothing Selected"
       any: "- Any -"
-      please_specify: 'Please specify: *'
+      please_specify: "Please specify: *"
+      search_for_user: "Search for a User"
       select: "---Please Select---"
-      search_for_user: Search for a User
-      select_one: Select One
-    add_as_last: Add as last
+      select_action: "Select an action"
+      select_one: "Select One"
+    add_as_last: "Add as last"
+    other: "Other"
+    show: "Show Details"
+    hide: "Hide Details"
+    more: "More..."
+    less: "Less..."
+
+  #############
+  # DOCUMENTS #
+  #############
   documents:
-    none: No Documents Found
-    add_document: Add a Document
+    none: "No Documents Found"
+    add_document: "Add a Document"
     add:
-      header: Add Document
+      header: "Add Document"
     edit:
-      header: Edit Document
-    created: Document Uploaded!
-    updated: Document Updated!
-    destroyed: Document Destroyed!
+      header: "Edit Document"
+    created: "Document Uploaded!"
+    updated: "Document Updated!"
+    destroyed: "Document Destroyed!"
     table_fields:
-      type: Type
-      title: Title
-      uploaded: Uploaded
-      shared_with: Service Provider Access
+      type: "Type"
+      title: "Title"
+      uploaded: "Uploaded"
+      shared_with: "Service Provider Access"
     form_fields:
-      document_type: 'Document Type:'
-      specify_doc_type: 'Please Specify:'
-      document: 'Document:'
-      access: 'Allow Access:'
+      document_type: "Document Type:"
+      specify_doc_type: "Please Specify:"
+      document: "Document:"
+      access: "Allow Access:"
     tooltips:
-      access: Uploaded documents are made viewable to all service providers unless
-        checkmark is removed
-      add_document: Upload document(s) in repository
-    select_type: Please Select Type
-    delete_confirm: Are you sure you want to delete the selected Document from this
-      protocol?
+      access: "Uploaded documents are made viewable to all service providers unless checkmark is removed"
+      add_document: "Upload document(s) in repository"
+    select_type: "Please Select Type"
+    delete_confirm: "Are you sure you want to delete the selected Document from this protocol?"
+
+  ###############
+  # ERROR PAGES #
+  ###############
   error_pages:
     not_found:
-      heading: Uh, oh.  You've hit a
-      error: Page Not Found (404)
-      help_text: 'For help, contact us:'
-      link_href: mailto:success@musc.edu
-      link_display: 'Email: success@musc.edu'
-      phone_href: tel:843-792-8300
-      phone_display: 'Call: 843-792-8300'
+      heading: "Uh, oh.  You've hit a"
+      error: "Page Not Found (404)"
+      help_text: "For help, contact us:"
+      link_href: "mailto:success@musc.edu"
+      link_display: "Email: success@musc.edu"
+      phone_href: "tel:843-792-8300"
+      phone_display: "Call: 843-792-8300"
     server_error:
-      heading: Uh, oh.  You've hit an
-      error: Internal Server Error (500)
-      help_text: 'For help, contact us:'
-      link_href: mailto:success@musc.edu
-      link_display: 'Email: success@musc.edu'
-      phone_href: tel:843-792-8300
-      phone_display: 'Call: 843-792-8300'
+      heading: "Uh, oh.  You've hit an"
+      error: "Internal Server Error (500)"
+      help_text: "For help, contact us:"
+      link_href: "mailto:success@musc.edu"
+      link_display: "Email: success@musc.edu"
+      phone_href: "tel:843-792-8300"
+      phone_display: "Call: 843-792-8300"
+
+  #########
+  # FORMS #
+  #########
   forms:
     table_fields:
-      srid: SRID
-      association: Association
-      title: Form Title
-      completed: Completed
-      options: Options
+      srid: "SRID"
+      association: "Association"
+      title: "Form Title"
+      completed: "Completed"
+      options: "Options"
+
+  ##############
+  # IDENTITIES #
+  ##############
   identities:
-    approved: Account Approved
-    disapproved: Account Disapproved
+    approved: "Account Approved"
+    disapproved: "Account Disapproved"
+
+  ###############
+  # IE7 WARNING #
+  ###############
   ie_warning:
-    header: Internet Explorer Version Warning
-    text1: Your browser version is out of date. SPARCRequest does not support Internet
-      Explorer versions older than version 8.
-    text2: Using versions lower than 8 can cause data curruption and other serious
-      problems using this tool.
+    header: "Internet Explorer Version Warning"
+    text1: "Your browser version is out of date. SPARCRequest does not support Internet Explorer versions older than version 8."
+    text2: "Using versions lower than 8 can cause data curruption and other serious problems using this tool."
+
+  ##########
+  # MODELS #
+  ##########
   models:
     note:
-      singular: Note
-      plural: Notes
+      singular: "Note"
+      plural: "Notes"
+
+  ###########
+  #  NOTES  #
+  ###########
   notes:
-    add: Add a Note
-    new: New %{notable_type} Note
-    created: Note Created!
-    none: This %{notable_type} currently has no notes.
+    add: "Add a Note"
+    created: "Note created!"
+    updated: "Note updated!"
+    destroyed: "Note deleted!"
+    none: "This %{notable_type} currently has no notes."
     table_fields:
-      user: User
-      date: Date
-      note: Note
+      user: "User"
+      date: "Date"
+      note: "Note"
+      actions: "Actions"
     form_fields:
-      note: 'Note:'
+      note: "Note:"
+    headers:
+      index: "%{notable_type} Notes"
+      new: "New %{notable_type} Note"
+      edit: "Edit %{notable_type} Note"
+
+  #############
+  # PROTOCOLS #
+  #############
   protocols:
-    new: New Protocol
-    edit: Edit %{protocol_type} Information
+    new: "New Protocol"
+    edit: "Edit %{protocol_type} Information"
     created: "%{protocol_type} Created!"
     updated: "%{protocol_type} Updated!"
     summary:
       header: "%{protocol_type} Summary"
-      archive: Archive
-      unarchive: Unarchive
+      archive: "Archive"
+      unarchive: "Unarchive"
       id: "%{protocol_type} ID:"
-      title: 'Title:'
-      short_title: 'Short Title:'
-      sponsor: 'Sponsor Name:'
-      funding_source: 'Funding Source:'
-      potential_source: 'Potential Funding Source:'
-      research_master_id: 'Research Master ID:'
-      na_research_master_id: Not Available
-      rmid_validated: Updated to corresponding Research Master ID %{title}
-      rmid_short_title: Short Title
-      rmid_title: Title
+      title: "Title:"
+      short_title: "Short Title:"
+      sponsor: "Sponsor Name:"
+      funding_source: "Funding Source:"
+      potential_source: "Potential Funding Source:"
+      research_master_id: "Research Master ID:"
+      na_research_master_id: 'Not Available'
+      rmid_validated: "Updated to corresponding Research Master ID %{title}"
+      rmid_short_title: "Short Title"
+      rmid_title: "Title"
       tooltips:
-        notes: Protocol notes viewable to Administrators and Authorized Users
-        details: Quick access to protocol information
-        edit: Quick access to edit protocol information
-        archive_study: Ability to hide study from all Authorized User dashboards
-        unarchive_study: Click to reveal on all associated Authorized User dashboards
-        rmid_server_down: Research Master ID Server is down.  You cannot edit the
-          Research Master ID field at this time.
+        notes: "Protocol notes viewable to Administrators and Authorized Users"
+        details: "Quick access to protocol information"
+        edit: "Quick access to edit protocol information"
+        archive_study: "Ability to hide study from all Authorized User dashboards"
+        unarchive_study: "Click to reveal on all associated Authorized User dashboards"
+        rmid_server_down: "Research Master ID Server is down. You cannot edit the Research Master ID field at this time."
     view_details:
-      button: View %{protocol_type} Details
+      button: "View %{protocol_type} Details"
       header: "%{protocol_type} Details: #%{protocol_id}"
     change_type:
-      header: Change Protocol Type
-      type: 'Protocol Type:'
-      study: Study
-      project: Project
-      change_button: Change Type
-      warning: This will change the type of this Protocol. Are you sure?
-      updated: Protocol Type Updated!
-      new_study_warning: Please complete Sponsor Name and Publish Study in Epic
+      header: "Change Protocol Type"
+      type: "Protocol Type:"
+      study: "Study"
+      project: "Project"
+      change_button: "Change Type"
+      warning: "This will change the type of this Protocol. Are you sure?"
+      updated: "Protocol Type Updated!"
+      new_study_warning: "Please complete Sponsor Name and Publish Study in Epic"
     studies:
-      new: New Research Study
+      new: "New Research Study"
       information:
-        header: Study Information
-        subtext: Necessary to obtain correct pricing
-        short_title: 'Short Title:'
-        title: 'Study Title:'
-        funding_status: 'Proposal Funding Status:'
-        funding_source: 'Funding Source:'
-        potential_funding_source: 'Potential Funding Source:'
-        funding_source_internal: 'Please Specify:'
-        research_master_id: 'Research Master ID:'
+        header: "Study Information"
+        subtext: "Necessary to obtain correct pricing"
+        short_title: "Short Title:"
+        title: "Study Title:"
+        funding_status: "Proposal Funding Status:"
+        funding_source: "Funding Source:"
+        potential_funding_source: "Potential Funding Source:"
+        funding_source_internal: "Please Specify:"
+        research_master_id: "Research Master ID:"
         funding_source_federal:
-          title: 'Federal Grant Title:'
-          code: 'Federal Grant Code:'
-          phs_sponsor: 'Federal PHS Sponsor:'
+          title: "Federal Grant Title:"
+          code: "Federal Grant Code:"
+          phs_sponsor: "Federal PHS Sponsor:"
           separator: "-OR-"
-          non_phs_sponsor: 'Federal Non-PHS Sponsor:'
-          serial_number: 'Federal Grant Serial Number:'
-        phase: 'Study Phase(s):'
-        sponsor: 'Sponsor Name:'
-        push_to_epic: 'Publish Study in Epic:'
-        study_type_questions: 'Study Type Questions:'
-        note: 'Note: '
+          non_phs_sponsor: "Federal Non-PHS Sponsor:"
+          serial_number: "Federal Grant Serial Number:"
+        phase: "Study Phase(s):"
+        sponsor: "Sponsor Name:"
+        push_to_epic: "Publish Study in Epic:"
+        study_type_questions: "Study Type Questions:"
+        note: "Note: "
       financial_information:
-        header: Financial Information
-        subtext: Used for reporting purposes and saved for your future use
-        udak_project_number: 'MFK #'
-        rate: 'Indirect Cost Rate:'
-        rfa: 'Funding Opportunity # / RFA:'
-        potential_start_date: 'Potential Funding Start Date:'
-        start_date: 'Funding Start Date:'
+        header: "Financial Information"
+        subtext: "Used for reporting purposes and saved for your future use"
+        udak_project_number: "Financial Account (UDAK #):"
+        rate: "Indirect Cost Rate:"
+        rfa: "Funding Opportunity # / RFA:"
+        potential_start_date: "Potential Funding Start Date:"
+        start_date: "Funding Start Date:"
+        contact: "Contact:"
+        phone: "Phone:"
+        email: "Email:"
       research_involving:
-        none: No Research Types selected
-        header: Research Involving
-        subtext: Check all that apply
+        none: "No Research Types selected"
+        header: "Research Involving"
+        subtext: "Check all that apply"
         humans:
-          header: Human Subjects
-          nct_number: 'NCT# (National Clinical Trials Number):'
-          hr_number: 'HawkIRB #:'
-          pro_number: 'PRO #:'
-          record_irb: 'IRB of Record:'
-          submission_type: 'Submission Type:'
-          pending_approval: 'Application/Approval Pending?:'
-          irb_approval_date: 'IRB Approval Date:'
-          irb_expiration_date: 'IRB Expiration Date:'
-        tooltips:
-          ide: Investigation Device Exemption (IDE) Number
-          hde: Humanitarian Device Exemption (HDE) Number
-          hud: Humanitarian Use Device (HUD) Number
+          header: "Human Subjects"
+          nct_number: "NCT# (National Clinical Trials Number):"
+          hr_number: "HR #:"
+          pro_number: "PRO #:"
+          record_irb: "IRB of Record:"
+          submission_type: "Submission Type:"
+          pending_approval: "Application/Approval Pending?:"
+          initial_irb_approval_date: "Initial IRB Approval Date:"
+          irb_approval_date: "Current IRB Approval Date:"
+          irb_expiration_date: "IRB Expiration Date:"
         vertebrates:
-          header: Vertebrate Animals
-          iacuc_number: 'IACUC #:'
-          iacuc_name: 'Name of IACUC:'
-          iacuc_approval_date: 'IACUC Approval Date:'
-          iacuc_expiration_date: 'IACUC Expiration Date:'
+          header: "Vertebrate Animals"
+          iacuc_number: "IACUC #:"
+          iacuc_name: "Name of IACUC:"
+          iacuc_approval_date: "IACUC Approval Date:"
+          iacuc_expiration_date: "IACUC Expiration Date:"
         products:
-          clear: Clear
-          header: Investigational Products
-          ind_number: 'IND #:'
-          ind_on_hold: 'IND on Hold?:'
-          ide_number: 'IDE# / HDE# / HUD#:'
+          clear: "Clear"
+          header: "Investigational Products"
+          ind_number: "IND #:"
+          ind_on_hold: "IND on Hold?:"
+          ide_number: "IDE# / HDE# / HUD#:"
           numbers:
-            ide: 'IDE #:'
-            hde: 'HDE #:'
-            hud: 'HUD #:'
+            ide: "IDE #:"
+            hde: "HDE #:"
+            hud: "HUD #:"
         ip_patents:
-          header: IP/Patents
-          number: 'Patent Number:'
-          inventors: 'Inventors:'
+          header: "IP/Patents"
+          number: "Patent Number:"
+          inventors: "Inventors:"
       study_type:
-        none: No Study Types selected
-        header: Study Type
-        subtext: Check all that apply
+        none: "No Study Types selected"
+        header: "Study Type"
+        subtext: "Check all that apply"
       impact_areas:
-        none: No Impact Areas selected
-        header: Impact Areas
-        subtext: Check all that apply
-        other: 'Please Specify:'
+        none: "No Impact Areas selected"
+        header: "Impact Areas"
+        subtext: "Check all that apply"
+        other: "Please Specify:"
       affiliations:
-        none: No Affiliations selected
-        header: Affiliations, Collaborations, and Memberships
-        subtext: Check all that apply
+        none: "No Affiliations selected"
+        header: "Affiliations, Collaborations, and Memberships"
+        subtext: "Check all that apply"
     projects:
-      new: New Project
+      new: "New Project"
       information:
-        header: Project Information
-        short_title: 'Short Title:'
-        title: 'Project Title:'
-        funding_status: 'Proposal Funding Status:'
-        funding_source: 'Funding Source:'
-        potential_funding_source: 'Potential Funding Source:'
-        description: 'Brief Description:'
-        rate: 'Indirect Cost Rate:'
+        header: "Project Information"
+        short_title: "Short Title:"
+        title: "Project Title:"
+        funding_status: "Proposal Funding Status:"
+        funding_source: "Funding Source:"
+        potential_funding_source: "Potential Funding Source:"
+        description: "Brief Description:"
+        rate: "Indirect Cost Rate:"
     prompts:
-      status: Select a Funding Status
-      source: Select a Funding Source
-      potential_source: Select a Potential Funding Source
-      federal_sponsor: Select if Applicable
-      phase: Select Study Phase(s)
-      submission_type: Select a Submission Type
+      status: "Select a Funding Status"
+      source: "Select a Funding Source"
+      potential_source: "Select a Potential Funding Source"
+      federal_sponsor: "Select if Applicable"
+      phase: "Select Study Phase(s)"
+      submission_type: "Select a Submission Type"
     tooltips:
-      epic: Defines whether record will interface to Epic EMR upon submission
-      study_type_questions: Information needed to determine confidentiality of patients/protocols
-      nct_number: Clinicaltrials.gov Registry Number
-      pro_number: Institutional Review Board (IRB) Unique Identifier
-      ind_number: Investigational New Drug (IND) Number
-      short_title: An abbreviated form of the title used to identify your study/project.
-        Special characters outside the allowed range will be removed automatically.
-      title: Full title of your study/project. Special characters outside the allowed
-        range will be removed automatically.
-      funding_status: Indicates whether or not funding has been applied for or obtained
-      potential_funding_source: Funding source that has been applied for but not yet
-        obtained. Pricing is logically driven off this field
-      funding_source: Funding source which drives research pricing for your study/project
-      sponsor_name: Specify name of the entity funding the project/study
+      short_title: 'An abbreviated form of the title used to identify your Study/Project.'
+      title: 'Full title of your Study/Project.'
+      funding_status: 'Indicates whether or not funding has been applied for or obtained.'
+      potential_funding_source: 'Funding source that has been applied for but not yet obtained, which also drives research pricing.'
+      funding_source: 'Funding source which drives research pricing for your Study/Project'
+      sponsor_name: 'Specify name of the entity funding the Study/Project.'
+      epic: 'Defines whether record will interface to Epic EMR.'
+      study_type_questions: 'Information needed to determine confidentiality of patients/protocols.'
+      nct_number: 'Clinicaltrials.gov Registry Number.'
+      pro_number: 'Institutional Review Board (IRB) Unique Identifier.'
+      ind_number: 'Investigational New Drug Number'
+      ide: 'Investigation Device Exemption Number'
+      hde: 'Humanitarian Device Exemption Number'
+      hud: 'Humanitarian Use Device Number'
     authorized_users:
-      header: Add Primary PI
-      primary_pi: 'Primary PI:'
+      header: "Add Primary PI"
+      primary_pi: "Primary PI:"
+
+  ########################
+  # NOT APPROVED WARNING #
+  ########################
   not_approved_warning:
-    header: Account not Approved
-    text1: Your account has not yet been approved for use in SPARCRequest.
-    text2: If you believe this is incorrect, please contact the SUCCESS center at
-      (843) 792-8300 or success@musc.edu.
+    header: "Account not Approved"
+    text1: "Your account has not yet been approved for use in SPARCRequest."
+    text2: "If you believe this is incorrect, please contact the SUCCESS center at (843) 792-8300 or success@musc.edu."
+
+  #############
+  # SUBSIDIES #
+  #############
   subsidies:
-    add: Request a Subsidy
-    new: New Subsidy Pending Approval
-    edit: Edit Subsidy Pending Approval
-    created: Subsidy Created!
-    updated: Subsidy Updated!
-    destroyed: Subsidy Destroyed!
-    delete_confirm: Are you sure that you would like to delete this subsidy?
+    add: "Request a Subsidy"
+    new: "New Subsidy Pending Approval"
+    edit: "Edit Subsidy Pending Approval"
+    created: "Subsidy Created!"
+    updated: "Subsidy Updated!"
+    destroyed: "Subsidy Destroyed!"
+    delete_confirm: "Are you sure that you would like to delete this subsidy?"
     approved:
-      header: Current Effective Subsidy
-      request_cost: Cost at Approval
+      header: "Current Effective Subsidy"
+      request_cost: "Cost at Approval"
       percent: "% Subsidy"
-      pi_contribution: PI Contribution
-      cost: Subsidy Cost
-      approved_by: Approved By
-      approved_at: Approved At
-      none: There is no current effective subsidy.
+      pi_contribution: "PI Contribution"
+      cost: "Subsidy Cost"
+      approved_by: "Approved By"
+      approved_at: "Approved At"
+      none: "There is no current effective subsidy."
     pending:
-      header: Subsidy Pending Approval
-      request_cost: Current Cost
+      header: "Subsidy Pending Approval"
+      request_cost: "Current Cost"
       percent: "% Subsidy"
-      pi_contribution: PI Contribution
-      cost: Subsidy Cost
+      pi_contribution: "PI Contribution"
+      cost: "Subsidy Cost"
     form:
-      request_cost: 'Current Request Cost:'
-      percent: 'Percent Subsidy:'
-      pi: 'PI Contribution:'
-      cost: 'Subsidy Cost:'
+      request_cost: "Current Request Cost:"
+      percent: "Percent Subsidy:"
+      pi: "PI Contribution:"
+      cost: "Subsidy Cost:"
     tooltips:
-      request_cost: Total cost of services eligible for a subsidy
-      percent: Percent of Current Request Cost to be covered by Service Provider
-      pi: Amount PI is responsible to provide to Service Provider
-      cost: Amount of Current Request Cost to be covered by Service Provider
+      request_subsidy: "Add a Subsidy request."
+      request_cost: "Total cost of services eligible for a subsidy"
+      percent: "Percent of Current Request Cost to be covered by Service Provider"
+      pi: "Amount PI is responsible to provide to Service Provider"
+      cost: "Amount of Current Request Cost to be covered by Service Provider"
+
+  #######################
+  # SWEET ALERT CONTENT #
+  #######################
   swal:
     swal_confirm:
-      title: Are you sure?
-      text: You cannot undo this action
+      title: "Are you sure?"
+      text: "You cannot undo this action"
+
+  #############################
+  # VALIDATION ERROR MESSAGES #
+  #############################
   errors:
-    user_note: Fields marked with an asterisk ( * ) are required
+    user_note: "Fields marked with an asterisk ( * ) are required"
     arms:
-      name_unique: must be unique to the Protocol
-      bad_characters: 'can not contain any of the following characters: [ ] * / \
-        ? :'
-      visit_day_missing: Please specify a study day for each visit (%{arm_name})
+      name_unique: "has to be unique within a study/project"
+      bad_characters: "can not contain any of the following characters: [ ] * / \\ ? :"
+      visit_day_missing: "Please specify a study day for each visit (%{arm_name})"
+      name_unique: 'must be unique to the Protocol'
     line_items:
-      displayed_cost_numeric: must be a number
-      displayed_cost_gte_zero: must be greater than or equal to 0
+      displayed_cost_numeric: 'must be a number'
+      displayed_cost_gte_zero: 'must be greater than or equal to 0'
     line_items_visits:
-      subject_count_invalid: Subject Count cannot exceed the Arm Subject Count (%{arm_subject_count})
+      subject_count_invalid: "Subject Count cannot exceed the Arm Subject Count (%{arm_subject_count})"
     protocols:
-      start_date_missing: Start Date can't be blank
-      end_date_missing: End Date can't be blank
-      date_range_invalid: Start Date must come before End Date
+      start_date_missing: "Start Date can't be blank"
+      end_date_missing: "End Date can't be blank"
+      date_range_invalid: "Start Date must come before End Date"
     question_responses:
-      phone_invalid: Phone is invalid
-      email_invalid: Email is invalid
-      zipcode_invalid: Zipcode is invalid
+      phone_invalid: "Phone is invalid"
+      email_invalid: "Email is invalid"
+      zipcode_invalid: "Zipcode is invalid"
     service_requests:
-      line_items_missing: You must add Services to your cart before continuing
-      protocol_missing: You must create a Protocol before continuing
-      protocol_errors: The selected Protocol has errors which must be fixed. Please
-        edit the Protocol before continuing
-      arms_missing: You must create Arms before proceeding to the Service Calendar
+      line_items_missing: "You must add Services to your cart before continuing"
+      protocol_missing: "You must create a Protocol before continuing"
+      protocol_errors: "This Protocol has errors which must be fixed before continuing."
+      arms_missing: "You must create Arms before proceeding to the Service Calendar"
     visit_groups:
-      days_out_of_order: Please make sure visit days are in sequential order (%{arm_name}).
+      days_out_of_order: "Please make sure visit days are in sequential order (%{arm_name})."
+
+  ################
+  # VISIT GROUPS #
+  ################
   visit_groups:
     form_fields:
-      arm: 'Arm:'
-      visit: 'Visit:'
-      name: 'Name:'
-      day: 'Day:'
-      position: 'Insert into Position:'
-      window_before: 'Window Before:'
-      window_after: 'Window After:'
+      arm: "Arm:"
+      visit: "Visit:"
+      name: "Name:"
+      day: "Day:"
+      position: "Insert into Position:"
+      window_before: "Window Before:"
+      window_after: "Window After:"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ###########################################################################################
+  ###########################################################################################
+  ###########################################################################################
+  # THE YML BELOW THIS POINT IS EITHER UNUSED OR USED IN THE CATALOG MANAGER OR POTENTIALLY #
+  # WENT UN-NOTICED WHILE EXTRACTING YML FOR THE NEW PROPER AND DASHBOARD UPGRADES.         #
+  # PLEASE DO NOT ADD ANY NEW YML TO THE BELOW AND INSTEAD ADD IT WITH CONISTENT FORMATTING #
+  # TO THE ABOVE AND OTHER YML FILES (PROPER/DASHBOARD). THANK YOU.                         #
+  ###########################################################################################
+  ###########################################################################################
+  ###########################################################################################
+
+  # Admin Dashboard
   admin_dashboard:
-    billing_business: Billing/Business Manager
-    delete_confirm: Are you sure?
-    delete_link: Delete
-    delete: Delete This Request
-    edit_protocol_title: Dashboard <span>|</span> Edit Protocol Information
-    epic_interface: Epic Interface
-    export_link: Export
-    export: Export to Excel
-    id: SRID
-    notifications_title: Dashboard <span>|</span> Notifications
-    pi: Principal Investigator
-    requester: Requester
-    routing: Routing
-    send_to_epic: Send To Epic
-    short_title: Short Title
-    status: Status
+    billing_business: "Billing/Business Manager"
+    delete_confirm: "Are you sure?"
+    delete_link: "Delete"
+    delete: "Delete This Request"
+    edit_protocol_title: "Dashboard <span>|</span> Edit Protocol Information"
+    epic_interface: "Epic Interface"
+    export_link: "Export"
+    export: "Export to Excel"
+    id: "SRID"
+    notifications_title: "Dashboard <span>|</span> Notifications"
+    pi: "Principal Investigator"
+    requester: "Requester"
+    routing: "Routing"
+    send_to_epic: "Send To Epic"
+    short_title: "Short Title"
+    status: "Status"
     tabs:
-      cw_fulfillment: Fulfillment
-      docs: Documents
-      fulfillment: Fulfillment
-      invoices: Invoices
-      notifications: Notifications
-      payments: Payments
-      protocol_info: Project/Study Information
-      related_srs: Related Service Requests
-      services: Services
-      subject_tracker: Subject Tracker
-      template: Template
-      users: Authorized Users
-    title: Dashboard <span>|</span> Welcome
+      cw_fulfillment: "Fulfillment"
+      docs: "Documents"
+      fulfillment: "Fulfillment"
+      invoices: "Invoices"
+      notifications: "Notifications"
+      payments: "Payments"
+      protocol_info: "Project/Study Information"
+      related_srs: "Related Service Requests"
+      services: "Services"
+      subject_tracker: "Subject Tracker"
+      template: "Template"
+      users: "Authorized Users"
+    title: "Dashboard <span>|</span> Welcome"
+
   admin_identities:
-    button_cancel: Cancel
-    button_add_user: Add User to I-CART
-    button_edit_user: Edit User
-    button_search: Search
-    button_update_user: Update User
-    catalog_manager: Catalog Manager
-    edit_user_modal_title: 'Update '
-    edit_user_email: Email
-    edit_user_first_name: First name
-    edit_user_last_name: Last name
-    edit_user_required: Required
-    edit_user_valid_email_required: Valid email required
-    footer: "* Close this window or tab when you're done adding new users to I-CART."
-    grid_uid: HawkID
-    home: Users
-    page_title: Advanced User Search
-    portal: Dashboard
-    portal_admin: Portal Admin
-    request_services: Request Services
-    return_to_basic_user_search: 'Please go back to the ''STEP 1: Add Users'' window
-      to add them to your study/project.'
-    search_help_block: Full name searches do not work. Filter the results by searching
-      within the column headers in the grid below. Edit User buttons are displayed
-      for people already in I-CART and only usable by I-CART administrators.
-    search_placeholder: 'Search one of the following: first name, last name, email,
-      or HawkID'
+    button_cancel: "Cancel"
+    button_add_user: "Add User"
+    button_edit_user: "Edit User"
+    button_search: "Search"
+    button_update_user: "Update User"
+    catalog_manager: "Catalog Manager"
+    edit_user_modal_title: "Update "
+    edit_user_email: "Email"
+    edit_user_first_name: "First name"
+    edit_user_last_name: "Last name"
+    edit_user_required: "Required"
+    edit_user_valid_email_required: "Valid email required"
+    footer: "* Close this window or tab when you're done adding new users."
+    grid_uid: "LDAP UID"
+    home: "Users"
+    page_title: "Advanced User Search"
+    portal: "Dashboard"
+    portal_admin: "Portal Admin"
+    request_services: "Request Services"
+    return_to_basic_user_search: "Please go back to the 'STEP 1: Add Users' window to add them to your study/project."
+    search_help_block: "Filter the results by searching within the column headers in the grid below. Edit User buttons are displayed for people already in the system and only usable by administrators."
+    search_placeholder: "Find users by first name, last name, email, or user ID"
+
+  # Admin Root Page
   admin_root:
-    assigned: Person Assigned
-    date: Date Submitted
-    orgs: Provider/Program/Core
-    requester: Requester
-    search_placeholder: Search all service requests...
-    service: Service
-    title: My Profile
+    assigned: "Person Assigned"
+    date: "Date Submitted"
+    orgs: "Provider/Program/Core"
+    requester: "Requester"
+    search_placeholder: "Search all service requests..."
+    service: "Service"
+    title: "My Profile"
+
+  # Bottom navigation
   bottom_navigation:
     cancel: " ⟵ Cancel"
-    continue: 'Continue ⟶ '
-    get_cost_estimate: Get Cost Estimate
+    continue: "Continue ⟶ "
+    get_cost_estimate: "Get Cost Estimate"
     go_back: " ⟵ Go Back"
-    save_and_continue: 'Save & Continue ⟶ '
-    save_and_exit: Save as Draft
-    save_as_draft: Save As Draft
-    submit_to_start: 'Submit to Start Services ⟶ '
+    save_and_continue: "Save & Continue ⟶ "
+    save_and_exit: "Save as Draft"
+    save_as_draft: "Save As Draft"
+    submit_to_start: "    Submit to Start Services ⟶ "
+
   message:
-    red_message: ''
+    red_message: "Pricing is consistent across locations unless otherwise stated."
+
+  # Calendar Page
   calendar_page:
     billing_legend:
       effort: "% = % Effort"
-      research: R = Research
-      third_party: T = Third Party (PT Insurance)
+      research: "R = Research"
+      third_party: "T = Third Party (PT Insurance)"
     headers:
-      clinical_qty: Clinical Qty Type
+      clinical_qty: "Clinical Qty Type"
       number: "#"
-      other_services: Other Services
-      qty_type: Qty Type
-      service_rate: Service Rate
-      services: Services
-      status: Status
-      subjects: "# Subjects"
-      total_per_patient: Total Per Patient
-      total_per_study: Total Per Study
-      total_study: Study Cost Totals
-      total: Total
-      unit_costs: Unit Costs
-      unit_type: Unit Type
-      your_cost: Your Cost
+      other_services: "Other Services"
+      qty_type: "Qty Type"
+      service_rate: "Service Rate"
+      services: "Services"
+      status: 'Status'
+      subjects: "N"
+      total_per_patient: "Total Per Patient"
+      total_per_study: "Total Per Study"
+      total_study: "Study Cost Totals"
+      total: "Total"
+      unit_costs: "Unit Costs"
+      unit_type: "Unit Type"
+      your_cost: "Your Cost"
       decrement: "-"
       increment: "+"
-      day: Day
+      day: "Day"
+      status: "Status"
     labels:
-      direct_cost: Total Direct Cost
-      grand_total_direct: 'Grand Total: Direct Costs'
-      grand_total_indirect: 'Grand Total: Indirect Costs'
-      grand_total: 'Grand Total:'
-      indirect_cost: Total Indirect Cost
-      jump_to_visit: 'Jump To:'
-      maximum_direct: Maximum Total Direct Costs Per Patient
-      maximum_indirect: Maximum Total Indirect Costs Per Patient
-      maximum_per: Maximum Total Per Patient
-      total_costs_arm: Total Costs (Clinical Services) All ARMs
-      total_costs_other: Total Costs (Other Services) Per Study
-      total_costs: Total Costs (Clinical Services) Per Study
-      total_direct_arm: Total Direct Costs (Clinical Services) All ARMs
-      total_direct_other: Total Direct Costs (Other Services) Per Study
-      total_direct: Total Direct Costs (Clinical Services) Per Study
-      total_indirect_arm: Total Indirect Costs (Clinical Services) All ARMs
-      total_indirect_other: Total Indirect Costs (Other Services) Per Study
-      total_indirect: Total Indirect Costs (Clinical Services) Per Study
-      totals_costs_other: Total Costs (Other Services) Per Study
-    per_patient: Clinical Services
+      direct_cost: "Total Direct Cost"
+      grand_total_direct: "Grand Total: Direct Costs"
+      grand_total_indirect: "Grand Total: Indirect Costs"
+      grand_total: "Grand Total:"
+      indirect_cost: "Total Indirect Cost"
+      jump_to_visit: "Jump To:"
+      maximum_direct: "Maximum Total Direct Costs Per Patient"
+      maximum_indirect: "Maximum Total Indirect Costs Per Patient"
+      maximum_per: "Maximum Total Per Patient"
+      total_costs_arm: "Total Costs (Clinical Services) All ARMs"
+      total_costs_other: "Total Costs (Other Services) Per Study"
+      total_costs: "Total Costs (Clinical Services) Per Study"
+      total_direct_arm: "Total Direct Costs (Clinical Services) All ARMs"
+      total_direct_other: "Total Direct Costs (Other Services) Per Study"
+      total_direct: "Total Direct Costs (Clinical Services) Per Study"
+      total_indirect_arm: "Total Indirect Costs (Clinical Services) All ARMs"
+      total_indirect_other: "Total Indirect Costs (Other Services) Per Study"
+      total_indirect: "Total Indirect Costs (Clinical Services) Per Study"
+      totals_costs_other: "Total Costs (Other Services) Per Study"
+    per_patient: "Clinical Services"
     tabs:
-      billing: Quantity/Billing Tab
-      pricing: Consolidated Request Tab
-      quantity: Quantity Display Tab
-      template: Template Tab
+      billing: "Quantity/Billing Tab"
+      pricing: "Consolidated Request Tab"
+      quantity: "Quantity Display Tab"
+      template: "Template Tab"
+
+  # Edit Project Form
   project_form:
-    description: 'Brief Description:'
-    dropdown_default1: Select a Funding Status
-    dropdown_default2: Select a Funding Source
-    dropdown_default3: Select a Potential Funding Source
-    message: Before you can complete a service request, please tell us more about
-      your project.  This information will be used by our staff to decide the best
-      way to process your request.
-    push_to_epic: 'Publish Project to Epic:'
-    rate: 'Indirect Cost Rate:'
-    save: Save
-    title: Project Title:*
+    description: "Brief Description:"
+    dropdown_default1: "Select a Funding Status"
+    dropdown_default2: "Select a Funding Source"
+    dropdown_default3: "Select a Potential Funding Source"
+    message: "Before you can complete a service request, please tell us more about your project.  This information will be used by our staff to decide the best way to process your request."
+    push_to_epic: "Publish Project to Epic:"
+    rate: "Indirect Cost Rate:"
+    save: "Save"
+    title: "Project Title:*"
+
+  # Edit Study form
   study_form:
-    affiliations: Affiliations, Collaborations, and Memberships
-    approval_pending: 'Application/Approval Pending:'
-    study_type_questions: Study Type Questions
-    attributes: Study Attributes
-    clear: Clear
-    code_blank: Select a Federal Grant Code
-    description: Before you can complete a service request, please tell us more about
-      your research study. This information will be used by our staff to decide the
-      best way to process your request.
-    epic: Epic Information
-    federal_grant_code_id: 'Federal Grant Code:'
-    federal_grant_serial_number: 'Federal Grant Serial Number:'
-    federal_grant_title: 'Federal Grant Title:'
-    federal_non_phs_sponsor: 'Federal Grant Non-PHS Sponsor:'
-    federal_phs_sponsor: 'Federal Grant PHS Sponsor:'
-    funding_blank: Select a Funding Source
-    funding_rfa: 'Funding Opportunity #/RFA:'
-    funding_source_other: Please Specify
-    funding_start_date: 'Funding Start Date:'
-    hr_number: 'HawkIRB #:'
-    human_subjects: 'Human Subjects:'
-    iacuc_approval_date: 'IACUC Approval Date:'
-    iacuc_expiration_date: 'IACUC Expiration Date:'
-    iacuc_number: 'IACUC #:'
-    impact: Impact Areas
-    ind_number: 'IND#:'
-    ind_on_hold: IND on Hold?
-    indirect_cost_rate: Indirect Cost Rate
-    inventors: 'Inventors:'
-    investigational_products: 'Investigational Products:'
-    ip_patents: 'IP/Patents:'
-    irb_approval_date: 'IRB Approval Date:'
-    irb_expiration_date: 'IRB Expiration Date:'
-    irb_of_record: 'IRB of Record:'
-    name_of_iacuc: 'Name of IACUC:'
-    nct_number: 'NCT # (clinicaltrials.gov number):'
-    needed_info: Information needed to obtain correct pricing
+    affiliations: "Affiliations, Collaborations, and Memberships"
+    approval_pending: "Application/Approval Pending:"
+    study_type_questions: "Study Type Questions"
+    attributes: "Study Attributes"
+    clear: "Clear"
+    code_blank: "Select a Federal Grant Code"
+    description: "Before you can complete a service request, please tell us more about your research study. This information will be used by our staff to decide the best way to process your request."
+    epic: "Epic Information"
+    federal_grant_code_id: "Federal Grant Code:"
+    federal_grant_serial_number: "Federal Grant Serial Number:"
+    federal_grant_title: "Federal Grant Title:"
+    federal_non_phs_sponsor: "Federal Grant Non-PHS Sponsor:"
+    federal_phs_sponsor: "Federal Grant PHS Sponsor:"
+    funding_blank: "Select a Funding Source"
+    funding_rfa: "Funding Opportunity #/RFA:"
+    funding_source_other: "Please Specify"
+    funding_start_date: "Funding Start Date:"
+    hr_number: "HR #:"
+    human_subjects: "Human Subjects:"
+    iacuc_approval_date: "IACUC Approval Date:"
+    iacuc_expiration_date: "IACUC Expiration Date:"
+    iacuc_number: "IACUC #:"
+    impact: "Impact Areas"
+    ind_number: "IND#:"
+    ind_on_hold: "IND on Hold?"
+    indirect_cost_rate: "Indirect Cost Rate"
+    inventors: "Inventors:"
+    investigational_products: "Investigational Products:"
+    ip_patents: "IP/Patents:"
+    irb_approval_date: "IRB Approval Date:"
+    irb_expiration_date: "IRB Expiration Date:"
+    irb_of_record: "IRB of Record:"
+    name_of_iacuc: "Name of IACUC:"
+    nct_number: "NCT# (National Clinical Trials Number):"
+    needed_info: "Information needed to obtain correct pricing"
     numbers:
-      hde: 'HDE #:'
-      hud: 'HUD #:'
-      ide: 'IDE #:'
-    optional_text: Optional Information
+      hde: "HDE #:"
+      hud: "HUD #:"
+      ide: "IDE #:"
+    optional_text: "Optional Information"
     optional_text2: "(used for reporting purposes and saved for your future use)"
-    options: Optional
-    rate: 'Indirect Cost Rate:'
-    research: Research Involving (Check all that apply)
-    patent_number: 'Patent Number:'
-    phase_blank: Select a Study Phase
-    phs_blank: Please Select if Applicable
-    potential_blank: Select a Potential Funding Source
-    potential_funding_source_other: Please Specify
-    potential_funding_start_date: 'Potential Funding Start Date:'
-    pro_number: 'WIRB #:'
-    push_to_epic: 'Publish Study in Epic: *'
-    save: Save
-    sponsor_name: Sponsor Name:*
-    status_blank: Select a Funding Status
-    study_phase: 'Study Phase:'
-    submission_blank: Pick a Submission Type
-    submission_type: 'Submission Type:'
-    title: Protocol Title:*
-    type: Study Type (Check all that apply)
-    udak_project_number: 'Financial Account (MFK#):'
-    vertebrate_animals: 'Vertebrate Animals:'
+    options: "Optional"
+    rate: "Indirect Cost Rate:"
+    research: "Research Involving (Check all that apply)"
+    patent_number: "Patent Number:"
+    phase_blank: "Select a Study Phase"
+    phs_blank: "Please Select if Applicable"
+    potential_blank: "Select a Potential Funding Source"
+    potential_funding_source_other: "Please Specify"
+    potential_funding_start_date: "Potential Funding Start Date:"
+    pro_number: "Pro #:"
+    push_to_epic: "Publish Study in Epic: *"
+    save: "Save"
+    sponsor_name: "Sponsor Name:*"
+    status_blank: "Select a Funding Status"
+    study_phase: "Study Phase:"
+    submission_blank: "Pick a Submission Type"
+    submission_type: "Submission Type:"
+    title: "Protocol Title:*"
+    type: "Study Type (Check all that apply)"
+    udak_project_number: "Financial Account (UDAK#):"
+    vertebrate_animals: "Vertebrate Animals:"
+
+  # Fulfillment tab
   fulfillments:
     approval_history:
-      approval_type: Type
-      approved_by: Approved By
-      date_approved: Date Approved
-      header: Approval History
-    cwf_remove_service_button: Remove Service from all patients
-    cwf_service_button: Add Service to all patients
+      approval_type: "Type"
+      approved_by: "Approved By"
+      date_approved: "Date Approved"
+      header: "Approval History"
+    cwf_remove_service_button: "Remove Service from all patients"
+    cwf_service_button: "Add Service to all patients"
     core_approvals:
-      header: Administrative Approvals
-      imaging: Imaging Approved
-      lab: Lab Approved
-      nursing: Nursing/Nutrition Approved
+      header: "Administrative Approvals"
+      imaging: "Imaging Approved"
+      lab: "Lab Approved"
+      nursing: "Nursing/Nutrition Approved"
     committee_approval:
-      headar: Committee Approval
-      label: Committee Approved
+      headar: "Committee Approval"
+      label: "Committee Approved"
     notes:
-      header: Notes
-      link: Add Note
-    otf_button: Add Non-clinical Service
-    remove_service_button: Remove Service
-    service_button: Add Service
+      header: "Notes"
+      link:  "Add Note"
+    otf_button: "Add Non-clinical Service"
+    remove_service_button: "Remove Service"
+    service_button: "Add Service"
     services:
-      header: Service
+      header: "Service"
       no_visits:
-        code: Charge Code
-        complete: Complete
-        cost: Cost
-        date: Fulfillment Dates
-        delete: Delete
-        header: Non-clinical Service
-        in_process: In Process
-        no_requests: "“There are no non-clinical services requested.”"
-        notes: Notes
+        code: "Charge Code"
+        complete: "Complete"
+        cost: "Cost"
+        date: "Fulfillment Dates"
+        delete: "Delete"
+        header: "Non-clinical Service"
+        in_process: "In Process"
+        no_requests:  “There are no non-clinical services requested.”
+        notes: "Notes"
         number: "#"
-        otf_unit_type: Unit Type
-        qty_type: Qty Type
-        received: Received
-        selected: Services Selected
-        service: Services
-        time: Time
-        timeframe: Timeframe
+        otf_unit_type: "Unit Type"
+        qty_type: "Qty Type"
+        received: "Received"
+        selected: "Services Selected"
+        service: "Services"
+        time: "Time"
+        timeframe: "Timeframe"
       visits:
-        add_arm: Add an Arm
-        add_link: Add a Visit
-        add: Add a Visit
-        arm: Select Arm
-        delete_link: Delete a Visit
-        delete: Delete a Visit
-        header: Clinical Service
-        no_requests: There are no clinical services requested.
-        remove_arm: Remove an Arm
+        add_arm: "Add an Arm"
+        add_link: "Add a Visit"
+        add: "Add a Visit"
+        arm: "Select Arm"
+        delete_link: "Delete a Visit"
+        delete: "Delete a Visit"
+        header: "Clinical Service"
+        no_requests: "There are no clinical services requested."
+        remove_arm: "Remove an Arm"
     status_changes:
-      date: Date Changed
-      from: Status Changed From
-      header: Status Changes
-      to: Status Changed To
+      date: "Date Changed"
+      from: "Status Changed From"
+      header: "Status Changes"
+      to: "Status Changed To"
     subsidies:
-      cost: Total Cost
-      delete: Delete Subsidy
-      effective_current_total_cost: Subsidy Current Cost
-      header: Subsidy Information
-      link: Request a Subsidy
-      no_subsidy: No subsidy has been requested for this service request.
+      cost: "Total Cost"
+      delete: "Delete Subsidy"
+      effective_current_total_cost: "Subsidy Current Cost"
+      header: "Subsidy Information"
+      link: "Request a Subsidy"
+      no_subsidy: "No subsidy has been requested for this service request."
       percent: "% Subsidy"
-      pi: PI Contribution
-      user_display_total_cost: Subsidy User Display Cost
+      pi: "PI Contribution"
+      user_display_total_cost: "Subsidy User Display Cost"
     subsidy_changes:
-      action: Action
-      date: Date Changed
-      header: Subsidy Changes
-      pi_contribution: PI Contribution
-      subsidy_percent: Subsidy Percent
-      user: Changed by
+      action: "Action"
+      date: "Date Changed"
+      header: "Subsidy Changes"
+      pi_contribution: "PI Contribution"
+      subsidy_percent: "Subsidy Percent"
+      user: "Changed by"
     timeline:
-      arranged_date: Consult Arranged Date
-      contacted_date: Requester Contacted Date
-      end_date: Proposed End Date
-      header: Timeline
-      start_date: Proposed Start Date
+      arranged_date: "Consult Arranged Date"
+      contacted_date: "Requester Contacted Date"
+      end_date: "Proposed End Date"
+      header: "Timeline"
+      start_date: "Proposed Start Date"
     totals:
-      effective_current_total_cost: Current Cost
-      user_display_total_cost: User Display Cost
+      effective_current_total_cost: "Current Cost"
+      user_display_total_cost: "User Display Cost"
+
+  # Identities Account Aproved/Disapproved
   epic_queues:
-    confirm: Are you sure you want to delete this item from the Epic Queue?
+    confirm: "Are you sure you want to delete this item from the Epic Queue?"
     date_formatter: "%m/%d/%Y %I:%M:%S %p"
-    date: Last Queue Date
-    delete: Delete
-    PIs: PI(s)
-    protocol: Queued Protocol
-    notes: Notes
-    status: Last Queue Status
-    created_at: Current Queue Date
-    send: Send
-    by: By
-    sent_protocols: Sent Protocols
-    type: Type
+    date: "Last Queue Date"
+    delete: "Delete"
+    PIs: "PI(s)"
+    protocol: "Queued Protocol"
+    notes: "Notes"
+    status: "Last Queue Status"
+    created_at: 'Current Queue Date'
+    send: 'Send'
+    by: 'By'
+    sent_protocols: 'Sent Protocols'
+    type: 'Type'
   footer:
-    mail_to: ''
-    mail_link: ''
-    mail_subject: ''
-    link_one_text: I-CART Newsletter
-    link_one_url: https://list.uiowa.edu/scripts/wa.exe?SUBED1=ICTS-I-CART&A=1
-    link_two_text: SPARC Request Blog
-    link_two_url: http://sparcrequestosblog.com/
-    link_three_text: SPARC Request at MUSC
-    link_three_url: http://academicdepartments.musc.edu/sctr/sparc_request
+    mail_to: "hundc@musc.edu"
+    mail_link: "Sign Up For the SPARC Request Listserv"
+    mail_subject: "SPARC Request Listserv"
+    link_one_text: "SPARC Request Blog"
+    link_one_url: "https://sparcrequestblog.com/"
+    link_two_text: "SCTR"
+    link_two_url: "http://sctr.musc.edu"
+    link_three_text: "SPARC Request Home"
+    link_three_url: "http://academicdepartments.musc.edu/sctr/sparc_request"
   identity:
-    approved: Account approved
-    disapproved: Account disapproved
+    approved: "Account approved"
+    disapproved: "Account disapproved"
   reports:
-    create_report: Create Report
-    defined_reports_desc: Please select a defined report below and click to proceed
-      with report customizations.
-    defined_reports: Defined Reports
-    intro: Welcome to the I-CART Request Reporting Module. Please select a report
-      type to proceed.
-    sub_intro: Please select a report type to proceed
-    proceed: Proceed
-    return_to_admin_portal: Return to Admin Portal
+    create_report: "Create Report"
+    defined_reports_desc: "Please select a defined report below and click to proceed with report customizations."
+    defined_reports: "Defined Reports"
+    intro: "Welcome to the SPARC Request Reporting Module"
+    sub_intro: "Please select a report type to proceed"
+    proceed: "Proceed"
+    return_to_admin_portal: "Return to Admin Portal"
   study_tracker:
-    title: Fulfillment
-    save: Save
+    audits:
+      end_date: "End Date:"
+      get_report: "Get Report"
+      imaging: "Imaging"
+      laboratory: "Laboratory"
+      no_start_date: "Unable to determine when this request was put into Fulfillment"
+      nursing: "Nursing"
+      nutrition: "Nutrition"
+      start_date: "Start Date:"
+    billing_report:
+      end_date: "End Date"
+      get_report: "Get Report"
+      protocols: "Protocol(s)"
+      start_date: "Start Date"
+      title: "Admin Billing Report"
+    cancel: "Cancel"
+    dashboard:
+      header1: "Completed Visits"
+      header2: "Visit Totals"
+      header3: "Subject Total:"
+      tabs:
+        audit_reporting: "Audit Reporting"
+        billing: "Billing"
+        payments: "Payments"
+        services: "Services"
+        cost: "Your Cost"
+        subjects: "# Subjects"
+        total: "Service Total"
+        study_level_charges: "Non-clinical Services Charges"
+        study_schedule: "Clinical Services"
+        subject_tracker: "Subject Tracker"
+      totals:
+        direct_cost: "Total Direct Cost"
+        indirect_cost: "Total Indirect Costs"
+        grand: "Grand Total:"
+      notes:
+        header: "Comments:"
+        save: "Save Comment"
+      otf_charges:
+        add: "Add a Fulfillment"
+        date: "Date"
+        remove: "Remove"
+      payment_uploads:
+        add: "Add document"
+        remove: "Remove"
+        remove_confirm: "Are you sure you want to delete this document?"
+      payments:
+        add: "Add a payment"
+        amt_invoiced: "Amount Invoiced"
+        amt_received: "Amount Received"
+        date_received: "Date Received"
+        details: "Details"
+        documents: "Documents"
+        pay_method: "Payment Method"
+        percent_subsidy: "Percent Subsidy"
+        prompt: ""
+        remove_confirm: "Are you sure you want to delete this payment?"
+        remove: "Remove"
+        submitted: "Date Submitted"
+      save: "Save"
+      subject_tracker:
+        add: "Add a subject"
+        confirm: "Are you sure you want to delete this subject?"
+        delete: "Delete"
+        dob: "Date of Birth"
+        ethnicity: "Race" #this was change to race but the database still has it labeled as ethnicity
+        gender: "Gender"
+        id: "ID"
+        mrn: "MRN"
+        name: "Subject Name"
+        report: "Report"
+        schedule: "Schedule"
+      title: "Fulfillment"
+      visit_calendar:
+        add_service: "Add Service"
+        cwf_link: "Back to Fulfillment"
+        grand_total: "Grand Total"
+        header1: "Study/Project ID:"
+        header10: "Total"
+        header2: "Subject ID:"
+        header3: "Billing/Business Manager:"
+        header4: "Subject Study Status:"
+        header5: "Procedure"
+        header6: "Completed"
+        header7: "R Quantity"
+        header8: "T Quantity"
+        header9: "Unit Cost"
+        popup_header1: "Visit Name:"
+        popup_header2: "Service/Assessment Name:"
+        popup_message1: "Attention - An assessment"
+        popup_message2: "has been added at"
+        popup_message3: "If subject is past visit, please refer to your IRB-approved protocol."
+        popup_message4: "Attention - Assessments have been added to the following visits. If subject is past visit, please refer to your IRB-approved protocol."
+        save_alert: "You must save your changes for the dashboard to be updated."
+        submit: "Save Appointments"
+        visit_complete: "Date of Visit (entering date signifies a completed visit)"
+        visit_selector: "Please select a visit:"
+  # Portal Editing user for study/project
   portal_user_form:
-    add_user: Add User
-    credential_prompt: Select a Credential
-    credentials: 'Credentials:'
-    edit_user: Edit User
-    email: 'E-mail:'
-    epic_access: 'Epic EMR Access?:'
-    era: 'ERA Commons Name:'
-    name: 'Name:'
-    phone: 'Phone:'
+    add_user: "Add User"
+    credential_prompt: "Select a Credential"
+    credentials: "Credentials:"
+    edit_user: "Edit User"
+    email: "E-mail:"
+    epic_access: "Epic EMR Access?:"
+    era: "ERA Commons Name:"
+    name: "Name:"
+    credentials_other: "Other Credentials:"
+    phone: "Phone:"
     rights:
-      approve: Authorize/Change Study Charges
-      header: User Rights:*
-      none: Member Only
-      request: Request/Approve Services
-      view: View Rights
-    role_prompt: Select a Role
-    role: Role:*
-    specify: Please Specify:*
-    subspecialty_prompt: Select a Subspecialty
-    subspecialty: 'Subspecialty:'
+      header: "User Rights:"
+      none: 'Member Only'
+      view: 'View Rights'
+      request: 'Request/Approve Services'
+      approve: 'Authorize/Change Study Charges'
+    role_other: "Other Role:"
+    role_prompt: "Select a Role"
+    role: "Role:*"
+    subspecialty_prompt: "Select a Subspecialty"
+    subspecialty: "Subspecialty:"
+
+  # Indirect cost rates, default values used to prepopulate forms
   indirect_cost_rates:
-    internal_and_college: '0'
-    industry: '25'
-    foundation_and_investigator: '15'
-    federal: '51'
+    internal_and_college: "0"
+    industry: "30"
+    foundation_and_investigator: "25"
+    federal: "49.5"
+
   pricing_setup:
-    pricing_setup_display_date: Pricing setup's 'display date'
-    pricing_setup_effective_date: Pricing setup's 'effective date'
-    pricing_setup_corporate: Pricing setup's 'corporate percent'
-    pricing_setup_other: Pricing setup's 'other percent'
-    pricing_setup_member: Pricing setup's 'member percent'
-    pricing_setup_college_rate_type: Pricing setup's 'college rate type'
-    pricing_setup_foundation_rate_type: Pricing setup's 'foundation rate type'
-    pricing_setup_industry_rate_type: Pricing setup's 'industry rate type'
-    pricing_setup_investigator_rate_type: Pricing setup's 'investigator rate type'
-    pricing_setup_internal_rate_type: Pricing setup's 'internal rate type'
-  ajax_error: 'An error happened processing your request: '
+    pricing_setup_display_date: "Pricing setup's 'display date'"
+    pricing_setup_effective_date: "Pricing setup's 'effective date'"
+    pricing_setup_corporate: "Pricing setup's 'corporate percent'"
+    pricing_setup_other: "Pricing setup's 'other percent'"
+    pricing_setup_member: "Pricing setup's 'member percent'"
+    pricing_setup_college_rate_type: "Pricing setup's 'college rate type'"
+    pricing_setup_foundation_rate_type: "Pricing setup's 'foundation rate type'"
+    pricing_setup_industry_rate_type: "Pricing setup's 'industry rate type'"
+    pricing_setup_investigator_rate_type: "Pricing setup's 'investigator rate type'"
+    pricing_setup_internal_rate_type: "Pricing setup's 'internal rate type'"
+
+  # Javascript localizations
+  ajax_error: "An error happened processing your request: "
   cart:
-    remove_request_confirm: This action will delete this service request and you will
-      be redirected to the dashboard. Click OK to proceed.
-    new_request_dialog1: New Request?
-    new_request_dialog2: Is this a new research study or project?
-    request_submitted1: Delete Service Warning
-    request_submitted2: Deleting this service from the service cart will be irreversible
-      and will cause it to be deleted from the associated protocol (%{protocol_id}).
-      Are you sure you want to proceed?
+    remove_request_confirm: "This action will delete this service request and you will be redirected to your user portal. Click OK to proceed."
+    new_request_dialog1: "New Request?"
+    new_request_dialog2: "Is this a new research study or project?"
+    request_submitted1: "Delete Service Warning"
+    request_submitted2: "Deleting this service from the service cart will be irreversible and will cause it to be deleted from the associated protocol (%{protocol_id}). Are you sure you want to proceed?"
   catalog_manager_js:
-    clinical_provider_remove: Are you sure you want to remove this Fulfillment Provider?
-    cm_rights_remove: Are you sure you want to remove rights for this user from the
-      Catalog Manager?
-    core_prompt: Please enter the name of the core you would like to create
-    institution_prompt: Please enter the name of the institution you would like to
-      create
-    later_display_date: This display date is before the display date of existing pricing
-      maps, are you sure you want to do this?
-    later_effective_date: This effective date is before the effective date of existing
-      pricing maps, are you sure you want to do this?
-    permission_change: You are changing your own permissions. Your page will refresh
-      automatically when this window closes.
-    program_prompt: Please enter the name of the program you would like to create
-    provider_prompt: Please enter the name of the provider you would like to create
-    same_display_date: A pricing map already exists with that display date.  Please
-      choose another date.
-    same_effective_date: A pricing map already exists with that effective date.  Please
-      choose another date.
-    service_alert: There needs to be at least one service provider on a parent organization
-      to create a new service.
-    service_provider_remove: Are you sure you want to remove this Service Provider?
-    service_remove: Are you sure you want to remove this Related Service?
-    super_user_remove: Are you sure you want to remove this Super User?
-    survey_delete: Are you sure you want to remove this Associated Survey?
+    clinical_provider_remove: "Are you sure you want to remove this Fulfillment Provider?"
+    cm_rights_remove: "Are you sure you want to remove rights for this user from the Catalog Manager?"
+    core_prompt: "Please enter the name of the core you would like to create"
+    institution_prompt: "Please enter the name of the institution you would like to create"
+    later_display_date: "This display date is before the display date of existing pricing maps, are you sure you want to do this?"
+    later_effective_date: "This effective date is before the effective date of existing pricing maps, are you sure you want to do this?"
+    permission_change: "You are changing your own permissions. Your page will refresh automatically when this window closes."
+    program_prompt: "Please enter the name of the program you would like to create"
+    provider_prompt: "Please enter the name of the provider you would like to create"
+    same_display_date: "A pricing map already exists with that display date.  Please choose another date."
+    same_effective_date: "A pricing map already exists with that effective date.  Please choose another date."
+    service_alert: "There needs to be at least one service provider on a parent organization to create a new service."
+    service_provider_remove: "Are you sure you want to remove this Service Provider?"
+    service_remove: "Are you sure you want to remove this Related Service?"
+    super_user_remove: "Are you sure you want to remove this Super User?"
+    survey_delete: "Are you sure you want to remove this Associated Survey?"
   cwf_js:
-    calendar_changed: Changes to patient calendars need to be saved, click 'Stay on
-      page' and save the form to save the calendar, or click 'Leave page' to leave
-      the page and dismiss your changes.
-    subject_changed: Changes to subjects need to be saved. Click 'Cancel' to return
-      to the page and save the form, or 'OK' to leave the page and dismiss your changes.
-    subject_delete: This subject has one or more completed appointments and can't
-      be deleted.
+    calendar_changed: "Changes to patient calendars need to be saved, click 'Stay on page' and save the form to save the calendar, or click 'Leave page' to leave the page and dismiss your changes."
+    subject_changed: "Changes to subjects need to be saved. Click 'Cancel' to return to the page and save the form, or 'OK' to leave the page and dismiss your changes."
+    subject_delete: "This subject has one or more completed appointments and can't be deleted."
   epic_box:
-    epic_box_error: Epic Information Error
-    epic_box_alert: Please fill out the Epic Information correctly.
+    epic_box_error: "Epic Information Error"
+    epic_box_alert: "Please fill out the Epic Information correctly."
   feedback:
-    message_error: Message can't be blank
+    message_error: "Message can't be blank"
   fulfillment_js:
-    arm_delete_confirm: Are you sure you want to remove the arm?
-    arm_remove_alert: You can't delete the last arm while Clinical Services still
-      exist.
-    arm_subject_data_alert: This arm has subject data and can not be deleted.
-    cwf_service_delete: Are you sure you want to remove this service?
-    date_error: Please enter a start date before the end date
+    arm_delete_confirm: "Are you sure you want to remove the arm?"
+    arm_remove_alert: "You can't delete the last arm while Clinical Services still exist."
+    arm_subject_data_alert: "This arm has subject data and can not be deleted."
+    cwf_service_delete: "Are you sure you want to remove this service?"
+    date_error: "Please enter a start date before the end date"
     deleted: " has been deleted."
-    epic: Project/Study has been sent to Epic
-    last_visit_delete: You can't delete the last visit. Please delete the arm if visits
-      are no longer required.
-    pi_contribution: Value is over maximum dollar cap.
-    remove_service: Are you sure that you want to remove this service from all subjects'
-      visit calendars in this arm?
-    service_delete_confirm: Are you sure that you want to remove this service from
-      all subjects' visit calendars?
-    subsidy: Value is over maximum subsidy percentage.
-  in_fulfillment: This line item is associated with a request that is in Fulfillment
-    and cannot be deleted.
-  js_confirm: Are you sure?
+    epic: "Project/Study has been sent to Epic"
+    last_visit_delete: "You can't delete the last visit. Please delete the arm if visits are no longer required."
+    pi_contribution: "Value is over maximum dollar cap."
+    remove_service: "Are you sure that you want to remove this service from all subjects' visit calendars in this arm?"
+    service_delete_confirm: "Are you sure that you want to remove this service from all subjects' visit calendars?"
+    subsidy: "Value is over maximum subsidy percentage."
+  in_fulfillment: "This line item is associated with a request that is in Fulfillment and cannot be deleted."
+  js_confirm: "Are you sure?"
   notifications_js:
-    send: Message has been sent.
-  service_calendar_toasts:
-    jump_to_visit: Select the visit you would like to view.
-    visit_day: Click to set the visits day. All days must be in numerical order. Ex.
-      1, 2, 4, 9
-    visit_name: Click to rename your visits.
-    visit_window_after: Click to set the window after the day that the visit can be
-      completed.
-    visit_window_before: Click to set the window before the day that the visit can
-      be completed.
-  service_deleted: Service has been deleted.
+    send: "Message has been sent."
+  service_deleted: "Service has been deleted."
   service_details_alerts:
-    subject_count: This arm has completed subject data in Fulfillment. The subject
-      count cannot be decreased.
-    visit_count: This arm has completed subject data in Fulfillment. The visit count
-      cannot be decreased.
-  service_request_success: Service request has been saved.
+    subject_count: "This arm has completed subject data in Fulfillment. The subject count cannot be decreased."
+    visit_count: "This arm has completed subject data in Fulfillment. The visit count cannot be decreased."
+  service_request_success: "Service request has been saved."
   services_js:
-    before_display_date: You have selected a display date before an existing display
-      date, are you sure you want to do this?
-    before_effective_date: You have selected a effective date before an existing effective
-      date, are you sure you want to do this?
-    rate_field_confirm: Changing this value will override the pre-calculated rate
-      for this service.
-    same_display_date: You can't have two display dates on the same day!
-    same_effective_date: You can't have two effective dates on the same day!
-  sign_in_dialog: 'Please select one of the options below:'
-  signed_up_dialog: 'New account created:'
+    before_display_date: "You have selected a display date before an existing display date, are you sure you want to do this?"
+    before_effective_date: "You have selected a effective date before an existing effective date, are you sure you want to do this?"
+    rate_field_confirm: "Changing this value will override the pre-calculated rate for this service."
+    same_display_date: "You can't have two display dates on the same day!"
+    same_effective_date: "You can't have two effective dates on the same day!"
+  sign_in_dialog: "Please select one of the options below:"
+  signed_up_dialog: "New account created:"
+
+  # Mailer
   mailer:
     email_title:
-      epic_queue_error: 'Epic Interface Error '
-      epic_queue_summary: Epic Queue Summary
-      epic_queue_report: Epic Queue Report
-      new: New
-      new_account_registration: New SPARCRequest Account Registration
-      general: SPARCRequest %{email_status} (%{type} %{id})
-    application_title: SPARCRequest
-    add_intro: An Authorized User has been added in
-    contact_information: Contact Information
-    delete_intro: An Authorized User has been deleted in
-    epic_access: Epic Access
-    issue_contact: Please contact us at iCartHelp@healthcare.uiowa.edu for assistance
-      with this process or with any questions you may have.
-    name: 'Name:'
-    p_id: 'Protocol ID:'
-    p_info: Protocol Information
-    proxy: SPARC Proxy Rights
-    received: You have received a new notification on your I-CART Request User Dashboard.
-      Please login  @ %{portal_root_url} to retrieve it. Thank you.
-    role: 'Role:'
-    s_name: Sponsor Name
-    sparc_dashboard_period: SPARCDashboard.
-    title1: 'Short Title:'
-    title2: 'Project Title:'
-    user_info: 'User Information:'
-    user_modification: User Modification
+      epic_queue_error:  "Epic Interface Error "
+      epic_queue_summary: "Epic Queue Summary"
+      epic_queue_report: "Epic Queue Report"
+      new: "New"
+      new_account_registration: "New SPARCRequest Account Registration"
+      general: "SPARCRequest %{email_status} (%{type} %{id})"
+    application_title: "SPARCRequest"
+    add_intro: "An Authorized User has been added in"
+    contact_information: "Contact Information"
+    delete_intro: "An Authorized User has been deleted in"
+    epic_access: "Epic Access"
+    issue_contact: "Please contact the %{department_name} at %{phone} or <a href='mailto:%{email}'>%{email}</a> for assistance with this process or with any questions you may have."
+    name: "Name:"
+    p_id: "Protocol ID:"
+    p_info: "Protocol Information"
+    proxy: "SPARC Proxy Rights"
+    received: "You have received a new notification on your SPARC Request User Dashboard. Please login  @ %{portal_root_url} to retrieve it. Thank you."
+    role: "Role:"
+    s_name: "Sponsor Name"
+    sparc_dashboard_period: "SPARCDashboard."
+    title1: "Short Title:"
+    title2: "Project Title:"
+    user_info: "User Information:"
+    user_modification: "User Modification"
+
+  # New/editing projects
   sr_project:
-    description: 'Brief Description:'
-    dropdown_default1: Select a Funding Status
-    dropdown_default2: Select a Funding Source
-    dropdown_default3: Select a Potential Funding Source
-    funding_source: Funding Source:*
-    funding_status: Proposal Funding Status:*
-    message: Before you can complete a service request, please tell us more about
-      your project.  This information will be used by our staff to decide the best
-      way to process your request.
-    potential_funding_source: Potential Funding Source:*
-    rate: 'Indirect Cost Rate:'
-    title1: Short Title:*
-    title2: Project Title:*
+    description: "Brief Description:"
+    dropdown_default1: "Select a Funding Status"
+    dropdown_default2: "Select a Funding Source"
+    dropdown_default3: "Select a Potential Funding Source"
+    funding_source: "Funding Source:*"
+    funding_status: "Proposal Funding Status:*"
+    message: "Before you can complete a service request, please tell us more about your project.  This information will be used by our staff to decide the best way to process your request."
+    potential_funding_source: "Potential Funding Source:*"
+    rate: "Indirect Cost Rate:"
+    title1: "Short Title:*"
+    title2: "Project Title:*"
+
+  # New user sign up
   signup:
-    cancel: Cancel
-    company: 'Company:'
-    confirm: 'Password Confirmation:'
-    fname: 'First Name:'
-    lname: 'Last Name:'
-    mail: 'Email:'
-    message: 'To create an account for the utilization of the I-CART Request application,
-      please provide the following information:'
-    not_approved: Close Window
-    phone: 'Telephone Number:'
-    reason: 'Reason for account/login request:'
-    submit: Create New User
+    cancel: "Cancel"
+    company: "Company:"
+    confirm: "Password Confirmation:"
+    fname: "First Name:"
+    lname: "Last Name:"
+    mail: "Email:"
+    message: "To create an account for the utilization of the SPARC Request application, please provide the following information:"
+    not_approved: "Close Window"
+    phone: "Telephone Number:"
+    reason: "Reason for account/login request:"
+    submit: "Create New User"
+
+  # Notifications
   notifications:
-    about: 'Subject:'
-    ask_a_question_email_error: Valid email address required.
-    ask_a_question_email: Enter Your Email
-    ask_a_question: Please ask your question here
-    deselect: Deselect All
-    email: Enter Your Email (optional)
-    feedback: Please enter your feedback text here
-    from: 'From:'
-    message: Please enter notification text here
-    preview: 'Preview:'
-    read: Mark as Read
-    received: 'Time:'
-    recipient: 'Recipient:'
-    requester: 'Requester: '
-    select: Select All
-    subject: Subject
-    unread: Mark as Unread
-    warning: You can not send a message to yourself.
+    about: "Subject:"
+    ask_a_question_email_error: "Valid email address required."
+    ask_a_question_email: "Enter Your Email"
+    ask_a_question: "Please ask your question here"
+    deselect: "Deselect All"
+    email: "Enter Your Email (optional)"
+    feedback: "Please enter your feedback text here"
+    from: "From:"
+    message: "Please enter notification text here"
+    preview: "Preview:"
+    read: "Mark as Read"
+    received: "Time:"
+    recipient: "Recipient:"
+    requester: "Requester: "
+    select: "Select All"
+    subject: "Subject"
+    unread: "Mark as Unread"
+    warning: "You can not send a message to yourself."
+
+  # Notifier
   notifier:
-    action: Action
-    admin_data: Admin Information
-    arm_data: Protocol Arm Information
-    arm_name: Arm Name
-    arm_subject_count: Subject Count
-    arm_visit_count: Visit Count
-    body1: Dear %{full_name},
-    body6: A list of requested services is attached.
-    body7: To approve the charges associated with the selected services please click
-    contact_info: Contact Information
-    deleted_all_services_from_cart: All services have been deleted in SPARCRequest
-      for the %{protocol_type} below to which you have been granted access.
-    epic_access: Epic Access
-    link: HERE
-    name: User Name
-    non_service_provider_message: "%{welcome} in SPARCRequest. You can review or edit
-      this request in %{href}. An email has been sent to the service provider(s) to
-      review and ensure the services are appropriate. <b>Please note the services
-      will not start until this request is submitted through SPARCDashboard.</b>"
-    service_provider_message: "%{welcome} in SPARCRequest and is awaiting your review
-      in %{href}.  Please ensure services chosen are appropriate and can be provided.
-      Communicate any necessary changes to the study team and request they “Submit
-      to Start Services” once ready to proceed."
-    non_service_provider_submitted_message: "%{welcome} in SPARCRequest.  Visit %{href}
-      to view the status or make any updates to your request."
-    service_provider_submitted_message: "%{welcome} in SPARCRequest and is awaiting
-      your review in %{href}."
-    note: "*Note: upon submission, services selected to go to Epic will be sent daily
-      at 4:30pm."
-    notes_present: "*Note(s) are included with this submission."
+    action: "Action"
+    admin_data: "Admin Information"
+    arm_data: "Protocol Arm Information"
+    arm_name: "Arm Name"
+    arm_subject_count: "Subject Count"
+    arm_visit_count: "Visit Count"
+    body1: "Dear %{full_name},"
+    body6: "A list of requested services is attached."
+    body7: "To approve the charges associated with the selected services please click"
+    contact_info: "Contact Information"
+    description: "Brief Description"
+    deleted_all_services_from_cart: "All services have been deleted in SPARCRequest for the %{protocol_type} below to which you have been granted access."
+    epic_access: "Epic Access"
+    epic_notice: "*Note: upon submission, services selected to go to Epic will be sent daily at 4:30pm."
+    link: "HERE"
+    name: "User Name"
+    non_service_provider_message: "%{welcome} in SPARCRequest. You can review or edit this request in %{href}. An email has been sent to the service provider(s) to review and ensure the services are appropriate. <b>Please note the services will not start until this request is submitted through SPARCDashboard.</b>"
+    service_provider_message: "%{welcome} in SPARCRequest and is awaiting your review in %{href}. Please ensure services chosen are appropriate and can be provided. Communicate any necessary changes to the study team and request they “Submit to Start Services” once ready to proceed."
+    non_service_provider_submitted_message:  "%{welcome} in SPARCRequest. Visit %{href} to view the status or make any updates to your request."
+    service_provider_submitted_message:  "%{welcome} in SPARCRequest and is awaiting your review in %{href}."
+    note: "Note"
+    note_date: "Date"
+    note_user: "User"
     notice:
-      approve: Approve Account
-      body1: Request for new I-CARTRequest account submitted and awaiting approval
-      body2: A new I-CARTRequest account is waiting for approval.
-      company: Company
-      disapprove: Disapprove Account
-      email: Email
-      first: First Name
-      last: Last Name
-      number: Telephone Number
-      reason: Reason for account/login request
-    organization: Organization
-    p_id: Project ID
-    p_info: Project Information
-    p_title: Project Title
-    proxy: 'Proxy Rights:'
-    request_amendment: Request Amendment
-    request_amendment_intro: Services have been added or deleted in SPARCRequest and
-      is awaiting your review in
-    requester: Requester
-    role: Role
-    s_name: Sponsor Name
-    service: Service
-    service_request: Service Request
-    sparc_dashboard: SPARCDashboard
-    sparc_dashboard_period: SPARCDashboard.
-    source: Funding Source
-    srid_info: Service Request Information
-    sr_id: 'Service Request ID:'
-    sr_id_acronym: SRID
-    ssr_ids: 'Sub Service Request IDs:'
-    ssr_id: 'Sub Service Request ID:'
-    status: Status
+      approve: "Approve Account"
+      body1: "Request for new SPARCRequest account submitted and awaiting approval"
+      body2: "A new SPARCRequest account is waiting for approval."
+      company: "Company"
+      disapprove: "Disapprove Account"
+      email: "Email"
+      first: "First Name"
+      last: "Last Name"
+      number: "Telephone Number"
+      reason: "Reason for account/login request"
+    organization: "Organization"
+    p_id: "Project ID"
+    p_info: "Project Information"
+    p_title: "Project Title"
+    protocol_notes: "%{type} Notes"
+    proxy: "Proxy Rights:"
+    request_amendment: "Request Amendment"
+    request_amendment_intro:  "Services have been added or deleted in SPARCRequest and is awaiting your review in"
+    requester:  "Requester"
+    role: "Role"
+    s_name: "Sponsor Name"
+    service: "Service"
+    service_request: "Service Request"
+    sparc_dashboard: "SPARCDashboard"
+    sparc_dashboard_period: "SPARCDashboard."
+    potential_source: "Potential Funding Source"
+    source: "Funding Source"
+    srid_info: "Service Request Information"
+    sr_id: "Service Request ID:"
+    sr_id_acronym: "SRID"
+    ssr_ids: "Sub Service Request IDs:"
+    ssr_id: "Sub Service Request ID:"
+    status: "Status"
     status_change:
-      body1: Request for new I-CART Request account status change
-      body2: 'Your request for a new I-CART Request account has been approved.  You
-        may proceed with your service '
-      body3: request using your newly created
-      body4: username and password.
-      body5: Your request for a new I-CART Request account has NOT been approved.
-    study_info: Study Information
-    study_id: Study ID
-    study_title: Study Title
-    title1: Short Title
-    triggered_by: 'Current Identity:'
-    u_info: User Information
-    welcome_obtain_research_pricing: A request has been made for a budget review (Get
-      Cost Estimate)
-    welcome_submit: A request has been submitted to start services
-  password_reset_message: Forgot your password?
-  password_reset_submit: Send password reset
+      body1: "Request for new SPARC Request account status change"
+      body2: "Your request for a new SPARC Request account has been approved.  You may proceed with your service "
+      body3: "request using your newly created"
+      body4: "username and password."
+      body5: "Your request for a new SPARC Request account has NOT been approved."
+    study_info: "Study Information"
+    study_id: "Study ID"
+    study_title: "Study Title"
+    title1: "Short Title"
+    p_title: "Project Title"
+    triggered_by: "Current Identity:"
+    u_info: "User Information"
+    welcome_obtain_research_pricing: "A request has been made for a budget review (Get Cost Estimate)"
+    welcome_submit: "A request has been submitted to start services"
+
+  # Password reset
+  password_reset_message: "Forgot your password?"
+  password_reset_submit: "Send password reset"
+
+  # Portal Editing user for study/project
+  portal_user_form:
+    add_user: "Add User"
+    credential_prompt: "Select a Credential"
+    credentials: "Credentials:"
+    edit_user: "Edit User"
+    email: "E-mail:"
+    epic_access: "Epic EMR Access?:*"
+    era: "ERA Commons Name:"
+    name: "Name:"
+    phone: "Phone:"
+    rights:
+      approve: 'Authorize/Change Study Charges'
+      header: "User Rights:*"
+      none: 'Member Only'
+      request: 'Request/Approve Services'
+      view: 'View Rights'
+    role_prompt: "Select a Role"
+    role: "Role:*"
+    specify: "Please Specify:*"
+    subspecialty_prompt: "Select a Subspecialty"
+    subspecialty: "Subspecialty:"
+
+  # Portal Root/Information
   protocol_information:
-    actions: Actions
-    add_authorized_user: Add An Authorized User
-    add_services: Add Services
-    authorized_users: 'Authorized Users:'
+    actions: "Actions"
+    add_authorized_user: "Add An Authorized User"
+    add_services: "Add Services"
+    authorized_users: "Authorized Users:"
     change_primary_pi:
       warning: "<strong>**WARNING**</strong>"
-      warning_prompt_1_1: 'Adding the new Primary PI '
+      warning_prompt_1_1: "Adding the new Primary PI "
       warning_prompt_1_2: " will change the current Primary PI "
       warning_prompt_1_3: " to a general access user on Protocol "
-      warning_prompt_2: Do you wish to proceed?
-    consolidated_request: Export Consolidated Request
+      warning_prompt_2: "Do you wish to proceed?"
+    consolidated_request: 'Export Consolidated Request'
     create:
-      study: Create New Study
-      project: Create New Project
-    date: 'Submitted Date:'
-    delete: Delete
-    edit_original: Edit Original
-    edit: Edit
-    full_calendar: View Consolidated Request
-    funding: 'Funding Source:'
-    greeting: Welcome!
-    information: 'Information:'
-    loading: Loading your Projects/Studies
-    message1: Within your dashboard, you can view (and/or edit and submit) service
-      requests currently in I-CART Request, as well as all of those still in 'draft'
-      status.
-    message2: Please note that Projects/Studies are listed in descending order.
-    name: 'Name:'
-    no_authorized_users: Currently no authorized users
-    note_count: Unread Message
-    notes: 'Notifications:'
-    program: 'Program/Core:'
-    provider: 'Provider:'
-    proxy: 'Proxy Rights:'
-    require_primary_pi_message: Projects/Studies require a Primary PI. Please add
-      a new one before continuing.
-    rights1: You do not have appropriate rights to
-    rights2: Should you need this right, please contact your PI or Authorized Users
-    role: 'Role:'
-    send_notification: Send Notification
-    service_requests: 'Service Requests:'
-    short_title: 'Short Title:'
-    sponsor: 'Sponsor Name:'
-    srid: 'SRID:'
-    status: 'Status:'
-    title: 'Title:'
+      study: "Create New Study"
+      project: "Create New Project"
+    date: "Submitted Date:"
+    delete: "Delete"
+    edit_original: "Edit Original"
+    edit: "Edit"
+    full_calendar: "View Consolidated Request"
+    funding: "Funding Source:"
+    greeting: "Welcome!"
+    information: "Information:"
+    loading: "Loading your Projects/Studies"
+    message1: "Within your dashboard, you can view (and/or edit and submit) service requests currently in SPARC Request, as well as all of those still in 'draft' status."
+    message2: "Please note that Projects/Studies are listed in descending order."
+    name: "Name:"
+    no_authorized_users: "Currently no authorized users"
+    note_count: "Unread Message"
+    notes: "Notifications:"
+    program: "Program/Core:"
+    provider: "Provider:"
+    proxy: "Proxy Rights:"
+    require_primary_pi_message: "Projects/Studies require a Primary PI. Please add a new one before continuing."
+    rights1: "You do not have appropriate rights to"
+    rights2: "Should you need this right, please contact your PI or Authorized Users"
+    role: "Role:"
+    send_notification: "Send Notification"
+    service_requests: "Service Requests:"
+    short_title: "Short Title:"
+    sponsor: "Sponsor Name:"
+    srid: "SRID:"
+    status: "Status:"
+    title: "Title:"
     wait_message: Please be patient while the Project/Study loads.
+
+  # Portal sub service request dialog
   ssr_dialog:
     auth_users:
-      name: Name
-      proxy_rights: 'Proxy Rights:'
-      role: Role
+      name: "Name"
+      proxy_rights: "Proxy Rights:"
+      role: "Role"
     calendar:
       headers:
-        cost: Your Cost
-        services: Services
+        cost: "Your Cost"
+        services: "Services"
         subjects: "# Subjects"
-        total: Service Total
+        total: "Service Total"
     docs:
-      file_name: File Name
-      program_core: Program/Core
+      file_name: "File Name"
+      program_core: "Program/Core"
       totals:
-        direct_cost: Total Direct Cost
-        grand: 'Grand Total:'
-        indirect_cost: Total Indirect Costs
-      uploads: Uploads
+        direct_cost: "Total Direct Cost"
+        grand: "Grand Total:"
+        indirect_cost: "Total Indirect Costs"
+      uploads: "Uploads"
     project_study_details:
-      id: SRID
-      info: Project/Study Information
-      project_title: Project Title
-      short_title: Short Title
-      sponsor_name: Sponsor Name
+      id: "SRID"
+      info: "Project/Study Information"
+      project_title: "Project Title"
+      short_title: "Short Title"
+      sponsor_name: "Sponsor Name"
+
+  # Project/Study assignment page
   study_assignment:
-    current_project: 'Current Project: <span>&nbsp</span>'
-    current_study: 'Current Study: <span>&nbsp</span>'
-    edit_project: Edit Project
-    edit_study: Edit Study
-    instructions_1: Please review services below.
-    new_project: New Project
-    new_study: New Study
-    notice: If Professional Services are covered by % effort, please indicate in Step
-      2.
-    or: If not in list above, create NEW Study/Project Below
-    previously_submitted_study: The request that you are editing has been previously
-      submitted and can not be moved to another study.
-    previously_submitted_project: The request that you are editing has been previously
-      submitted and can not be moved to another project.
-    research_project: New Project
-    research_study: New Research Study
-    select_project: Select Project
-    select_protocol: Select a Research Study/Project
-    select_study: Select Study
+    current_project: "Current Project: <span>&nbsp</span>"
+    current_study: "Current Study: <span>&nbsp</span>"
+    edit_project: "Edit Project"
+    edit_study: "Edit Study"
+    instructions_1: "Please review services below."
+    new_project: "New Project"
+    new_study: "New Study"
+    notice: "If Professional Services are covered by % effort, please indicate in Step 2."
+    or: "If not in list above, create NEW Study/Project Below"
+    previously_submitted_study: "The request that you are editing has been previously submitted and can not be moved to another study."
+    previously_submitted_project: "The request that you are editing has been previously submitted and can not be moved to another project."
+    research_project: "New Project"
+    research_study: "New Research Study"
+    select_project: "Select Project"
+    select_protocol: "Select a Research Study/Project"
+    select_study: "Select Study"
     sidebar_box:
-      help: Help
-      my_services: My Services
+      help: "Help"
+      my_services: "My Services"
     tooltips:
-      research_study_tooltip: 'Research Study: An individual research study with defined
-        aims and outcomes'
-      research_project_tooltip: Use 'Project' for non-study specific service requests,
-        or anything that is not a study
+      research_study_tooltip: 'Research Study: An individual research study with defined aims and outcomes'
+      research_project_tooltip: "Use 'Project' for non-study specific service requests, or anything that is not a study"
+
+  # Rails Root Page Messages
   rails_root:
-    message1_html: I-CART is an online one-stop-shopping experience that efficiently
-      manages all of your ICTS-related research requests and services. Anyone requesting
-      to use ICTS services must use I-CART. If you need help planning your project,
-      please select the appropriate consulting service to meet with a service manager.
-    welcome_html: Welcome to the UIowa SPARC Request Services Catalog
-    message4_html: I-CART is powered by Medical University of South Carolina’s Services,
-      Pricing, & Applications for Research Centers (SPARC) request management system.
-    message5_html: Welcome to SPARC Request Version 4.0. We're happy to announce that
-      Step 2 now includes the concept of clinical trial arms. You'll find other numerous
-      enhancements and upgrades in Version 4.0. For more information and training
-      documents, please visit our new website at
-    message6_html: Please contact the PLACEHOLDER at xxx-xxxx with any questions or
-      to set up a demonstration!
-    message7_html: Check out our SPARC Request Blog (
-    message8_html: "). This feature allows you to follow our latest news and is a
-      great way to ask questions of and leave feedback for the SPARC Request Team
-      as well as communicate with both us and other SPARC Request Users."
-    message9_html: Search for services above or browse the catalog to your left. <strong>You
-      may only select services applicable to ONE research study/project at a time</strong>.
-      Please watch the following <a href="http://academicdepartments.musc.edu/sctr/sparc_request/training.html"
-      target="_blank">training videos</a> to learn more.
-    message9link: ''
-    message10_html: ''
-    message10link: ''
-    message11_html: ''
+    message1: "Search for services above or browse the catalog to your left."
+    welcome: "Welcome to the SPARC Request Services Catalog"
+    # message2: "Click \"Add Services\" at the bottom of any service description to add it to your \"My Services\"."
+    # message3: "To delete a service from \"My Services\", use the red X beside any service."
+    message4: "** Please Note: You may only select services applicable to ONE research study/project at a time.**"
+    message5: "Welcome to SPARC Request Version 4.0. We're happy to announce that Step 2 now includes the concept of clinical trial arms. You'll find other numerous enhancements and upgrades in Version 4.0. For more information and training documents, please visit our new website at"
+    # <a>http://academicdepartments.musc.edu/sparc_request/</a>.
+    message6: "Please contact the SUCCESS Center at 792-8300 with any questions or to set up a demonstration!"
+    message7: "Check out our SPARC Request Blog ("
+    message8: "). This feature allows you to follow our latest news and is a great way to ask questions of and leave feedback for the SPARC Request Team as well as communicate with both us and other SPARC Request Users."
+    # message7: "Due to user feedback regarding the inclusion of Indirect Costs in the Grand Total of Study Costs, Indirect Costs (as a line item) have currently been removed from SPARC Request and will be reintroduced in the budget template tools in the Study Tracker Release. Please contact the SUCCESS Center at 792-8300 with any questions."
+    message9: "Website/Training: "
+    message9link: 'http://academicdepartments.musc.edu/sctr/sparc_request'
+    message10: "Blog: "
+    message10link: 'http://www.sparcrequestblog.com'
+    message11: "Pricing is consistent across locations unless otherwise stated."
+
+  # Related Service Requests (portal/admin/)
   related:
     headers:
-      date_submitted: Date Submitted
-      pi: PI
-      program_core: Program/Core
-      requester: Requester
-      service: Service
-      srid: SRID
+      date_submitted: "Date Submitted"
+      pi: "PI"
+      program_core: "Program/Core"
+      requester: "Requester"
+      service: "Service"
+      srid: "SRID"
+
+  # Right navigation
   right_navigation:
-    catalog: Back to Catalog
-    dashboard: Dashboard
-    faq: Help/FAQs
+    catalog: "Back to Catalog"
+    dashboard: "Dashboard"
+    faq: "Help/FAQs"
+    feedback: "Feedback"
     feedback:
-      name: Name
-      email: Email
-      date: Date
-      bug: Bug
-      enhancement_feature_request: Enhancement/Feature Request
-      training: Training
-      other: Other
-      immediate_work_stoppage: Immediate Work Stoppage
-      high: High
-      normal: Normal
-      low: Low
-      browser_version: Browser Version
-      prompt: Please Choose a Browser
-    redcap_survey: https://redcap.icts.uiowa.edu/redcap/surveys/?s=7LRHJ9NP3M
+      name: 'Name'
+      email: 'Email'
+      date: 'Date'
+      bug: 'Bug'
+      enhancement_feature_request: 'Enhancement/Feature Request'
+      training: 'Training'
+      other: 'Other'
+      immediate_work_stoppage: 'Immediate Work Stoppage'
+      high: 'High'
+      normal: 'Normal'
+      low: 'Low'
+      browser_version: 'Browser Version'
+      prompt: 'Please Choose a Browser'
+    redcap_survey: 'https://redcap.musc.edu/surveys/?s=A37TNJWJPL'
+
+  # Service Request approve epic rights
   approve_epic_rights:
-    instructions: Thank you. An email has been sent to the primary PI for the final
-      approval.
+    instructions: "Thank you. An email has been sent to the primary PI for the final approval."
+
+  # Service Request Confirmation Page and Obtain Research Pricing Page
   sr_confirmation:
     details:
-      contact: 'Contact:'
-      date_submitted: 'Date Submitted: '
-      id: 'Service Request ID:'
-      institution: 'Institution:'
-      program_core: 'Program/Core:'
-      provider: 'Provider:'
-      short_title: 'Short Title: '
-    download_button: Download my Service Request
-    instructions: Thank you for submitting your service request(s) through I-CART.
-      An email has been sent to each of your service providers and they should be
-      contacting you soon. If you have any questions or concerns, please don't hesitate
-      to contact us at iCartHelp@healthcare.uiowa.edu
-    portal_button: Go to I-CART Dashboard
-    research_pricing_instructions: You have successfully submitted a request to get
-      a cost estimate. An email(s) has been submitted on your behalf, and we will
-      respond to your request for a cost estimate shortly. Should you have any questions
-      regarding your request(s), please contact the service provider contact(s) listed
-      below.
+      contact: "Contact:"
+      date_submitted: "Date Submitted: "
+      id: "Service Request ID:"
+      institution: "Institution:"
+      program_core: "Program/Core:"
+      provider: "Provider:"
+      short_title: "Short Title: "
+    download_button: "Download my Service Request"
+    instructions: "Thank you for submitting your service request(s) through SPARC Request. An email has been sent to each of your service providers and they should be contacting you soon. If you have any questions or concerns, please don't hesitate to contact the SUCCESS Center at 792-8300 or success@musc.edu."
+    portal_button: "Go to Dashboard"
+    research_pricing_instructions : "You have successfully submitted a request to get a cost estimate. An email(s) has been submitted on your behalf, and we will respond to your request for a cost estimate shortly. Should you have any questions regarding your request(s), please contact the service provider contact(s) listed below."
+
+  # Service Request Details form
   service_request_details:
-    help: Help
-    name: ARM Name
-    number_of_subjects: Estimated Total Number of Subjects
-    number_of_visits: Estimated Total Number of Visits
-    one_time_fee_and_per_patient_instructions: Next, please enter the following information
-      specific to your research study/project. This information will help us generate
-      applicable service fees for your review.
-    one_time_fee_instructions: Please enter service details for I-CART Request Services
-      that you selected
-    per_patient_instructions: Please enter the following information specific to your
-      research study/project. This information will help us generate applicable service
-      fees for your review.
-    recruitment_end_date: Estimated Recruitment End Date
-    recruitment_start_date: Estimated Recruitment Start Date
-    services_required: You can't continue unless you have services in your cart.
-    services: My Services
-    study_end_date: Estimated Study End Date *
-    study_start_date: Estimated Study Start Date *
+    help: "Help"
+    name: "ARM Name"
+    number_of_subjects: "Estimated Total Number of Subjects"
+    number_of_visits: "Estimated Total Number of Visits"
+    one_time_fee_and_per_patient_instructions: "Next, please enter the following information specific to your research study/project. This information will help us generate applicable service fees for your review."
+    one_time_fee_instructions: "Please enter service details for SPARC Request Services that you selected"
+    per_patient_instructions: "Please enter the following information specific to your research study/project. This information will help us generate applicable service fees for your review."
+    recruitment_end_date: "Estimated Recruitment End Date"
+    recruitment_start_date: "Estimated Recruitment Start Date"
+    services_required: "You can't continue unless you have services in your cart."
+    services: "My Services"
+    study_end_date: "Estimated Study End Date *"
+    study_start_date: "Estimated Study Start Date *"
+
+  # Service Request review page
   sr_review:
     auth_users:
-      name: 'Name:'
-      proxy_rights: 'Proxy Rights:'
-      role: 'Role:'
+      name: "Name:"
+      proxy_rights: "Proxy Rights:"
+      role: "Role:"
     calendar:
       headers:
-        cost: Your Cost
-        services: Services
+        cost: "Your Cost"
+        services: "Services"
         subjects: "# Subjects"
-        total: Service Total
+        total: "Service Total"
       totals:
-        direct_cost: Total Direct Cost
-        grand: 'Grand Total:'
-        indirect_cost: Total Indirect Costs
-    instructions: "<ul class='review_instructions'><li>Review your request.</li><li>Makes
-      changes (if needed).</li><li>Save as draft for later, get a cost estimate, or
-      submit to start services.</li></ul>"
-    notes_header: Service Request Notes
-    participate_in_survey: Would you like to participate in a brief 1 question I-CART
-      Request satisfaction survey?
-    participate_in_survey_title: System Satisfaction Survey
-    save_as_draft_notification: This study will be saved as a draft, and no notifications
-      or emails will be sent to the service providers. Do you wish to proceed?
-    save_as_draft_notification_title: Notification
+        direct_cost: "Total Direct Cost"
+        grand: "Grand Total:"
+        indirect_cost: "Total Indirect Costs"
+    instructions: "<ul class='review_instructions'><li>Review your request.</li><li>Makes changes (if needed).</li><li>Save as draft for later, get a cost estimate, or submit to start services.</li></ul>"
+    notes_header: "Service Request Notes"
+    participate_in_survey: "Would you like to participate in a brief 1 question SPARC Request satisfaction survey?"
+    participate_in_survey_title: "System Satisfaction Survey"
+    save_as_draft_notification: "This study will be saved as a draft, and no notifications or emails will be sent to the service providers. Do you wish to proceed?"
+    save_as_draft_notification_title: "Notification"
     study_project_info:
-      id: 'Study/Project ID:'
-      funding_source: 'Funding Source:'
-      sponsor_name: 'Sponsor Name:'
-      short_title: Short Title
-      title: 'Study/Project Title:'
+      id: "Study/Project ID:"
+      funding_source: "Funding Source:"
+      sponsor_name: "Sponsor Name:"
+      short_title: "Short Title"
+      title: "Study/Project Information:"
+
+  # Service Requests
   service_requests:
     approve_changes:
-      text1: has already approved these changes
-      text2: You have successfully approved the changes requested.
+      text1: "has already approved these changes"
+      text2: "You have successfully approved the changes requested."
     catalog:
-      event: No events scheduled within a month from today.
-      search_placeholder: Search by service name or CPT code ...
-      text1: My Services
-      text2: Help
-      text3: Please ensure that you have added all necessary research services to
-        your My Services cart before proceeding. For a listing of available services
-        to add, click on any of the Programs listed on the left-hand side of the page.
-        Services will appear in the middle of the screen. Add services by clicking
-        "Add".
-      text4: At least 1 service needs to be in cart first time through before clicking
-        "Submit request" from catalog page.
+      event: "No events scheduled within a month from today."
+      search_placeholder: "Search by service name or CPT code ..."
+      text1: "My Services"
+      text2: "Help"
+      text3: "Please ensure that you have added all necessary research services to your My Services cart before proceeding. For a listing of available services to add, click on any of the Programs listed on the left-hand side of the page. Services will appear in the middle of the screen. Add services by clicking \"Add\"."
+      text4: "At least 1 service needs to be in cart first time through before clicking \"Submit request\" from catalog page."
     detail_list:
       description1: "(Samples, hours, etc...)"
       description2: "(Slides, etc...)"
-      nan: Please enter a valid number.
-      q_type: Quantity Type
-      quantity: Quantity
-      service: Service
-      text1: Quantity of
-      text2: is less than the unit minimum of
-      text3: Quantity is being reset to the previous value.
-      text4: Units Per Quantity of
-      text5: is more than the maximum allowed of
-      text6: Units Per Quantity is being set to the maximum allowed value.
-      up_quantity: Units Per Quantity
+      nan: "Please enter a valid number."
+      q_type: "Quantity Type"
+      quantity: "Quantity"
+      service: "Service"
+      text1: "Quantity of"
+      text2: "is less than the unit minimum of"
+      text3: "Quantity is being reset to the previous value."
+      text4: "Units Per Quantity of"
+      text5: "is more than the maximum allowed of"
+      text6: "Units Per Quantity is being set to the maximum allowed value."
+      up_quantity: "Units Per Quantity"
     info:
-      text1: Service Request Status
-      text2: Service Request Owner
-      text3: 'Ready for Fulfillment:'
-      text4: Total Cost
-  login_name: 'Username:'
-  login_password: 'Password:'
-  remember_user: 'Remember me:'
+      text1: "Service Request Status"
+      text2: "Service Request Owner"
+      text3: "Ready for Fulfillment:"
+      text4: "Total Cost"
+
+  # Sign in page
+  login_name: "Username:"
+  login_password: "Password:"
+  remember_user: "Remember me:"
   signin:
-    button1: UIowa Users Click Here
-    button2: Outside Users Click Here
-    button3: Sign In
-    message1: UIowa Users- Sign in here
-    message2: ''
-    message3: Outside Users- Sign in here with your I-CART Request account
-    message4: ''
-  create_new_account_link: 'Outside Users: Don''t have an account? Click here.'
-  initial_signin_dialog: You are not currently logged into I-CART Request. If you
-    are affiliated with an institution and have an institutional login OR have created
-    a I-CART Request account and have a I-CART Request login and password, please
-    click the top button to proceed. If you are not currently affiliated with an institution
-    OR do not have a I-CART Request login/password, please click the button on the
-    bottom to proceed with creating a new account.
-  proceed_to_database_login: Outside Users with existing I-CART Request Accounts
-  proceed_to_shibboleth: UIowa Users
+    button1: "MUSC Users Click Here"
+    button2: "Outside Users Click Here"
+    button3: "Sign In"
+    message1: "MUSC Users- Sign in here"
+    message2: ""
+    message3: "Outside Users- Sign in here with your SPARC Request account"
+    message4: ""
+
+  # Sign in popup
+  create_new_account_link: "Outside Users: Don't have an account? Click here."
+  initial_signin_dialog: "You are not currently logged into SPARC Request. If you are affiliated with an institution and have an institutional login OR have created a SPARC Request account and have a SPARC Request login and password, please click the top button to proceed. If you are not currently affiliated with an institution OR do not have a SPARC Request login/password, please click the button on the bottom to proceed with creating a new account."
+  proceed_to_database_login: "Outside Users with existing SPARC Request Accounts"
+  proceed_to_shibboleth: "MUSC Users"
+
+  # Steps navigation
   step_navigation:
-    step_1: 'STEP 1: <br /> Review Services & <br /> Assign Study or Project'
-    step_2: 'STEP 2: <br /> Enter Service <br /> Details'
-    step_3: 'STEP 3: <br /> Notes & <br /> Documents'
-    step_4: 'STEP 4: <br /> Review Your <br /> Request'
-    step_5: 'STEP 5: <br /> Submission <br /> Confirmation'
+    step_1: "STEP 1: <br /> Review Services & <br /> Assign Study or Project"
+    step_2: "STEP 2: <br /> Enter Service <br /> Details"
+    step_3: "STEP 3: <br /> Notes & <br /> Documents"
+    step_4: "STEP 4: <br /> Review Your <br /> Request"
+    step_5: "STEP 5: <br /> Submission <br /> Confirmation"
+
   protocol:
     study_schedule:
-      add_arm: Add Arm
-      add_visit_group: Add Visit Group
-      edit_arm: Edit Arm
-      manage_arms: Manage Arms
-      manage_visits: Manage Visits
-      manage_services: Manage Services
-      remove_arm: Remove Arm
+      add_arm: "Add Arm"
+      add_visit_group: "Add Visit Group"
+      edit_arm: "Edit Arm"
+      manage_arms: "Manage Arms"
+      manage_visits: "Manage Visits"
+      manage_services: "Manage Services"
+      remove_arm: "Remove Arm"
+
+  study_tracker:
+    title: "Fulfillment"
+    save: "Save"
+  # Study/Project Shared
   protocol_shared:
-    add_user: User added!  See table below to set proxy rights.
-    button: Change Type
-    cancel: Cancel
-    change: 'Project/Study Type:'
-    confirm: This will change the type of this Project/Study.  Are you sure?
-    funding_source: Funding Source:*
-    funding_status: Proposal Funding Status:*
-    potential_funding_source: Potential Funding Source:*
-    step_text_2: 'STEP 1: Add Users'
-    step_text: 'STEP 1: Protocol Information'
-    title: Short Title:*
-    update_user: User updated!  See table below to set proxy rights.
+    add_user: "User added!  See table below to set proxy rights."
+    button: "Change Type"
+    cancel: "Cancel"
+    change: "Project/Study Type:"
+    confirm: "This will change the type of this Project/Study.  Are you sure?"
+    funding_source: "Funding Source:*"
+    funding_status: "Proposal Funding Status:*"
+    potential_funding_source: "Potential Funding Source:*"
+    step_text_2: "STEP 1: Add Users"
+    step_text: "STEP 1: Protocol Information"
+    title: "Short Title:*"
+    update_user: 'User updated!  See table below to set proxy rights.'
+
+  # Subsidy Page
   subsidy_page:
-    additional_confirm: Are you sure you want to leave? Any unsaved changes to this
-      service request will be lost.
-    eligible_html: The services selected below may be eligible for a <b><i>funding
-      award</i></b> or subsidy to cover some or all of the costs of the services.
-    not_eligible: None of the services you have selected are eligible for a subsidy.
-    overridden: This request has been previously submitted and the subsidy can now
-      only be edited by an Admin.
-    request_additional: To request additional research funding go to
+    additional_confirm: "Are you sure you want to leave? Any unsaved changes to this service request will be lost."
+    eligible_html: "The services selected below may be eligible for a <b><i>funding award</i></b> or subsidy to cover some or all of the costs of the services. For example, SCTR (CTSA) provides funding awards for the Research Nexus."
+    not_eligible: "None of the services you have selected are eligible for a subsidy."
+    overridden: "This request has been previously submitted and the subsidy can now only be edited by an Admin."
+    request_additional: "To request additional research funding go to"
     table:
-      amount_of_funding: amount of funding
-      institution: Institution/Provider/Program/Core
-      percent_of_cost: percent of cost
-      pi_contribution: Study Contribution
-      requested_funding: Requested Funding
+      amount_of_funding: "amount of funding"
+      institution: "Institution/Provider/Program/Core"
+      percent_of_cost: "percent of cost"
+      pi_contribution: "Study Contribution"
+      requested_funding: "Requested Funding"
       subsidy: "% Requested Subsidy"
-      total_estimated: Total Estimated Costs
+      total_estimated: "Total Estimated Costs"
+
+  # Tag label overrides
   tags:
-    ctrc: Administrative Approvals
-    clinical_work_fulfillment: Fulfillment
-    ctrc_clinical_services: Clinical Research Support services
-    epic: Epic
+    ctrc: "Administrative Approvals"
+    clinical_work_fulfillment: "Fulfillment"
+    ctrc_clinical_services: "Nexus Clinical Services"
+    epic: "Epic"
+
+  # Tooltip help dialogs
   cart_help:
     questions:
-      question_text1: May I submit a request for services for multiple research studies/projects
-        simultaneously?
-      answer_text1: No. Please browse and select services for only one research study/project
-        at a time.
-      question_text2: May I select and add services from multiple Service Providers
-        and Programs at one time?
-      answer_text2: Yes. Please feel free to browse, select, and add services from
-        any Service Provider, Program, and/or Core displayed in the system for any
-        given research study/project.
-      question_text3: How many Authorized Users can I add?
-      answer_text3: Add as many Authorized Users as you feel is pertinent. There is
-        no limit.
-      question_text4: What is the difference  between a Research Study and a Project?
-      answer_text4: A Research Study is an individual research protocol with defined
-        aims and outcomes.
-      question_text5: How is I-CART Request calculating my indirect costs?
-      answer_text5: The original requester for your study/project defined both the
-        funding source of the study/project and the indirect cost rate. I-CART Request
-        uses this data to calculate your total overall indirect costs.
-      question_text6: I'm stuck! Who can I contact for assistance with an I-CART Request?
-      answer_text6: We are happy to assist you! Please contact us at iCartHelp@healthcare.uiowa.edu
+      question_text1: "May I submit a request for services for multiple research studies/projects simultaneously?"
+      answer_text1: "No. Please browse and select services for only one research study/project at a time."
+      question_text2: "May I select and add services from multiple Service Providers and Programs at one time?"
+      answer_text2: "Yes. Please feel free to browse, select, and add services from any Service Provider, Program, and/or Core displayed in the system for any given research study/project."
+      question_text3: "How many Authorized Users can I add?"
+      answer_text3: "Add as many Authorized Users as you feel is pertinent. There is no limit."
+      question_text4: "What is the difference  between a Research Study and a Project?"
+      answer_text4: "A Research Study is an individual research protocol with defined aims and outcomes."
+      question_text5: "How is SPARC Request calculating my indirect costs?"
+      answer_text5: "The original requester for your study/project defined both the funding source of the study/project and the indirect cost rate. SPARC Request uses this data to calculate your total overall indirect costs."
+      question_text6: "I'm stuck! Who can I contact for assistance with SPARC Request?"
+      answer_text6: "The SUCCESS Center is happy to assist you! Please contact us at success@musc.edu or (843) 792-3357."
+
+  # User details partial
   user_details:
-    add_button: Add Authorized User
-    ec_name: ERA Commons Name
-    email: Email
-    name: Name
-    phone: Phone
-    role: Role
-    role_select: Select a Role
-    subspecialty: 'Subspecialty:'
-    subspecialty_prompt: Select a Subspecialty
-    update_button: Update Authorized User
-    other: Please Specify
+    add_button: "Add Authorized User"
+    ec_name: "ERA Commons Name"
+    email: "Email"
+    name: "Name"
+    phone: "Phone"
+    role: "Role"
+    role_select: "Select a Role"
+    subspecialty: "Subspecialty:"
+    subspecialty_prompt: "Select a Subspecialty"
+    update_button: "Update Authorized User"
+    other: "Please Specify"
+
+  # User list partial
   user_list:
-    actions: Actions
-    check_apply: 'Check the appropriate securities for Epic access:'
-    epic_access: Epic EMR Access?:*
-    information: Research Study/Project Authorized Users
+    actions: "Actions"
+    check_apply: "Check the appropriate securities for Epic access:"
+    epic_access: "Epic EMR Access?"
+    information: "Research Study/Project Authorized Users"
     message: "(Select appropriate level of study/project rights)"
-    proxy_rights: Proxy Rights
-    rights1: 'Member Only:'
-    rights2: 'View Rights:'
-    rights3: 'Request/Approve Services:'
-    rights4: Authorize/Change
-    rights5: 'Study Charges:'
+    proxy_rights: "Proxy Rights"
+    rights1: "Member Only:"
+    rights2: "View Rights:"
+    rights3: "Request/Approve Services:"
+    rights4: "Authorize/Change"
+    rights5: "Study Charges:"
+
+  # User search partial
   user_search:
-    advanced_user_search_title: Click here to add users to I-CART and then return
-      to this page to add them to this study/project.
-    help_block: Unable to find a user? Please try the
-    help_block_link_text: Advanced User Search
-    message: To begin to search and add authorized users to this study/project, type
-      in the first or last name of the user.  Select as appropriate.
-    search_box_header: User Search
-    search_placeholder: Search for user...
+    advanced_user_search_title: "Click here to add users to SPARC and then return to this page to add them to this study/project."
+    help_block: "Unable to find a user? Please try the"
+    help_block_link_text: "Advanced User Search"
+    message: "To begin to search and add authorized users to this study/project, type in the first or last name of the user.  Select as appropriate."
+    search_box_header: "User Search"
+    search_placeholder: "Search for user..."
