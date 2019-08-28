@@ -3,7 +3,10 @@
 set -o nounset
 set -e
 
-. {{pkg.svc_config_path}}/dotenv
+if [ -n "{{cfg.ssl_cert_file}}" ]
+then
+  SSL_CERT_FILE="{{cfg.ssl_cert_file}}"
+fi
 
 echo "Creating runtime directories"
 mkdir -pv $HOME

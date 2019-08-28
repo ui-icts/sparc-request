@@ -173,7 +173,7 @@ do_build() {
      --path vendor/bundle \
      --without test:development \
      --retry 5 \
-     --no-binstubs \
+     --binstubs \
      --quiet
 
   # cp -R vendor/bundle $HAB_CACHE_SRC_PATH/bundle_cache
@@ -387,7 +387,7 @@ set -e
 if test -n "\$DEBUG"; then set -x; fi
 export HOME="$pkg_svc_data_path"
 if [ -f "$env_sh" ]; then
-  export \$(cat "$env_sh")
+  source "$env_sh"
 else
   >&2 echo "No dotenv file found: '$env_sh'"
   >&2 echo "Have you not started this service ($pkg_origin/$pkg_name) before?"

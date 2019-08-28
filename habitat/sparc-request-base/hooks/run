@@ -10,10 +10,16 @@ cd $RAILS_ROOT
 # exported by the set_runtime_env calls
 # in the plan. They are paths or values
 # whereas this is a port that can change
-export RAILS_PORT={{cfg.rails.port}}
+export RAILS_PORT={{cfg.rails_port}}
 {{#if cfg.use_syslog ~}}
 export RAILS_LOG_TO_SYSLOG={{cfg.use_syslog}}
 {{/if}}
+
+
+if [ -n "{{cfg.ssl_cert_file}}" ]
+then
+  SSL_CERT_FILE="{{cfg.ssl_cert_file}}"
+fi
 
 exec 2>&1
 exec bin/eye load application.eye -f

@@ -1,24 +1,17 @@
-export RAILS_PORT='{{cfg.rails_port}}'
-export SHIBBOLETH_REQUEST_TYPE="{{cfg.shibboleth.request_type}}"
-
-if [ -n "{{cfg.ssl_cert_file}}" ]
-then
-  export SSL_CERT_FILE="{{cfg.ssl_cert_file}}"
-fi
+SECRET_KEY_BASE="{{cfg.secret_key_base}}"
+SHIBBOLETH_REQUEST_TYPE="{{cfg.shibboleth.request_type}}"
 
 ## Exception Notifier
-export EXCEPTION_SENDER_ADDRESS="{{cfg.sparc.production.no_reply_from}}"
+EXCEPTION_SENDER_ADDRESS="{{cfg.sparc.production.no_reply_from}}"
 # Added SPARC 3.4
-export sender_address="{{cfg.sparc.production.no_reply_from}}"
-export EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
+EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
-export SECRET_KEY_BASE="{{cfg.secret_key_base}}"
 
 ## SPARC VALUES
-export org_logo="{{cfg.customization.org_logo}}"
-export institution_logo="{{cfg.customization.institution_logo}}"
-export institution="{{cfg.customization.institution}}"
+org_logo="{{cfg.customization.org_logo}}"
+institution_logo="{{cfg.customization.institution_logo}}"
+institution="{{cfg.customization.institution}}"
+site_name="{{cfg.site_banner}}"
 
-{{#if cfg.site_banner ~}}
-site_name={{cfg.site_banner}}
-{{/if}}
+### Added in 3.4
+sender_address="{{cfg.sparc.production.no_reply_from}}"
