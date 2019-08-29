@@ -25,7 +25,7 @@ database_host = "33.33.33.1"
 database_port = 3306
 
 ssl_cert_file = ""
-
+force_ssl = true
 # Displays a banner at the top of the site
 # Useful for test environments so that users do not
 # mistake it for production

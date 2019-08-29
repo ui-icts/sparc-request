@@ -11,7 +11,12 @@ EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 org_logo="{{cfg.customization.org_logo}}"
 institution_logo="{{cfg.customization.institution_logo}}"
 institution="{{cfg.customization.institution}}"
+{{#if cfg.site_banner ~}}
 site_name="{{cfg.site_banner}}"
+{{/if}}
 
 ### Added in 3.4
 sender_address="{{cfg.sparc.production.no_reply_from}}"
+
+### Added by Iowa in 3.4 .. not upstream
+force_ssl="{{cfg.force_ssl}}"

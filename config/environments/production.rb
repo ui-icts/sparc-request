@@ -56,7 +56,13 @@ SparcRails::Application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  if ENV['force_ssl'].present? && ENV['force_ssl'].downcase == 'true'
+    config.force_ssl = true
+  elsif ENV['force_ssl'].present? && ENV['force_ssl'].downcase == 'false'
+    config.force_ssl = false
+  else
+    config.force_ssl = true
+  end
 
   # Set HTTP/S security headers
   # config.action_dispatch.default_headers = {
