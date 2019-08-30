@@ -98,13 +98,13 @@ do_setup_environment() {
   set_runtime_env HOME ${pkg_svc_data_path}
   set_runtime_env LANG "en_US.UTF-8"
   set_runtime_env LC_ALL "en_US.UTF-8"
-  set_runtime_env SENDMAIL_PATH "{{pkgPathFor "core/busybox-static"}}/bin/sendmail"
+  set_runtime_env SENDMAIL_PATH "$(pkg_path_for busybox-static)/bin/sendmail"
   set_runtime_env RAILS_ENV "production"
   set_runtime_env RACK_ENV "production"
   set_runtime_env RAILS_ROOT "${pkg_prefix}/${app_sub_path}"
   set_runtime_env EYE_HOME "${pkg_svc_var_path}/eye"
 
-  set_runtime_env SPARC_VERSION "v{{pkg.version}}"
+  set_runtime_env SPARC_VERSION "v${pkg_version}"
   # Build specific
 
   set_buildtime_env HOME /root
