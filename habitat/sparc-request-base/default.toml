@@ -124,6 +124,17 @@ namespace = ""
 
 request_type = "header"
 
+[fulfillment]
+
+database_name = "sparc_fulfillment"
+database_username = "root"
+database_password = "root"
+database_host = "33.33.33.1"
+
+# It's highly unlikely anyone would want to change this from the
+# default, right? but it's configurable. Just in case.
+database_port = 3306
+
 [customization]
 
 org_logo = "sctr_header_sized.jpg"

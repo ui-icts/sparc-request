@@ -284,6 +284,7 @@ _create_symlinks() {
   rm -rf ${pkg_prefix}/static/release/tmp
   rm -rf ${pkg_prefix}/static/release/public/system
   rm -rf ${pkg_prefix}/static/release/config/database.yml
+  rm -rf ${pkg_prefix}/static/release/config/fulfillment_db.yml
   rm -rf ${pkg_prefix}/static/release/config/application.yml
   rm -rf ${pkg_prefix}/static/release/config/epic.yml
   rm -rf ${pkg_prefix}/static/release/config/ldap.yml
@@ -293,6 +294,7 @@ _create_symlinks() {
   ln -sf ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
 
   ln -sf ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
+  ln -sf ${pkg_svc_config_path}/fulfillment_db.yml ${pkg_prefix}/static/release/config/fulfillment_db.yml
   ln -sf ${pkg_svc_config_path}/application.yml ${pkg_prefix}/static/release/config/application.yml
   ln -sf ${pkg_svc_config_path}/epic.yml ${pkg_prefix}/static/release/config/epic.yml
   ln -sf ${pkg_svc_config_path}/ldap.yml ${pkg_prefix}/static/release/config/ldap.yml
