@@ -1,5 +1,4 @@
 update 'en' do
-  change 'protocols.studies.research_involving.humans.hr_number', to: 'HawkIRB #:'
   update 'admin_identities' do
     change 'button_add_user', to: 'Add User to I-CART'
     change 'footer', to: "* Close this window or tab when you're done adding new users to I-CART."
@@ -17,7 +16,6 @@ update 'en' do
 
   update 'study_form' do
 
-    change 'hr_number', to: "HawkIRB #:"
     change 'nct_number', to: "NCT # (clinicaltrials.gov number):"
     change 'pro_number', to: "WIRB #:"
     change 'udak_project_number', to: "Financial Account (MFK#):"
