@@ -4,9 +4,6 @@ update 'en' do
       change 'sctr', to: 'ICTS'
       change 'sctr_url', to: 'https://icts.uiowa.edu'
     end
-    update 'catalog' do
-      change 'no_description', to: ''
-    end
 
     update 'right_navigation' do
       update 'faqs' do
