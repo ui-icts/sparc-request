@@ -1,4 +1,4 @@
-# Copyright © 2011-2018 MUSC Foundation for Research Development
+# Copyright © 2011-2019 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -155,7 +155,7 @@ $ ->
     if $('#new_associated_survey').val() == ''
       alert "No survey selected"
     else
-      survey_id = $(this).closest('.row').find('.new_associated_survey')[0].value
+      survey_id = $('#new_associated_survey').selectpicker('val')
       surveyable_type = $(this).data('type')
       surveyable_id = $(this).data('id')
       $.ajax
@@ -319,6 +319,12 @@ $ ->
       data:
         program_id: program_id
 
+  $(document).on 'change', '[name="service[is_available]"]', ->
+    if $(this).prop('checked')
+      $('.shareable-link').removeClass('hidden')
+    else
+      $('.shareable-link').addClass('hidden')
+
   ##############################################
   ###          Service Components            ###
   ##############################################
@@ -368,37 +374,6 @@ $ ->
         service_relation_id: service_relation_id
         service_relation:
           required: required
-
-  $(document).on 'change', '.linked_quantity', (event) ->
-    service_relation_id = $(this).data('service-relation-id')
-    linked_quantity = $(this).prop('checked')
-
-    ajax_call = ->
-      $.ajax
-        type: 'POST'
-        url: "/catalog_manager/services/update_related_service"
-        data:
-          service_relation_id: service_relation_id
-          service_relation:
-            linked_quantity: linked_quantity
-
-    if !linked_quantity
-      $(this).siblings('.linked_quantity_container').fadeOut(750, ->
-        ajax_call()
-        )
-    else
-      ajax_call()
-
-  $(document).on 'change', '.linked_quantity_total', (event) ->
-    service_relation_id = $(this).data('service-relation-id')
-    linked_quantity_total = $(this).val()
-    $.ajax
-      type: 'POST'
-      url: "/catalog_manager/services/update_related_service"
-      data:
-        service_relation_id: service_relation_id
-        service_relation:
-          linked_quantity_total: linked_quantity_total
 
   ##############################################
   ###             Service Pricing            ###

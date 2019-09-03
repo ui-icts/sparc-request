@@ -1,4 +1,4 @@
-# Copyright © 2011-2018 MUSC Foundation for Research Development
+# Copyright © 2011-2019 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -45,14 +45,10 @@ RSpec.describe 'User previews a survey', js: true do
       wait_for_javascript_to_finish
     end
 
-    scenario 'and sees the preview modal' do
-      expect(page).to have_selector('#preview-modal')
-    end
-
     scenario 'and sees all proper content' do
       expect(all('.section').count).to eq(@survey.sections.count)
       expect(all('.question').count).to eq(@survey.questions.count)
-      expect(all('.option').count).to eq(@survey.questions.map(&:options).flatten.count)
+      expect(all('select .option').count).to eq(@survey.questions.map(&:options).flatten.count)
     end
   end
 
@@ -77,14 +73,10 @@ RSpec.describe 'User previews a survey', js: true do
       wait_for_javascript_to_finish
     end
 
-    scenario 'and sees the preview modal' do
-      expect(page).to have_selector('#preview-modal')
-    end
-
     scenario 'and sees all proper content' do
       expect(all('.section').count).to eq(@form.sections.count)
       expect(all('.question').count).to eq(@form.questions.count)
-      expect(all('.option').count).to eq(@form.questions.map(&:options).flatten.count)
+      expect(all('select .option').count).to eq(@form.questions.map(&:options).flatten.count)
     end
   end
 end

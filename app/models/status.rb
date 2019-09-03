@@ -18,30 +18,12 @@
 # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 # TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-class Identities::SessionsController < Devise::SessionsController
-
-  def create
-    if Rails.env.development? && params[:identity][:password] == "adminadmin"
-      @identity = Identity.where(ldap_uid: params[:identity][:ldap_uid]).first
-
-      if params[:service_request_id]
-        # redirect back to catalog page
-        store_location_for @identity, catalog_service_request_path(params[:service_request_id])
-      end
-
-      sign_in_and_redirect @identity, :event => :authentication #this will throw if @identity is not activated
-      set_flash_message(:notice, :success, :kind => "Shibboleth") if is_navigational_format?
-
-    else
-      super
-    end
+class Status
+  def self.updatable?(status)
+    Setting.get_value('updatable_statuses').include?(status)
   end
 
-  def after_sign_in_path_for(resource)
-    if params[:service_request_id]
-      catalog_service_request_path(params[:service_request_id])
-    else
-      super
-    end
+  def self.complete?(status)
+    Setting.get_value('finished_statuses').include?(status)
   end
 end

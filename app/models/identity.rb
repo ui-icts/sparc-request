@@ -1,4 +1,4 @@
-# Copyright © 2011-2018 MUSC Foundation for Research Development
+# Copyright © 2011-2019 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -117,7 +117,7 @@ class Identity < ApplicationRecord
   # Return the netid (ldap_uid without the @musc.edu)
   def netid
     if Setting.get_value("use_ldap") then
-      return ldap_uid.sub(/@#{Directory::DOMAIN}/, '')
+      return ldap_uid.sub(/@#{Directory.domain}/, '')
     else
       return ldap_uid
     end
@@ -194,17 +194,9 @@ class Identity < ApplicationRecord
     identity = Identity.where(ldap_uid: auth.uid).first
 
     unless identity
-      identity = Identity.new ldap_uid: auth.uid, first_name: auth.info.first_name, last_name: auth.info.last_name, email: auth.info.email, password: Devise.friendly_token[0,20], approved: true
-      
-      if identity.valid?
-        if !identity.save
-          Rails.logger.warn("[SHIB] Unable to save identity. No error code")
-        end
-      else
-        Rails.logger.warn("[SHIB] Identity created from shibboleth is invalid")
-        Rails.logger.info(identity.errors.inspect)
+      email = auth.info.email.blank? ? auth.uid : auth.info.email # in case shibboleth doesn't return the required parameters
+      identity = Identity.create ldap_uid: auth.uid, first_name: auth.info.first_name, last_name: auth.info.last_name, email: email, password: Devise.friendly_token[0,20], approved: true
         Rails.logger.info(auth.inspect)
-      end
     end
     identity
   end
@@ -254,11 +246,6 @@ class Identity < ApplicationRecord
   # Only users with request or approve rights can edit.
   def can_edit_service_request?(sr)
     has_correct_project_role?(sr) || self.catalog_overlord?
-  end
-
-  # If a user has request or approve rights AND the request is editable, then the user can edit.
-  def can_edit_sub_service_request?(ssr)
-    ssr.can_be_edited? && has_correct_project_role?(ssr)
   end
 
   def has_correct_project_role?(request)

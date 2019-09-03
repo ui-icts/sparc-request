@@ -1,4 +1,4 @@
-# Copyright © 2011-2018 MUSC Foundation for Research Development~
+# Copyright © 2011-2019 MUSC Foundation for Research Development~
 # All rights reserved.~
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:~
@@ -27,7 +27,7 @@ module Features
     def wait_for_javascript_to_finish(seconds=Capybara.default_max_wait_time)
       Timeout.timeout(Capybara.default_max_wait_time) do
         loop until jquery_defined?
-        loop until finished_all_ajax_requests? && finished_all_animations?
+        loop until finished_all_ajax_requests?
       end
     end
 
@@ -37,10 +37,6 @@ module Features
 
     def finished_all_ajax_requests?
       page.evaluate_script('jQuery.active') == 0
-    end
-
-    def finished_all_animations?
-      page.evaluate_script('$(":animated").length') == 0
     end
   end
 end

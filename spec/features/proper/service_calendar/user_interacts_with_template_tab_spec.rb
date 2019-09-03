@@ -1,4 +1,4 @@
-# Copyright © 2011-2018 MUSC Foundation for Research Development
+# Copyright © 2011-2019 MUSC Foundation for Research Development
 # All rights reserved.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -37,7 +37,7 @@ RSpec.describe 'User interacts with Template tab', js: true do
     liv       = create(:line_items_visit, line_item: li, arm: @arm)
     visit     = create(:visit, line_items_visit: liv, visit_group: vg)
 
-    visit service_calendar_service_request_path(@sr)
+    visit service_calendar_service_request_path(srid: @sr.id)
     wait_for_javascript_to_finish
 
     click_link 'Template Tab'
@@ -60,7 +60,7 @@ RSpec.describe 'User interacts with Template tab', js: true do
       liv       = create(:line_items_visit, line_item: li, arm: @arm)
       visit     = create(:visit, line_items_visit: liv, visit_group: vg)
 
-      visit service_calendar_service_request_path(@sr)
+      visit service_calendar_service_request_path(srid: @sr.id)
       wait_for_javascript_to_finish
 
       click_link 'Template Tab'
@@ -84,7 +84,7 @@ RSpec.describe 'User interacts with Template tab', js: true do
       liv       = create(:line_items_visit, :without_validations, line_item: li, arm: @arm)
       visit     = create(:visit, line_items_visit: liv, visit_group: vg)
 
-      visit service_calendar_service_request_path(@sr)
+      visit service_calendar_service_request_path(srid: @sr.id)
       wait_for_javascript_to_finish
 
       click_link 'Template Tab'
@@ -108,14 +108,14 @@ RSpec.describe 'User interacts with Template tab', js: true do
       liv       = create(:line_items_visit, line_item: li, arm: @arm)
       visit     = create(:visit, line_items_visit: liv, visit_group: vg)
 
-      visit service_calendar_service_request_path(@sr)
+      visit service_calendar_service_request_path(srid: @sr.id)
       wait_for_javascript_to_finish
 
       click_link 'Template Tab'
       wait_for_javascript_to_finish
 
-      find("#visits-select-for-#{@arm.id} + .bootstrap-select").click
-      all("#visits-select-for-#{@arm.id} + .bootstrap-select li")[1].click
+      find("#visits-select-for-#{@arm.id} + .dropdown-toggle").click
+      all(".dropdown-menu.open a")[1].click
       wait_for_javascript_to_finish
 
       expect(page).to have_selector('#service-calendars', visible: true)
