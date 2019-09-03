@@ -20,11 +20,13 @@ pkg_deps=(
   core/libxml2
   core/libxslt
   core/libyaml
+  core/gcc-libs
   core/mysql-client
   core/node
   core/curl
   core/rsync
-
+  core/zlib
+  
   $ruby_pkg
 
   core/busybox-static
@@ -190,6 +192,7 @@ do_build() {
     cat << NULLDB > config/database.yml
 production:
   adapter: nulldb
+  database: none
 NULLDB
 
   fi
