@@ -15,8 +15,12 @@ mkdir -pv $EYE_HOME
 echo "Creating symlinked directories"
 mkdir -pv {{pkg.svc_var_path}}/log
 mkdir -pv {{pkg.svc_var_path}}/tmp
+mkdir -pv {{pkg.svc_var_path}}/backup
 mkdir -pv {{pkg.svc_var_path}}/tmp/pids
 mkdir -pv {{pkg.svc_data_path}}/system
+
+echo "Permissions on backup directory"
+chmod u=rwx,g=,o= {{pkg.svc_var_path}}/backup
 
 # Need these permissions to make apache happy
 # and let it serve our static stuff

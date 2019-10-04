@@ -88,3 +88,4 @@ habitat/*/results
 
 # Pretty sure you don't want vagrant box in git
 .vagrant
+db/backup
