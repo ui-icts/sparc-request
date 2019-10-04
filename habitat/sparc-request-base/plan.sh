@@ -26,7 +26,7 @@ pkg_deps=(
   core/curl
   core/rsync
   core/zlib
-  
+  core/gzip
   $ruby_pkg
 
   core/busybox-static
