@@ -208,6 +208,9 @@ NULLDB
     sed -e "s#test#production#" -i "config/ldap.yml"
   fi
 
+  build_line "Installing JS packages"
+  yarn install
+
   build_line "Precompiling assets"
   RAILS_ENV=production bin/rake -s assets:precompile
 
