@@ -5,8 +5,8 @@ pkg_name=sparc-request
 pkg_origin=chrisortman
 pkg_version="3.6.0"
 
-ruby_pkg="core/ruby24"
-ruby_major="2.4.0"
+ruby_pkg="core/ruby25"
+ruby_major="2.5.0"
 
 # If you don't have this, then do_build won't happen inside the cache
 # directory and will happen in /src which could potentially change files you care about
