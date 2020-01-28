@@ -21,7 +21,7 @@
 class Identities::SessionsController < Devise::SessionsController
 
   def create
-    if Rails.env.development? && params[:identity][:password] == "adminadmin"
+    if Rails.env.development? && params[:identity] && params[:identity][:password] == "adminadmin"
       @identity = Identity.where(ldap_uid: params[:identity][:ldap_uid]).first
 
       if params[:service_request_id]
