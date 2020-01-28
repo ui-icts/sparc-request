@@ -1,502 +1,151 @@
----
-accordion_color_options:
-  blue: blue-provider
-  light-blue: light-blue-provider
-  orange: orange-provider
-  red: red-provider
-  green: green-provider
-alert_statuses:
-  active: active
-  clear: clear
-alert_types:
-  google_calendar: google_calendar
-  news_feed: news_feed
-audit_actions:
-  create: Added
-  destroy: Deleted
-epic_push_status_text:
-  started: ''
-  sent_study: ''
-  complete: Study has been sent to Epic.
-  failed: Unable to send study to Epic.
-  awaiting_approval: Awaiting approval before sending to Epic
-  awaiting_final_review: Awaiting final review before sending to Epic
-epic_rights:
-  view_rights: View Research Studies
-  enter_data: Access to input/edit data at patient/encounter level
-  schedule_research: Schedule research-related encounters - additional training required
-  enter_orders: Place Orders - valid medical license required
-  process_orders: Process standing orders for research protocols - additional training
-    required
-  approve: Review and approve research-related patient charges
-  complete: Activate and Complete studies
-study_type_answers:
-  '1':
-  - true
-  - true
-  - 
-  - 
-  - 
-  - 
-  '2':
-  - true
-  - false
-  - true
-  - 
-  - 
-  - 
-  '3':
-  - true
-  - false
-  - false
-  - false
-  - true
-  - true
-  '4':
-  - true
-  - false
-  - false
-  - false
-  - false
-  - true
-  '5':
-  - true
-  - false
-  - false
-  - false
-  - true
-  - false
-  '6':
-  - true
-  - false
-  - false
-  - false
-  - false
-  - false
-  '7':
-  - true
-  - false
-  - false
-  - true
-  - true
-  - true
-  '8':
-  - true
-  - false
-  - false
-  - true
-  - false
-  - true
-  '9':
-  - true
-  - false
-  - false
-  - true
-  - true
-  - false
-  '10':
-  - true
-  - false
-  - false
-  - true
-  - false
-  - false
-  '11':
-  - false
-  - 
-  - 
-  - false
-  - true
-  - true
-  '12':
-  - false
-  - 
-  - 
-  - false
-  - false
-  - true
-  '13':
-  - false
-  - 
-  - 
-  - false
-  - true
-  - false
-  '14':
-  - false
-  - 
-  - 
-  - false
-  - false
-  - false
-  '15':
-  - false
-  - 
-  - 
-  - true
-  - true
-  - true
-  '16':
-  - false
-  - 
-  - 
-  - true
-  - false
-  - true
-  '17':
-  - false
-  - 
-  - 
-  - true
-  - true
-  - false
-  '0':
-  - false
-  - 
-  - 
-  - true
-  - false
-  - false
-study_type_answers_version_2:
-  '1':
-  - true
-  - 
-  - 
-  - 
-  - 
-  - 
-  '2':
-  - false
-  - true
-  - true
-  - 
-  - 
-  - 
-  '3':
-  - false
-  - true
-  - false
-  - false
-  - true
-  - true
-  '4':
-  - false
-  - true
-  - false
-  - false
-  - false
-  - true
-  '5':
-  - false
-  - true
-  - false
-  - false
-  - true
-  - false
-  '6':
-  - false
-  - true
-  - false
-  - false
-  - false
-  - false
-  '7':
-  - false
-  - true
-  - false
-  - true
-  - true
-  - true
-  '8':
-  - false
-  - true
-  - false
-  - true
-  - false
-  - true
-  '9':
-  - false
-  - true
-  - false
-  - true
-  - true
-  - false
-  '10':
-  - false
-  - true
-  - false
-  - true
-  - false
-  - false
-  '11':
-  - false
-  - false
-  - 
-  - false
-  - true
-  - true
-  '12':
-  - false
-  - false
-  - 
-  - false
-  - false
-  - true
-  '13':
-  - false
-  - false
-  - 
-  - false
-  - true
-  - false
-  '14':
-  - false
-  - false
-  - 
-  - false
-  - false
-  - false
-  '15':
-  - false
-  - false
-  - 
-  - true
-  - true
-  - true
-  '16':
-  - false
-  - false
-  - 
-  - true
-  - false
-  - true
-  '17':
-  - false
-  - false
-  - 
-  - true
-  - true
-  - false
-  '0':
-  - false
-  - false
-  - 
-  - true
-  - false
-  - false
-study_type_answers_version_3:
-  '1':
-  - true
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  '3':
-  - false
-  - true
-  - false
-  - false
-  - false
-  - 
-  - 
-  '4':
-  - false
-  - true
-  - false
-  - true
-  - false
-  - 
-  - 
-  '5':
-  - false
-  - true
-  - false
-  - false
-  - true
-  - 
-  - 
-  '6':
-  - false
-  - true
-  - false
-  - true
-  - true
-  - 
-  - 
-  '7':
-  - false
-  - true
-  - true
-  - false
-  - false
-  - 
-  - 
-  '8':
-  - false
-  - true
-  - true
-  - true
-  - false
-  - 
-  - 
-  '9':
-  - false
-  - true
-  - true
-  - false
-  - true
-  - 
-  - 
-  '10':
-  - false
-  - true
-  - true
-  - true
-  - true
-  - 
-  - 
-  '11':
-  - false
-  - false
-  - false
-  - false
-  - false
-  - 
-  - 
-  '12':
-  - false
-  - false
-  - false
-  - true
-  - false
-  - 
-  - 
-  '13':
-  - false
-  - false
-  - false
-  - false
-  - true
-  - 
-  - 
-  '14':
-  - false
-  - false
-  - false
-  - true
-  - true
-  - 
-  - 
-  '15':
-  - false
-  - false
-  - true
-  - false
-  - false
-  - 
-  - 
-  '16':
-  - false
-  - false
-  - true
-  - true
-  - false
-  - 
-  - 
-  '17':
-  - false
-  - false
-  - true
-  - false
-  - true
-  - 
-  - 
-  '0':
-  - false
-  - false
-  - true
-  - true
-  - true
-  - 
-  - 
-study_type_notes:
-  '1': De-identified Research Participant
-  '3': Break-The-Glass for research associated encounters
-  '4': 'Break-The-Glass for research associated encounters: no notification, pink
-    header, no MyChart access.'
-  '5': 'Break-The-Glass for research associated encounters: no notification, no pink
-    header, MyChart access.'
-  '6': 'Break-The-Glass for research associated encounters: no notification, pink
-    header, MyChart access.'
-  '7': 'Break-The-Glass for research associated encounters: notification, no pink
-    header, no MyChart access.'
-  '8': 'Break-The-Glass for research associated encounters: notification, pink header,
-    no MyChart access.'
-  '9': 'Break-The-Glass for research associated encounters: notification, no pink
-    header, MyChart access.'
-  '10': 'Break-The-Glass for research associated encounters: notification, pink header,
-    MyChart access.'
-  '11': 'Full Epic Functionality:  no notification, no pink header, no MyChart access.'
-  '12': 'Full Epic Functionality:  no notification, pink header, no MyChart access.'
-  '13': 'Full Epic Functionality:  no notification, no pink header, MyChart access.'
-  '14': 'Full Epic Functionality:  no notification, pink header, MyChart access.'
-  '15': 'Full Epic Functionality:  notification, no pink header, no MyChart access.'
-  '16': 'Full Epic Functionality:  notification, pink header, no MyChart access.'
-  '17': 'Full Epic Functionality:  notification, no pink header, MyChart access.'
-  '0': 'Full Epic Functionality:  notification, pink header, MyChart access.'
-study_type_questions:
-- 1a. Does your study require a higher level of privacy for the participants?
-- 1b. Does your study have a Certificate of Confidentiality?
-- 1c. Do participants enrolled in your study require a second DEIDENTIFIED Medical
-  Record that is not connected to their primary record in Epic?
-- 2. Do you wish to receive a notification via Epic InBasket when your research participants
-  are admitted to the hospital or ED?
-- '3. Do you wish to remove the ''Research: Active'' indicator in the Patient Header
-  for your study participants?'
-- 4. Do you need to restrict the sending of study related results, such as laboratory
-  and radiology results, to a participants MyChart?
-study_type_questions_version_2:
-- 1. Does your study have a Certificate of Confidentiality?*
-- 2. Does your study require a higher level of privacy for the participants?*
-- 2b. Do participants enrolled in your study require a second DEIDENTIFIED Medical
-  Record that is not connected to their primary record in Epic?*
-- 3. Do you wish to receive a notification via Epic InBasket when your research participants
-  are admitted to the hospital or ED?*
-- '4. Do you wish to remove the ''Research: Active'' indicator in the Patient Header
-  for your study participants?*'
-- 5. Do you need to restrict the sending of study related results, such as laboratory
-  and radiology results, to a participants MyChart?*
-study_type_questions_version_3:
-- 1. Does your Informed Consent provide information to the participant specifically
-  stating their study participation will be kept private from anyone outside the research
-  team? (i.e. your study has a Certificate of Confidentiality or involves sensitive
-  data collection which requires de-identification of the research participant in
-  Epic.)
-- 2. Does your study require a higher level of privacy protection for the participants?
-  (Your study needs "break the glass" functionality in Epic because it is collection
-  sensitive data, such as HIV/sexually transmitted disease, sexual practice/attitudes,
-  illegal substance, etc., which needs higher privacy protection, yet not complete
-  de-identification of the study participant.)
-- 3. Is it appropriate for study team members to receive Epic InBasket notifications
-  if research participants in this study are hospitalized or admitted to the Emergency
-  Department?
-- '4. Is it appropriate to display the pink "Research: Active" indicator in the Patient
-  Header for all study participants?'
-- 5. Is it appropriate for all study participants to receive associated test results,
-  such as labs and/or imaging findings, via MyChart?
-- 1. Does your Informed Consent provide information to the participant specifically
-  stating their study participation will be kept private from anyone outside the research
-  team? (i.e. your study has a Certificate of Confidentiality or involves sensitive
-  data collection which requires de-identification of the research participant.)
-- 2. Does your study require a higher level of privacy protection for the participants?
-  (Your study needs "break the glass" functionality because it is collection sensitive
-  data, such as HIV/sexually transmitted disease, sexual practice/attitudes, illegal
-  substance, etc., which needs higher privacy protection, yet not complete de-identification
-  of the study participant.)
-browser_versions:
-  Internet Explorer: '1'
-  Mozilla Firefox: '2'
-  Google Chrome: '3'
-  Safari: '4'
+# Copyright © 2011 MUSC Foundation for Research Development
+# All rights reserved.
+
+# Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+# 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following
+# disclaimer in the documentation and/or other materials provided with the distribution.
+
+# 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products
+# derived from this software without specific prior written permission.
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
+# SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+# TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+accordion_color_options: { "blue": 'blue-provider',
+                           "light-blue": 'light-blue-provider',
+                           "orange": 'orange-provider',
+                           "red": 'red-provider',
+                           "green": 'green-provider' }
+
+alert_statuses: { 'active': 'active',
+                  'clear': 'clear' }
+
+alert_types: { 'google_calendar': 'google_calendar',
+               'news_feed': 'news_feed' }
+
+audit_actions: { 'create': 'Added',
+                 'destroy': 'Deleted'}
+
+epic_push_status_text: { 'started': '',
+                         'sent_study': '',
+                         'complete': 'Study has been sent to Epic.',
+                         'failed': 'Unable to send study to Epic.',
+                         'awaiting_approval': 'Awaiting approval before sending to Epic',
+                         'awaiting_final_review': 'Awaiting final review before sending to Epic' }
+
+epic_rights: { 'view_rights': 'View Research Studies',
+               'enter_data': 'Access to input/edit data at patient/encounter level',
+               'schedule_research': 'Schedule research-related encounters - additional training required',
+               'enter_orders': 'Place Orders - valid medical license required',
+               'process_orders': 'Process standing orders for research protocols - additional training required',
+               'approve': 'Review and approve research-related patient charges',
+               'complete': 'Activate and Complete studies'}
+
+study_type_answers: {  '1' : [true, true,   ~,     ~,     ~,     ~],
+                       '2' : [true, false, true,   ~,     ~,     ~],
+                       '3' : [true, false, false, false, true, true],
+                       '4' : [true, false, false, false, false, true],
+                       '5' : [true, false, false, false, true, false],
+                       '6' : [true, false, false, false, false, false],
+                       '7' :[true, false, false, true, true, true],
+                       '8' : [true, false, false, true, false, true],
+                       '9' : [true, false, false, true, true, false],
+                       '10' : [true, false, false, true, false, false],
+                       '11' : [false, ~,     ~,    false, true, true],
+                       '12' : [false, ~,     ~,    false, false, true],
+                       '13' : [false, ~,     ~,    false, true, false],
+                       '14' : [false, ~,     ~,    false, false, false],
+                       '15' : [false, ~,     ~,    true, true, true],
+                       '16' : [false, ~,     ~,    true, false, true],
+                       '17' : [false, ~,     ~,    true, true, false],
+                       '0' : [false, ~,     ~,    true, false, false] }
+
+study_type_answers_version_2: { '1' : [true, ~,    ~,    ~,    ~,    ~],
+                                '2' : [false, true, true,   ~,    ~,    ~],
+                                '3' : [false, true, false, false, true, true],
+                                '4' : [false, true, false, false, false, true],
+                                '5' : [false, true, false, false, true, false],
+                                '6' : [false, true, false, false, false, false],
+                                '7' : [false, true, false, true, true, true],
+                                '8' : [false, true, false, true, false, true],
+                                '9' : [false, true, false, true, true, false],
+                                '10': [false, true, false, true, false, false],
+                                '11': [false, false, ~,    false, true, true],
+                                '12': [false, false, ~,    false, false, true],
+                                '13': [false, false, ~,    false, true, false],
+                                '14': [false, false, ~,    false, false, false],
+                                '15': [false, false, ~,    true, true, true],
+                                '16': [false, false, ~,    true, false, true],
+                                '17': [false, false, ~,    true, true, false],
+                                '0': [false, false, ~,    true, false, false] }
+
+study_type_answers_version_3: { '1' : [true,    ~,    ~,    ~,    ~,    ~,    ~],
+                                '3' : [false, true, false, false, false,    ~,    ~],
+                                '4' : [false, true, false, true, false,    ~,    ~],
+                                '5' : [false, true, false, false, true,    ~,    ~],
+                                '6' : [false, true, false, true, true,    ~,    ~],
+                                '7' : [false, true, true, false, false,    ~,    ~],
+                                '8' : [false, true, true, true, false,    ~,    ~],
+                                '9' : [false, true, true, false, true,    ~,    ~],
+                                '10': [false, true, true, true, true,    ~,    ~],
+                                '11': [false, false, false, false, false,    ~,    ~],
+                                '12': [false, false, false, true, false,    ~,    ~],
+                                '13': [false, false, false, false, true,    ~,    ~],
+                                '14': [false, false, false, true, true,    ~,    ~],
+                                '15': [false, false, true, false, false,    ~,    ~],
+                                '16': [false, false, true, true, false,    ~,    ~],
+                                '17': [false, false, true, false, true,    ~,    ~],
+                                '0': [false, false, true, true, true,    ~,    ~ ] }
+
+study_type_notes:             { '1' : 'De-identified Research Participant',
+                                '3' : 'Break-The-Glass for research associated encounters',
+                                '4' : 'Break-The-Glass for research associated encounters: no notification, pink header, no MyChart access.',
+                                '5' : 'Break-The-Glass for research associated encounters: no notification, no pink header, MyChart access.',
+                                '6' : 'Break-The-Glass for research associated encounters: no notification, pink header, MyChart access.',
+                                '7' : 'Break-The-Glass for research associated encounters: notification, no pink header, no MyChart access.',
+                                '8' : 'Break-The-Glass for research associated encounters: notification, pink header, no MyChart access.',
+                                '9' : 'Break-The-Glass for research associated encounters: notification, no pink header, MyChart access.',
+                                '10': 'Break-The-Glass for research associated encounters: notification, pink header, MyChart access.',
+                                '11': 'Full Epic Functionality:  no notification, no pink header, no MyChart access.',
+                                '12': 'Full Epic Functionality:  no notification, pink header, no MyChart access.',
+                                '13': 'Full Epic Functionality:  no notification, no pink header, MyChart access.',
+                                '14': 'Full Epic Functionality:  no notification, pink header, MyChart access.',
+                                '15': 'Full Epic Functionality:  notification, no pink header, no MyChart access.',
+                                '16': 'Full Epic Functionality:  notification, pink header, no MyChart access.',
+                                '17': 'Full Epic Functionality:  notification, no pink header, MyChart access.',
+                                '0': 'Full Epic Functionality:  notification, pink header, MyChart access.' }
+
+study_type_questions: ["1a. Does your study require a higher level of privacy for the participants?",   
+                         "1b. Does your study have a Certificate of Confidentiality?",   
+                         "1c. Do participants enrolled in your study require a second DEIDENTIFIED Medical Record that is not connected to their primary record in Epic?",   
+                         "2. Do you wish to receive a notification via Epic InBasket when your research participants are admitted to the hospital or ED?",   
+                         "3. Do you wish to remove the 'Research: Active' indicator in the Patient Header for your study participants?",   
+                         "4. Do you need to restrict the sending of study related results, such as laboratory and radiology results, to a participants MyChart?"]     
+
+study_type_questions_version_2: ["1. Does your study have a Certificate of Confidentiality?*",
+                                 "2. Does your study require a higher level of privacy for the participants?*",
+                                 "2b. Do participants enrolled in your study require a second DEIDENTIFIED Medical Record that is not connected to their primary record in Epic?*",
+                                 "3. Do you wish to receive a notification via Epic InBasket when your research participants are admitted to the hospital or ED?*",
+                                 "4. Do you wish to remove the 'Research: Active' indicator in the Patient Header for your study participants?*",
+                                 "5. Do you need to restrict the sending of study related results, such as laboratory and radiology results, to a participants MyChart?*"]
+
+study_type_questions_version_3: ["1. Does your Informed Consent provide information to the participant specifically stating their study participation will be kept private from anyone outside the research team? (i.e. your study has a Certificate of Confidentiality or involves sensitive data collection which requires de-identification of the research participant in Epic.)",
+                               '2. Does your study require a higher level of privacy protection for the participants? (Your study needs "break the glass" functionality in Epic because it is collection sensitive data, such as HIV/sexually transmitted disease, sexual practice/attitudes, illegal substance, etc., which needs higher privacy protection, yet not complete de-identification of the study participant.)',
+                               "3. Is it appropriate for study team members to receive Epic InBasket notifications if research participants in this study are hospitalized or admitted to the Emergency Department?",
+                               '4. Is it appropriate to display the pink "Research: Active" indicator in the Patient Header for all study participants?',
+                               "5. Is it appropriate for all study participants to receive associated test results, such as labs and/or imaging findings, via MyChart?",
+                               "1. Does your Informed Consent provide information to the participant specifically stating their study participation will be kept private from anyone outside the research team? (i.e. your study has a Certificate of Confidentiality or involves sensitive data collection which requires de-identification of the research participant.)",
+                               '2. Does your study require a higher level of privacy protection for the participants? (Your study needs "break the glass" functionality because it is collection sensitive data, such as HIV/sexually transmitted disease, sexual practice/attitudes, illegal substance, etc., which needs higher privacy protection, yet not complete de-identification of the study participant.)']
+
+browser_versions: {
+  'Internet Explorer': '1',
+  'Mozilla Firefox': '2',
+  'Google Chrome': '3',
+  'Safari': '4',
+}
