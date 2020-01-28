@@ -8,7 +8,7 @@ UPDATE settings SET value = 'admin@example.com' WHERE `key` = 'feedback_mail_to'
 UPDATE settings SET value = 'http://localhost:3000/dashboard' WHERE `key` = 'header_link_2_dashboard';
 UPDATE settings SET value = 'http://localhost:3000/' WHERE `key` = 'header_link_2_proper';
 UPDATE settings SET value = 'localhost:3000' WHERE `key` = 'host';
-UPDATE settings SET value = '{"sparc_catalog"=>["SPARCCatalog", "http://localhost:3000/catalog_manager"], "sparc_dashboard"=>["Dashboard", "http://localhost:3000/dashboard"], "sparc_fulfillment"=>["SPARCFulfillment", "http://localhost:4000/reports"], "sparc_request"=>["SPARCRequest", "http://localhost:3000/"]}' WHERE `key` = 'navbar_links';
+UPDATE settings SET value = '{"sparc_catalog"=>["SPARCCatalog", "http://localhost:3000/catalog_manager"], "sparc_dashboard"=>["Dashboard", "http://localhost:3000/dashboard"], "sparc_fulfillment"=>["SPARCFulfillment", "http://localhost:4000"], "sparc_request"=>["SPARCRequest", "http://localhost:3000/"], "sparc_report"=>["SPARCReport", "http://localhost:3000/reports"],"sparc_forms"=>["SPARCForms","http://localhost:3000/surveyor/responses"]}' WHERE `key` = 'navbar_links';
 UPDATE settings SET value = 'admin@example.com' WHERE `key` = 'new_user_cc';
 UPDATE settings SET value = 'localhost:4000' WHERE `key` = 'remote_service_notifier_host';
 UPDATE settings SET value = 'betterthanruby' WHERE `key` = 'remote_service_notifier_password';
