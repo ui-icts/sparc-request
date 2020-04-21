@@ -132,7 +132,7 @@ do_setup_environment() {
 }
 do_build() {
 
-
+  gem install bundler -v 2.0.2 -n bin --no-ri --no-rdoc
   # we control the variable above, and it will be all on one line, and
   # we need single quotes otherwise the extconf doesn't build the
   # extension.
