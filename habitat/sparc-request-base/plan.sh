@@ -209,6 +209,9 @@ NULLDB
   fi
 
   build_line "Installing JS packages"
+  # yarn failing if this file not present
+  mkdir -p /usr/local/share
+  touch /usr/local/share/.yarnrc
   yarn install
 
   build_line "Precompiling assets"
