@@ -95,7 +95,6 @@ do_setup_environment() {
 
   set_runtime_env TZ "America/Chicago"
   set_runtime_env time_zone "America/Chicago"
-  push_runtime_env GEM_PATH "${pkg_prefix}/static/release/vendor/bundle/ruby/${ruby_major}"
   set_runtime_env LD_LIBRARY_PATH "$(pkg_path_for "core/gcc-libs")/lib:$(pkg_path_for "core/libevent")"
   set_runtime_env HOME ${pkg_svc_data_path}
   set_runtime_env LANG "en_US.UTF-8"
@@ -104,6 +103,7 @@ do_setup_environment() {
   set_runtime_env RAILS_ENV "production"
   set_runtime_env RACK_ENV "production"
   set_runtime_env RAILS_ROOT "${pkg_prefix}/${app_sub_path}"
+  push_runtime_env GEM_PATH "${pkg_prefix}/${app_sub_path}/vendor/bundle/ruby/${ruby_major}"
   set_runtime_env EYE_HOME "${pkg_svc_var_path}/eye"
 
   set_runtime_env SPARC_VERSION "v${pkg_version}"
