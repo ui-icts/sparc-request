@@ -110,6 +110,7 @@ do_setup_environment() {
   # Build specific
 
   set_buildtime_env HOME /root
+  push_buildtime_env GEM_PATH "/hab/cache/src/${pkg_name}-${pkg_version}/vendor/bundle/ruby/${ruby_major}"
   mkdir --parents '/hab/cache/artifacts/studio_cache/yarn'
   set_buildtime_env YARN_CACHE_FOLDER '/hab/cache/artifacts/studio_cache/yarn'
 
@@ -136,8 +137,8 @@ do_build() {
   # we control the variable above, and it will be all on one line, and
   # we need single quotes otherwise the extconf doesn't build the
   # extension.
-  bundle config build.nokogiri '${NOKOGIRI_CONFIG}'
-  bundle config build.mysql2 '${MYSQL_CONFIG}'
+  bin/bundle config build.nokogiri '${NOKOGIRI_CONFIG}'
+  bin/bundle config build.mysql2 '${MYSQL_CONFIG}'
 
   # We need to add tzinfo-data to the Gemfile since we're not in an
   # environment that has this from the OS
@@ -171,7 +172,7 @@ do_build() {
   fi
 
    build_line "Bundle install gems"
-   bundle install \
+   bin/bundle install \
      --path vendor/bundle \
      --without test:development \
      --retry 5 \
