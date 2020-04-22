@@ -95,7 +95,7 @@ do_setup_environment() {
 
   set_runtime_env TZ "America/Chicago"
   set_runtime_env time_zone "America/Chicago"
-  push_runtime_env GEM_PATH "${pkg_prefix}/vendor/bundle/ruby/${ruby_major}"
+  push_runtime_env GEM_PATH "${pkg_prefix}/static/release/vendor/bundle/ruby/${ruby_major}"
   set_runtime_env LD_LIBRARY_PATH "$(pkg_path_for "core/gcc-libs")/lib:$(pkg_path_for "core/libevent")"
   set_runtime_env HOME ${pkg_svc_data_path}
   set_runtime_env LANG "en_US.UTF-8"
