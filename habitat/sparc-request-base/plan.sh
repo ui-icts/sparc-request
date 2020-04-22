@@ -290,7 +290,7 @@ _create_symlinks() {
 
   rm -rf ${pkg_prefix}/static/release/log
   rm -rf ${pkg_prefix}/static/release/tmp
-  rm -rf ${pkg_prefix}/static/release/backup
+  rm -rf ${pkg_prefix}/static/release/db/backup
   rm -rf ${pkg_prefix}/static/release/public/system
   rm -rf ${pkg_prefix}/static/release/config/database.yml
   rm -rf ${pkg_prefix}/static/release/config/fulfillment_db.yml
@@ -300,7 +300,7 @@ _create_symlinks() {
 
   ln -sf ${pkg_svc_var_path}/log ${pkg_prefix}/static/release/log
   ln -sf ${pkg_svc_var_path}/tmp ${pkg_prefix}/static/release/tmp
-  ln -sf ${pkg_svc_var_path}/backup ${pkg_prefix}/static/release/backup
+  ln -sf ${pkg_svc_var_path}/backup ${pkg_prefix}/static/release/db/backup
   ln -sf ${pkg_svc_data_path}/system ${pkg_prefix}/static/release/public/system
 
   ln -sf ${pkg_svc_config_path}/database.yml ${pkg_prefix}/static/release/config/database.yml
