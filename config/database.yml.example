@@ -49,3 +49,7 @@ test:
   timeout: 5000
   variables:
     sql_mode: TRADITIONAL
+
+production:
+  adapter: nulldb
+  database: none
