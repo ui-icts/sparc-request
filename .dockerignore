@@ -1,0 +1,6 @@
+habitat
+node_modules
+log
+tmp
+coverage
+public/assets
