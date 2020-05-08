@@ -3,7 +3,7 @@
 
 pkg_name=sparc-request
 pkg_origin=chrisortman
-pkg_version="3.6.2"
+pkg_version="3.6.3"
 
 ruby_pkg="core/ruby25"
 ruby_major="2.5.0"
