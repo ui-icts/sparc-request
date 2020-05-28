@@ -8,6 +8,7 @@ EXCEPTION_RECIPIENTS="{{cfg.sparc.production.admin_mail_to}}"
 
 
 ## SPARC VALUES
+SPARC_VERSION="{{pkg.version}}"
 org_logo="{{cfg.customization.org_logo}}"
 institution_logo="{{cfg.customization.institution_logo}}"
 institution="{{cfg.customization.institution}}"
