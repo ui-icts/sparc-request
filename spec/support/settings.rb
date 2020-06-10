@@ -33,10 +33,10 @@ def populate_settings_before_suite
 end
 
 def stub_config(key, value)
-  setting = Setting.find_by_key(key)
-  default_value = setting.value
-
   before :each do
+    setting = Setting.find_by_key(key)
+    default_value = setting.value
+
     setting.update_attribute(:value, value)
   end
 
