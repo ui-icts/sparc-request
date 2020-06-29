@@ -30,7 +30,7 @@ namespace :mysql do
     Setting.set_value!( 'system_satisfaction_survey_cc','admin@example.com')
     Setting.set_value!( 'use_ldap','true')
     Setting.set_value!( 'use_shibboleth_only','false')
-    Setting.set_value!( 'wkhtmltopdf_location',`which wkhtmltopdf`)
+    Setting.set_value!( 'wkhtmltopdf_location','/usr/local/bin/wkhtmltopdf')
   end
 
   desc 'Backup database by mysqldump'
