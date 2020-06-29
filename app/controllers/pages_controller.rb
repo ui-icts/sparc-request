@@ -28,5 +28,9 @@ class PagesController < ApplicationController
   end
 
   def faqs
+    respond_to do |format|
+      format.html { render :partial => 'faqs_modal' }
+      format.js
+    end
   end
 end
