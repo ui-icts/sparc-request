@@ -178,6 +178,18 @@ class Arm < ApplicationRecord
     name
   end
 
+  def repair_visit_order!
+    self.visit_groups.reload
+
+    self.transaction do
+      num = 1
+      self.visit_groups.each do |vg|
+        vg.update_columns(position: num, day: num)
+        num += 1
+      end
+    end
+  end
+
   ### end audit reporting methods ###
 
   private
